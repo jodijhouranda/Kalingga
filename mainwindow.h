@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <RInside.h>
 #include <spreadsheet.h>
+#include <variableview.h>
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -18,7 +19,7 @@ private:
     void setupMenuBar();
     void createTabView();
     void createAction();
-    void updateDataView(Spreadsheet* ss);
+    void updateDataView(QTableWidget* ss);
     void updateVariableView(QTableWidget* table);
     QTabWidget *tabView;
     QAction* openCSV;

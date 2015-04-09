@@ -12,11 +12,13 @@ TARGET = KalinggaSoft
 ## build an app based on the one headers and two source files
 SOURCES += main.cpp \
     mainwindow.cpp \
-    spreadsheet.cpp
+    spreadsheet.cpp \
+    variableview.cpp
 
 HEADERS  += \
     mainwindow.h \
-    spreadsheet.h
+    spreadsheet.h \
+    variableview.h
 
 FORMS    +=
 ## comment this out if you need a different version of R,

@@ -3,12 +3,14 @@
 #include <QWidget>
 #include <QTableWidget>
 #include <Rcpp.h>
-class Spreadsheet: public QWidget
+class Spreadsheet
 {
-    Q_OBJECT
 public:
     Spreadsheet(Rcpp::DataFrame data);
     QTableWidget* getVariabelAttribute();
+    QString checkVariableType(QString string);
+
+    QTableWidget* getSpreadsheetTable();
 private:
     void dataFrameIterator();
      QTableWidget *table;

@@ -44,10 +44,24 @@ void MainWindow::createTabView(){
     tabView->addTab(new QWidget(),"Variabel View");
     tabView->addTab(new QWidget(),"Map View");
 
-    this->setCentralWidget(centralView);
+    setCentralWidget(centralView);
+}
+
+
+
+void MainWindow::updateDataView(QTableWidget* ss){
+    tabView->removeTab(0);
+    tabView->insertTab(0,ss, tr("Data View"));
+    tabView->setCurrentIndex(0);
+}
+
+void MainWindow::updateVariableView(QTableWidget* vv){
+    tabView->removeTab(1);
+    tabView->insertTab(1,vv, tr("Variable View"));
 
 }
 
+//All File dan data Slots
 void MainWindow::openCSVSlot(){
     QString csvPath = QFileDialog::getOpenFileName(this,"Open",QString(),tr("Separate Comma Value (*.csv)"));
     std::string cmd0 ="data<- read.csv(\"" ;
@@ -55,19 +69,8 @@ void MainWindow::openCSVSlot(){
     std::string cmd = cmd0 + csvPath.toStdString() + cmd1 ;
     Rcpp::DataFrame data = Rcon.parseEval(cmd);
     Spreadsheet* ss = new Spreadsheet(data);
-    updateDataView(ss);
-    updateVariableView(ss->getVariabelAttribute());
+    QTableWidget* table = ss->getSpreadsheetTable();
+    updateDataView(table);
+    VariableView* vv = new VariableView(table);
+    updateVariableView(vv->getVariabelViewTable());
   }
-
-void MainWindow::updateDataView(Spreadsheet* ss){
-    tabView->removeTab(0);
-    tabView->insertTab(0,ss, tr("Data View"));
-    tabView->setCurrentIndex(0);
-}
-
-void MainWindow::updateVariableView(QTableWidget* table){
-    tabView->removeTab(1);
-    tabView->insertTab(1,table, tr("Variable View"));
-    tabView->setCurrentIndex(1);
-}
-
