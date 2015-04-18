@@ -9,10 +9,10 @@ public:
     Spreadsheet(Rcpp::DataFrame data);
     QTableWidget* getVariabelAttribute();
     QString checkVariableType(QString string);
-
     QTableWidget* getSpreadsheetTable();
+    void dataFrameIterator(QTableWidget* typeTable);
 private:
-    void dataFrameIterator();
+
      QTableWidget *table;
      std::vector <std::string> header ;
      int rows;

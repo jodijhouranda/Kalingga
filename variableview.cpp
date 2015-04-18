@@ -1,10 +1,15 @@
 #include "variableview.h"
 #include <QDebug>
 
-VariableView::VariableView(QTableWidget* table):table(table)
+VariableView::VariableView(Rcpp::DataFrame frame , QWidget *parent): frame(frame)
 {
+    ss = new Spreadsheet(frame);
+    table = ss->getSpreadsheetTable();
     getVariabelAttribute();
+    ss->dataFrameIterator(variabelTable);
     setupAlignment();
+
+    connect(variabelTable , SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
 
 }
 void VariableView::getVariabelAttribute(){
@@ -18,24 +23,23 @@ void VariableView::getVariabelAttribute(){
     for (int c = 0; c < variabelTable->columnCount(); ++c) {
         QString character = QString::fromStdString(headerVariabel[c]);
         variabelTable->setHorizontalHeaderItem(c, new QTableWidgetItem(character));
-    }
 
-        for (int c = 0; c < table->columnCount(); ++c) {
 
-            QString dataType = checkVariableType(table->item(0,c)->text());
+        for (int c = 0; c < frame.size(); ++c) {
+            Rcpp::CharacterVector vektor = frame[c];
+            QString dataType = checkVariableType(QString::fromUtf8(vektor[0]));
             variabelTable->setItem(c,1, new QTableWidgetItem(dataType));
             qDebug() << dataType;
         }
         for (int r = 0; r < table->columnCount(); ++r) {
 
-            QTableWidgetItem* x = table->horizontalHeaderItem(r)->clone();
-            variabelTable->setItem(r,0,x);
+            QString x = table->horizontalHeaderItem(r)->text();
+            variabelTable->setItem(r,0,new QTableWidgetItem(x));
 
 
         }
-
 }
-
+}
 
 QString VariableView::checkVariableType(QString string){
       //check if string real
@@ -43,9 +47,10 @@ QString VariableView::checkVariableType(QString string){
 
     string.toInt(&validate);
     if(validate == true){
-        return "Integer";
+    return "Integer";
     }
     string.toDouble(&validate);
+
     if(validate == true){
         return "Real";
     }
@@ -57,6 +62,9 @@ QString VariableView::checkVariableType(QString string){
 
 QTableWidget* VariableView::getVariabelViewTable(){
     return variabelTable;
+}
+QTableWidget* VariableView::getSpreadsheetTable(){
+    return table;
 }
 
 void VariableView::setupAlignment(){
@@ -70,3 +78,12 @@ void VariableView::setupAlignment(){
         }
     }
 }
+
+//Edit Variable names
+
+void VariableView::changeVariableName(QTableWidgetItem* item){
+    if (item->column() == 0) {
+        table->setHorizontalHeaderItem(item->row(),item);
+    }
+}
+

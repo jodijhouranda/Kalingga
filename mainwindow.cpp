@@ -22,6 +22,7 @@ void MainWindow::setupWindowsSetting(){
 void MainWindow::createAction(){
     openCSV = new QAction(tr("Comma Separated Value (*.csv)"),this);
     connect(openCSV, SIGNAL(triggered()),this,SLOT(openCSVSlot()));
+
 }
 
 //setup menubar for mainwindow
@@ -68,9 +69,7 @@ void MainWindow::openCSVSlot(){
     std::string cmd1 = "\")";
     std::string cmd = cmd0 + csvPath.toStdString() + cmd1 ;
     Rcpp::DataFrame data = Rcon.parseEval(cmd);
-    Spreadsheet* ss = new Spreadsheet(data);
-    QTableWidget* table = ss->getSpreadsheetTable();
-    updateDataView(table);
-    VariableView* vv = new VariableView(table);
+    VariableView* vv = new VariableView(data);
+    updateDataView(vv->getSpreadsheetTable());
     updateVariableView(vv->getVariabelViewTable());
   }
