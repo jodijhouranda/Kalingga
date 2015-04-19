@@ -1,7 +1,9 @@
 #include "variableview.h"
 #include <QDebug>
 
-VariableView::VariableView(Rcpp::DataFrame frame , QWidget *parent): frame(frame)
+VariableView::VariableView(Rcpp::DataFrame frame,RInside &rconn, QWidget *parent):
+    frame(frame),
+    rconn(rconn)
 {
     ss = new Spreadsheet(frame);
     table = ss->getSpreadsheetTable();
@@ -117,4 +119,20 @@ QList<QString> VariableView::getAllVariableNames(){
 void VariableView::deleteVariable(int idx){
     table->removeColumn(idx);
     variabelTable->removeRow(idx);
+}
+// retrive variabel value vector
+Rcpp::NumericVector VariableView::getNumericVector(int idx){
+    Rcpp::NumericVector vector(table->rowCount());
+    for (int i = 0; i < table->rowCount(); ++i) {
+
+        vector(i) = table->item(i,idx)->text().toDouble();
+    }
+
+    qDebug()<< "sampai";
+    return vector;
+}
+
+//get R object
+RInside& VariableView::getRObject(){
+    return rconn;
 }

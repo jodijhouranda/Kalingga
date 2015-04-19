@@ -15,18 +15,24 @@ SOURCES += main.cpp \
     spreadsheet.cpp \
     variableview.cpp \
     createnewvariable.cpp \
-    deletevariable.cpp
+    deletevariable.cpp \
+    histogramcreator.cpp \
+    histogram.cpp
 
 HEADERS  += \
     mainwindow.h \
     spreadsheet.h \
     variableview.h \
     createnewvariable.h \
-    deletevariable.h
+    deletevariable.h \
+    histogramcreator.h \
+    histogram.h
 
 FORMS    += \
     createnewvariable.ui \
-    deletevariable.ui
+    deletevariable.ui \
+    histogramcreator.ui \
+    histogram.ui
 ## comment this out if you need a different version of R,
 ## and set set R_HOME accordingly as an environment variable
 R_HOME = 		$$system(R RHOME)
