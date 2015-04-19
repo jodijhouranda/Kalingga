@@ -5,6 +5,8 @@
 #include <RInside.h>
 #include <spreadsheet.h>
 #include <variableview.h>
+#include <createnewvariable.h>
+#include <deletevariable.h>
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -13,7 +15,8 @@ public:
 
 public slots:
     void openCSVSlot();
-
+    void openCreateNewVariable();
+    void openDeleteVariable();
 private:
     void setupWindowsSetting();
     void setupMenuBar();
@@ -21,8 +24,11 @@ private:
     void createAction();
     void updateDataView(QTableWidget* ss);
     void updateVariableView(QTableWidget* table);
+    VariableView* vv;
     QTabWidget *tabView;
     QAction* openCSV;
+    QAction* createNewVariable;
+    QAction* deleteVariable;
     QMenu* filemenu;
     RInside& Rcon;
 

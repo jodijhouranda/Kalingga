@@ -23,6 +23,12 @@ void MainWindow::createAction(){
     openCSV = new QAction(tr("Comma Separated Value (*.csv)"),this);
     connect(openCSV, SIGNAL(triggered()),this,SLOT(openCSVSlot()));
 
+    createNewVariable = new QAction (tr("Add Variable"),this);
+    connect(createNewVariable , SIGNAL(triggered()),this,SLOT(openCreateNewVariable()));
+
+    deleteVariable = new QAction (tr("Delete Variable"),this);
+    connect(deleteVariable , SIGNAL(triggered()),this,SLOT(openDeleteVariable()));
+
 }
 
 //setup menubar for mainwindow
@@ -31,10 +37,12 @@ QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
 QMenu *toolsMenu = menuBar()->addMenu(tr("&Tools"));
 QMenu *analysisMenu = menuBar()->addMenu(tr("&Analysis"));
-
+//file menu child
 QMenu *openMenu = fileMenu->addMenu(tr("Create Project From"));
 openMenu->addAction(openCSV);
-
+//data menu child
+dataMenu->addAction(createNewVariable);
+dataMenu->addAction(deleteVariable);
 }
 void MainWindow::createTabView(){
     QWidget *centralView = new QWidget(this);
@@ -69,7 +77,19 @@ void MainWindow::openCSVSlot(){
     std::string cmd1 = "\")";
     std::string cmd = cmd0 + csvPath.toStdString() + cmd1 ;
     Rcpp::DataFrame data = Rcon.parseEval(cmd);
-    VariableView* vv = new VariableView(data);
+    vv = new VariableView(data);
     updateDataView(vv->getSpreadsheetTable());
     updateVariableView(vv->getVariabelViewTable());
   }
+
+//slot buka windows create new Variable
+void MainWindow::openCreateNewVariable(){
+   CreateNewVariable* dialog =  new CreateNewVariable(vv,this );
+    dialog->show();
+}
+
+// slot buka dialog delete variable
+void MainWindow::openDeleteVariable(){
+    DeleteVariable* dialog =  new DeleteVariable(vv,this );
+     dialog->show();
+}

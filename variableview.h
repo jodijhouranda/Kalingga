@@ -12,6 +12,9 @@ public:
     VariableView(Rcpp::DataFrame frame , QWidget *parent = 0);
     QTableWidget* getVariabelViewTable();
     QTableWidget* getSpreadsheetTable();
+    void createNewVariable(QString name,QString type , QString label);
+    QList<QString> getAllVariableNames();
+    void deleteVariable(int idx);
 private:
     Spreadsheet* ss ;
     Rcpp::DataFrame frame;

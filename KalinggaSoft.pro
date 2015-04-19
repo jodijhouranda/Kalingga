@@ -13,14 +13,20 @@ TARGET = KalinggaSoft
 SOURCES += main.cpp \
     mainwindow.cpp \
     spreadsheet.cpp \
-    variableview.cpp
+    variableview.cpp \
+    createnewvariable.cpp \
+    deletevariable.cpp
 
 HEADERS  += \
     mainwindow.h \
     spreadsheet.h \
-    variableview.h
+    variableview.h \
+    createnewvariable.h \
+    deletevariable.h
 
-FORMS    +=
+FORMS    += \
+    createnewvariable.ui \
+    deletevariable.ui
 ## comment this out if you need a different version of R,
 ## and set set R_HOME accordingly as an environment variable
 R_HOME = 		$$system(R RHOME)

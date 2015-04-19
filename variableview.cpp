@@ -26,6 +26,7 @@ void VariableView::getVariabelAttribute(){
 
 
         for (int c = 0; c < frame.size(); ++c) {
+
             Rcpp::CharacterVector vektor = frame[c];
             QString dataType = checkVariableType(QString::fromUtf8(vektor[0]));
             variabelTable->setItem(c,1, new QTableWidgetItem(dataType));
@@ -66,7 +67,7 @@ QTableWidget* VariableView::getVariabelViewTable(){
 QTableWidget* VariableView::getSpreadsheetTable(){
     return table;
 }
-
+// setting table alignment
 void VariableView::setupAlignment(){
 
     for (int r = 0; r < variabelTable->rowCount(); ++r) {
@@ -82,8 +83,38 @@ void VariableView::setupAlignment(){
 //Edit Variable names
 
 void VariableView::changeVariableName(QTableWidgetItem* item){
+    qDebug() << item->row();
     if (item->column() == 0) {
         table->setHorizontalHeaderItem(item->row(),item);
     }
 }
 
+//Create New Variable
+void VariableView::createNewVariable(QString name, QString type, QString label){
+    int row = variabelTable->rowCount();
+
+    variabelTable->insertRow(row);
+    variabelTable->setItem(row,0, new QTableWidgetItem(name) );
+    variabelTable->setItem(row,1, new QTableWidgetItem(type) );
+    variabelTable->setItem(row,2, new QTableWidgetItem(label) );
+
+    table->insertColumn(row);
+    table->setHorizontalHeaderItem(row,new QTableWidgetItem(name) );
+    variabelTable->setItem(row,0, new QTableWidgetItem(name) );
+}
+
+//get All variable in spreadsheet
+
+QList<QString> VariableView::getAllVariableNames(){
+    QList<QString> allVar;
+    for (int i = 0; i < variabelTable->rowCount(); ++i) {
+        allVar << variabelTable->item(i,0)->text();
+    }
+    return allVar;
+}
+
+// delete one variable
+void VariableView::deleteVariable(int idx){
+    table->removeColumn(idx);
+    variabelTable->removeRow(idx);
+}
