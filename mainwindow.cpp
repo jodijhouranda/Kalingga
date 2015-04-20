@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include <QMenuBar>
 #include <QTabWidget>
-
 #include <QFileDialog>
+#include <mapview.h>
 MainWindow::MainWindow(RInside & R , QWidget *parent ) : QMainWindow(parent) ,Rcon(R)
 
 {
@@ -56,10 +56,10 @@ void MainWindow::createTabView(){
     QWidget *centralView = new QWidget(this);
     tabView = new QTabWidget(centralView);
     tabView->setTabPosition(QTabWidget::South);
-    tabView->setFixedSize(1370,650);
+    tabView->setFixedSize(1370,625);
     tabView->addTab(new QWidget(),"Data View");
     tabView->addTab(new QWidget(),"Variabel View");
-    tabView->addTab(new QWidget(),"Map View");
+    tabView->addTab(new mapview(this,tabView),"Map View");
 
     setCentralWidget(centralView);
 }

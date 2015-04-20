@@ -8,6 +8,7 @@
 #include <createnewvariable.h>
 #include <deletevariable.h>
 #include <histogramcreator.h>
+
 class MainWindow: public QMainWindow
 {
     Q_OBJECT

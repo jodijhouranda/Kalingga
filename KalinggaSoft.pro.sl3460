@@ -1,0 +1,62 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2015-04-06T20:15:13
+#
+#-------------------------------------------------
+
+QT       += core gui
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = KalinggaSoft
+
+## build an app based on the one headers and two source files
+SOURCES += main.cpp \
+    mainwindow.cpp \
+    spreadsheet.cpp \
+    mapview.cpp \
+    createnewvariable.cpp \
+    deletevariable.cpp \
+    dialog.cpp \
+    histogram.cpp \
+    histogramcreator.cpp \
+    variableview.cpp
+
+HEADERS  += \
+    mainwindow.h \
+    spreadsheet.h \
+    mapview.h \
+    createnewvariable.h \
+    deletevariable.h \
+    dialog.h \
+    histogram.h \
+    histogramcreator.h \
+    variableview.h
+
+
+FORMS    += \
+    createnewvariable.ui \
+    deletevariable.ui \
+    dialog.ui \
+    histogram.ui \
+    histogramcreator.ui
+
+## beyond the default configuration, also use SVG graphics
+QT += 			svg
+
+DISTFILES += \
+    images/addlayer.png \
+    images/addpoint.png \
+    images/mapinfo.png \
+    images/point.png \
+    images/polygon.png \
+    images/polyline.png \
+    images/savemap.png \
+    images/zoom.png \
+    images/zoomin.png \
+    images/zoomout.png \
+
+DESTDIR = $$PWD
+
+
+include (./qsimplespatial/qsimplespatial_static.pri)

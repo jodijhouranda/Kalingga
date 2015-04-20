@@ -5,34 +5,62 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT       += 			svg
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = KalinggaSoft
+
 ## build an app based on the one headers and two source files
 SOURCES += main.cpp \
     mainwindow.cpp \
     spreadsheet.cpp \
-    variableview.cpp \
+    mapview.cpp \
     createnewvariable.cpp \
     deletevariable.cpp \
+    dialog.cpp \
+    histogram.cpp \
     histogramcreator.cpp \
-    histogram.cpp
+    variableview.cpp
 
 HEADERS  += \
     mainwindow.h \
     spreadsheet.h \
-    variableview.h \
+    mapview.h \
     createnewvariable.h \
     deletevariable.h \
+    dialog.h \
+    histogram.h \
     histogramcreator.h \
-    histogram.h
+    variableview.h
+
 
 FORMS    += \
     createnewvariable.ui \
     deletevariable.ui \
-    histogramcreator.ui \
-    histogram.ui
+    dialog.ui \
+    histogram.ui \
+    histogramcreator.ui
+
+## beyond the default configuration, also use SVG graphics
+QT += 			svg
+
+DISTFILES += \
+    images/addlayer.png \
+    images/addpoint.png \
+    images/mapinfo.png \
+    images/point.png \
+    images/polygon.png \
+    images/polyline.png \
+    images/savemap.png \
+    images/zoom.png \
+    images/zoomin.png \
+    images/zoomout.png \
+
+DESTDIR = $$PWD
+
+
+include (./qsimplespatial/qsimplespatial_static.pri)
+
 ## comment this out if you need a different version of R,
 ## and set set R_HOME accordingly as an environment variable
 R_HOME = 		$$system(R RHOME)
