@@ -7,7 +7,7 @@ Spreadsheet::Spreadsheet(Rcpp::DataFrame data ):frame(data)
     rows = frame.nrows();
     cols = header.size();
     table = new QTableWidget(rows, cols, 0);
-        table->setMinimumSize(1365,595);
+        table->setMaximumSize(1365,595);
         table->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         for (int c = 0; c < cols; ++c) {
             QString character = QString::fromStdString(header.at(c));
@@ -21,7 +21,6 @@ Spreadsheet::Spreadsheet(QDbf::QDbfTableModel* tableModel) : tableModel(tableMod
     cols = tableModel->columnCount();
 
    table = new QTableWidget(rows, cols, 0);
-   table->setMinimumSize(1365,595);
    for (int c = 0; c < cols; ++c) {
        table->setHorizontalHeaderItem(c, new QTableWidgetItem(tableModel->headerData(c,Qt::Horizontal).toString()));
    }

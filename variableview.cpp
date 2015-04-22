@@ -32,7 +32,7 @@ void VariableView::getVariabelAttribute(){
 
 
     variabelTable = new QTableWidget(table->columnCount(), 3, 0);
-    variabelTable->setMinimumSize(1365,595);
+    variabelTable->setMaximumSize(1365,595);
     variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     std::string  headerVariabel[] = {"Variable","Type","Label"};
     //create Header
@@ -62,7 +62,7 @@ void VariableView::getVariabelAttributeDBF(){
 
 
     variabelTable = new QTableWidget(table->columnCount(), 3, 0);
-    variabelTable->setMinimumSize(1365,620);
+    variabelTable->setMinimumSize(1365,595);
     variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     std::string  headerVariabel[] = {"Variable","Type","Label"};
     //create Header
