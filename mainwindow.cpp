@@ -3,6 +3,12 @@
 #include <QTabWidget>
 #include <QFileDialog>
 #include <mapview.h>
+#include <QDebug>
+#include <QMessageBox>
+#include <qdbftablemodel.h>
+#include <QPointer>
+mapview* mview;
+
 MainWindow::MainWindow(RInside & R , QWidget *parent ) : QMainWindow(parent) ,Rcon(R)
 
 {
@@ -25,6 +31,9 @@ void MainWindow::createAction(){
     openCSV = new QAction(tr("Comma Separated Value (*.csv)"),this);
     connect(openCSV, SIGNAL(triggered()),this,SLOT(openCSVSlot()));
 
+    openSHP = new QAction(tr("Esri Shapefile (*.shp)"),this);
+    connect(openSHP, SIGNAL(triggered()),this,SLOT(openSHPSlot()));
+
     createNewVariable = new QAction (tr("Add Variable"),this);
     connect(createNewVariable , SIGNAL(triggered()),this,SLOT(openCreateNewVariable()));
 
@@ -45,7 +54,9 @@ QMenu *toolsMenu = menuBar()->addMenu(tr("&Tools"));
 QMenu *analysisMenu = menuBar()->addMenu(tr("&Analysis"));
 //file menu child
 QMenu *openMenu = fileMenu->addMenu(tr("Create Project From"));
+openMenu->addAction(openSHP);
 openMenu->addAction(openCSV);
+
 //data menu child
 dataMenu->addAction(createNewVariable);
 dataMenu->addAction(deleteVariable);
@@ -59,13 +70,14 @@ void MainWindow::createTabView(){
     tabView->setFixedSize(1370,625);
     tabView->addTab(new QWidget(),"Data View");
     tabView->addTab(new QWidget(),"Variabel View");
-    tabView->addTab(new mapview(this,tabView),"Map View");
+    mview = new mapview(this,tabView);
+    tabView->addTab(mview,"Map View");
 
     setCentralWidget(centralView);
 }
 
 
-
+//update ui
 void MainWindow::updateDataView(QTableWidget* ss){
     tabView->removeTab(0);
     tabView->insertTab(0,ss, tr("Data View"));
@@ -77,7 +89,6 @@ void MainWindow::updateVariableView(QTableWidget* vv){
     tabView->insertTab(1,vv, tr("Variable View"));
 
 }
-
 //All File dan data Slots
 void MainWindow::openCSVSlot(){
     QString csvPath = QFileDialog::getOpenFileName(this,"Open",QString(),tr("Separate Comma Value (*.csv)"));
@@ -89,6 +100,24 @@ void MainWindow::openCSVSlot(){
     updateDataView(vv->getSpreadsheetTable());
     updateVariableView(vv->getVariabelViewTable());
   }
+
+void MainWindow::openSHPSlot(){
+    QString shpPath = QFileDialog::getOpenFileName(this,"Open",QString(),tr("Separate Comma Value (*.shp)"));
+    QString dbfPath = shpPath.left(shpPath.length()-4) + ".dbf";
+    QFile* dbfFile = new QFile(dbfPath);
+    if (!dbfFile->exists() || shpPath.isEmpty()) {
+        QMessageBox::information(this,"Error opening shapefile" ,"dbf file not found");
+        return;
+    }
+
+   QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
+   tableModel->open(dbfPath);
+    vv = new VariableView(tableModel,Rcon);
+    updateDataView(vv->getSpreadsheetTable());
+    updateVariableView(vv->getVariabelViewTable());
+    mview->openShapeFile(shpPath);
+}
+
 //inisialisasi slot data menu
 //slot buka windows create new Variable
 void MainWindow::openCreateNewVariable(){

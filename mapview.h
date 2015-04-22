@@ -5,7 +5,7 @@
 
 #include "mapglobal.h"
 #include <mainwindow.h>
-
+#include <QWidget>
 #include <QSplitter>
 #include <QListWidget>
 #include <QFrame>
@@ -27,9 +27,9 @@ class mapview: public QWidget
     Q_OBJECT
 
 public:
-    mapview(MainWindow* MainWindow, QTabWidget* tabView,QWidget* parent = 0);
+   explicit mapview(MainWindow* MainWindow, QTabWidget* tabView, QWidget* parent = 0);
     ~mapview();
-
+    void openShapeFile(QString shpPath);
 protected:
     void keyPressEvent(QKeyEvent *event);
 

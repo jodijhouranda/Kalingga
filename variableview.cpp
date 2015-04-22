@@ -14,11 +14,25 @@ VariableView::VariableView(Rcpp::DataFrame frame,RInside &rconn, QWidget *parent
     connect(variabelTable , SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
 
 }
+
+VariableView::VariableView(QDbf::QDbfTableModel* tableModel ,RInside &rconn, QWidget *parent):
+tableModel(tableModel),
+rconn(rconn)
+{
+    ss = new Spreadsheet(tableModel);
+    table = ss->getSpreadsheetTable();
+    getVariabelAttributeDBF();
+    ss->dbfIterator(variabelTable);
+    setupAlignment();
+    connect(variabelTable , SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
+
+}
+
 void VariableView::getVariabelAttribute(){
 
 
     variabelTable = new QTableWidget(table->columnCount(), 3, 0);
-    variabelTable->setMinimumSize(1365,620);
+    variabelTable->setMinimumSize(1365,595);
     variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     std::string  headerVariabel[] = {"Variable","Type","Label"};
     //create Header
@@ -41,6 +55,40 @@ void VariableView::getVariabelAttribute(){
 
 
         }
+}
+}
+
+void VariableView::getVariabelAttributeDBF(){
+
+
+    variabelTable = new QTableWidget(table->columnCount(), 3, 0);
+    variabelTable->setMinimumSize(1365,620);
+    variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    std::string  headerVariabel[] = {"Variable","Type","Label"};
+    //create Header
+    for (int c = 0; c < variabelTable->columnCount(); ++c) {
+        QString character = QString::fromStdString(headerVariabel[c]);
+        variabelTable->setHorizontalHeaderItem(c, new QTableWidgetItem(character));
+        if (c == 0) {
+            for (int r = 0; r < table->columnCount(); ++r) {
+
+                QString x = tableModel->headerData(r,Qt::Horizontal).toString();
+                variabelTable->setItem(r,0,new QTableWidgetItem(x));
+
+
+            }
+        }else if (c == 1) {
+            for (int c = 0; c < variabelTable->rowCount(); ++c) {
+
+
+                QString dataType = checkVariableType(tableModel->index(0,c).data().toString());
+                variabelTable->setItem(c,1, new QTableWidgetItem(dataType));
+
+            }
+        }
+
+
+
 }
 }
 

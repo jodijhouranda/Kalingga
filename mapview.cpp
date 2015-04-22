@@ -408,7 +408,30 @@ void mapview::addShapeFile()
         }
     }
 }
+void mapview::openShapeFile(QString shpPath)
+{
+    QString filename = shpPath;
+    if(!filename.isEmpty()){
+        ShapeMapReader * smr = new ShapeMapReader(this);
+        Layer *layer = addLayer(filename,
+                                smr,
+                                mf->getProjection());
 
+        switch(layer->GetShapeType()){
+        case 1:
+            addPointLayer(layer);
+            break;
+        case 3:
+            addPolylineLayer(layer);
+            break;
+        case 5:
+            addPolygonLayer(layer);
+            break;
+        default:
+            QMessageBox::information(this,"ShapeFile Type unidentified","Shapefile type unidentified");
+        }
+    }
+}
 void mapview::addPointLayer(Layer *layer)
 {
         PaintSchemePoint *schemeCustom = new PaintSchemePoint(QPen(Qt::black),QBrush(Qt::red),5);

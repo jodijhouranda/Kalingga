@@ -6,11 +6,14 @@
 #include <spreadsheet.h>
 #include <Rcpp.h>
 #include <RInside.h>
+#include <QPointer>
+#include <qdbftablemodel.h>
 class VariableView : public QWidget
 {
 Q_OBJECT
 public:
     VariableView(Rcpp::DataFrame frame ,RInside &rconn, QWidget *parent = 0);
+    VariableView(QDbf::QDbfTableModel* tableModel ,RInside &rconn, QWidget *parent = 0);
     QTableWidget* getVariabelViewTable();
     QTableWidget* getSpreadsheetTable();
     RInside& getRObject();
@@ -21,10 +24,12 @@ public:
 private:
     Spreadsheet* ss ;
     Rcpp::DataFrame frame;
+    QDbf::QDbfTableModel* tableModel;
     QTableWidget* variabelTable;
     QTableWidget* table;
     RInside &rconn;
     void getVariabelAttribute();
+    void getVariabelAttributeDBF();
     QString checkVariableType(QString string);
     void setupAlignment();
 private slots:

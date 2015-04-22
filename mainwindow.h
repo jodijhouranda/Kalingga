@@ -9,6 +9,8 @@
 #include <deletevariable.h>
 #include <histogramcreator.h>
 
+
+
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -18,6 +20,7 @@ public:
 public slots:
     //slot data menu
     void openCSVSlot();
+    void openSHPSlot();
     void openCreateNewVariable();
     void openDeleteVariable();
 
@@ -30,10 +33,14 @@ private:
     void createAction();
     void updateDataView(QTableWidget* ss);
     void updateVariableView(QTableWidget* table);
+
     VariableView* vv;
     QTabWidget *tabView;
+
     //data menu action
     QAction* openCSV;
+    QAction* openSHP;
+
     QAction* createNewVariable;
     QAction* deleteVariable;
     //explore menu action
