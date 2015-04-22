@@ -34,6 +34,9 @@ void MainWindow::createAction(){
     openSHP = new QAction(tr("Esri Shapefile (*.shp)"),this);
     connect(openSHP, SIGNAL(triggered()),this,SLOT(openSHPSlot()));
 
+    openDBF = new QAction(tr("dBase Database File (*.dbf)"),this);
+    connect(openDBF, SIGNAL(triggered()),this,SLOT(openDBFSlot()));
+
     createNewVariable = new QAction (tr("Add Variable"),this);
     connect(createNewVariable , SIGNAL(triggered()),this,SLOT(openCreateNewVariable()));
 
@@ -55,6 +58,7 @@ QMenu *analysisMenu = menuBar()->addMenu(tr("&Analysis"));
 //file menu child
 QMenu *openMenu = fileMenu->addMenu(tr("Create Project From"));
 openMenu->addAction(openSHP);
+openMenu->addAction(openDBF);
 openMenu->addAction(openCSV);
 
 //data menu child
@@ -90,6 +94,8 @@ void MainWindow::updateVariableView(QTableWidget* vv){
 
 }
 //All File dan data Slots
+
+//1 open file slot
 void MainWindow::openCSVSlot(){
     QString csvPath = QFileDialog::getOpenFileName(this,"Open",QString(),tr("Separate Comma Value (*.csv)"));
     std::string cmd0 ="data<- read.csv(\"" ;
@@ -102,7 +108,7 @@ void MainWindow::openCSVSlot(){
   }
 
 void MainWindow::openSHPSlot(){
-    QString shpPath = QFileDialog::getOpenFileName(this,"Open",QString(),tr("Separate Comma Value (*.shp)"));
+    QString shpPath = QFileDialog::getOpenFileName(this,"Open",QString(),tr("Esri Shapefile (*.shp)"));
     QString dbfPath = shpPath.left(shpPath.length()-4) + ".dbf";
     QFile* dbfFile = new QFile(dbfPath);
     if (!dbfFile->exists() || shpPath.isEmpty()) {
@@ -116,6 +122,23 @@ void MainWindow::openSHPSlot(){
     updateDataView(vv->getSpreadsheetTable());
     updateVariableView(vv->getVariabelViewTable());
     mview->openShapeFile(shpPath);
+}
+
+void MainWindow::openDBFSlot(){
+    QString dbfPath = QFileDialog::getOpenFileName(this,"Open",QString(),tr("dBase Database File (*.dbf)"));
+
+
+    if (dbfPath.isEmpty()) {
+        QMessageBox::information(this,"Error opening shapefile" ,"dbf file not found");
+        return;
+    }
+
+   QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
+   tableModel->open(dbfPath);
+    vv = new VariableView(tableModel,Rcon);
+    updateDataView(vv->getSpreadsheetTable());
+    updateVariableView(vv->getVariabelViewTable());
+
 }
 
 //inisialisasi slot data menu

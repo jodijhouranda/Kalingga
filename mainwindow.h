@@ -17,10 +17,11 @@ class MainWindow: public QMainWindow
 public:
     explicit MainWindow(RInside & R,QWidget *parent = 0);
     RInside& Rcon;
-public slots:
+private slots:
     //slot data menu
     void openCSVSlot();
     void openSHPSlot();
+    void openDBFSlot();
     void openCreateNewVariable();
     void openDeleteVariable();
 
@@ -40,6 +41,7 @@ private:
     //data menu action
     QAction* openCSV;
     QAction* openSHP;
+    QAction* openDBF;
 
     QAction* createNewVariable;
     QAction* deleteVariable;
