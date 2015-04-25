@@ -24,7 +24,7 @@ private slots:
     void openDBFSlot();
     void openCreateNewVariable();
     void openDeleteVariable();
-
+    void openCalculateVariable();
     //slot explore menu
     void openHistogramCreator();
 private:
@@ -38,13 +38,15 @@ private:
     VariableView* vv;
     QTabWidget *tabView;
 
-    //data menu action
+
     QAction* openCSV;
     QAction* openSHP;
     QAction* openDBF;
+    //data menu action
 
     QAction* createNewVariable;
     QAction* deleteVariable;
+    QAction* calculateVariable;
     //explore menu action
     QAction* createHistogram;
     QMenu* filemenu;

@@ -27,12 +27,14 @@ Spreadsheet::Spreadsheet(QDbf::QDbfTableModel* tableModel) : tableModel(tableMod
 }
 
 void Spreadsheet::dataFrameIterator(QTableWidget* typeTable){
+
+    QTableWidgetItem* item = new QTableWidgetItem();
     for (int c = 0; c < typeTable->rowCount(); ++c) {
         if (typeTable->item(c,1)->text() == "String") {
                 Rcpp::CharacterVector x = frame[header.at(c)];
                 for (int r = 0; r < rows; ++r) {
-                    QString item = QString::fromUtf8(x[r]);
-                    table->setItem(r,c,new QTableWidgetItem(item));
+                    item->setText(QString::fromUtf8(x[r]));
+                    table->setItem(r,c, item->clone());
 
 
                 }
@@ -41,10 +43,9 @@ void Spreadsheet::dataFrameIterator(QTableWidget* typeTable){
         else {
                 Rcpp::NumericVector x = frame[header.at(c)];
                 for (int r = 0; r < rows; ++r) {
-                    QString item = QString::number(x[r]);
-                    table->setItem(r,c,new QTableWidgetItem(item));
-
-
+                    item->setText(QString::number(x[r]));
+                    table->setItem(r,c, item->clone());
+                    table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
                 }
             }
 

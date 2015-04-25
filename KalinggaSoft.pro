@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     dialog.cpp \
     histogram.cpp \
     histogramcreator.cpp \
-    variableview.cpp
+    variableview.cpp \
+    computevariable.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -31,7 +32,8 @@ HEADERS  += \
     dialog.h \
     histogram.h \
     histogramcreator.h \
-    variableview.h
+    variableview.h \
+    computevariable.h
 
 
 FORMS    += \
@@ -39,7 +41,8 @@ FORMS    += \
     deletevariable.ui \
     dialog.ui \
     histogram.ui \
-    histogramcreator.ui
+    histogramcreator.ui \
+    computevariable.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg
@@ -55,6 +58,7 @@ DISTFILES += \
     images/zoom.png \
     images/zoomin.png \
     images/zoomout.png \
+    images/arrow.png
 
 DESTDIR = $$PWD
 
@@ -95,3 +99,6 @@ QMAKE_LIBS +=           $$RLDFLAGS $$RBLAS $$RLAPACK $$RINSIDELIBS $$RCPPLIBS
 
 ## addition clean targets
 QMAKE_CLEAN +=		mainwindow.cpp Makefile
+
+RESOURCES += \
+    icon.qrc

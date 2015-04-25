@@ -13,7 +13,7 @@ HistogramCreator::HistogramCreator(VariableView* vv ,RInside &rconn, QWidget *pa
     rconn(rconn)
 {
     ui->setupUi(this);
-    QList<QString> allVar = vv->getAllVariableNames();
+    QList<QString> allVar = vv->getNumericVariableNames();
     ui->listWidgetVariables->addItems(allVar);
     m_tempfile = QString::fromStdString(Rcpp::as<std::string>(rconn.parseEval("tfile <- tempfile()")));
     m_svgfile = QString::fromStdString(Rcpp::as<std::string>(rconn.parseEval("sfile <- tempfile()")));
@@ -29,17 +29,25 @@ HistogramCreator::~HistogramCreator()
 void HistogramCreator::on_buttonBox_accepted()
 {
 
-    Rcpp::NumericVector vektor = vv->getNumericVector(ui->listWidgetVariables->currentRow());
+    QString selectedVar = ui->listWidgetVariables->item(ui->listWidgetVariables->currentRow())->text();
+    Rcpp::NumericVector vektor = vv->getNumericVector(vv->getVariableIndex(selectedVar));
     std::string x = ui->listWidgetVariables->currentItem()->text().toStdString();
+
     rconn[x] = vektor;
+    try {
 
+        std::string cmd0 ="svg(width=6,height=6,pointsize=10,filename=tfile); x <- as.vector(" ;
+        std::string cmd1 = ");";
+        std::string cmd2 = "y <- mean(x)";
+        std::string cmd = cmd0 + x + cmd1  + cmd2  ; // stick the selected kernel in the middle
+        rconn.parseEvalQ(cmd);
+        rconn.parseEvalQ("hist(x) ; dev.off()");
+    } catch (...) {
 
-    std::string cmd0 ="svg(width=6,height=6,pointsize=10,filename=tfile); " ;
-    std::string cmd1 = "hist(";
-    std::string cmd2 = "); dev.off()";
-    std::string cmd = cmd0 + cmd1 + x + cmd2  ; // stick the selected kernel in the middle
-    rconn.parseEvalQ(cmd);
-
+        qDebug() << "error 2";
+    }
+    double y = rconn["y"];
+     qDebug() << y;
     filterSVGFile();
     m_svgItem = new QGraphicsSvgItem(m_svgfile);
     QGraphicsScene *s = new QGraphicsScene;

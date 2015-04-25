@@ -18,7 +18,10 @@ public:
     QTableWidget* getSpreadsheetTable();
     RInside& getRObject();
     QList<QString> getAllVariableNames();
+    QList<QString> getNumericVariableNames();
     Rcpp::NumericVector getNumericVector(int idx);
+    void setNumericVariable(QString name, Rcpp::NumericVector vector );
+    int getVariableIndex(QString variabel);
     void createNewVariable(QString name,QString type , QString label);
     void deleteVariable(int idx);
 private:
@@ -30,7 +33,8 @@ private:
     RInside &rconn;
     void getVariabelAttribute();
     void getVariabelAttributeDBF();
-    QString checkVariableType(QString string);
+    QString checkVariableType(int column);
+    QString checkVariableTypeDbf(int column);
     void setupAlignment();
 private slots:
     void changeVariableName(QTableWidgetItem* item);

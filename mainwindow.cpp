@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <computevariable.h>
 #include <QMenuBar>
 #include <QTabWidget>
 #include <QFileDialog>
@@ -40,8 +41,11 @@ void MainWindow::createAction(){
     createNewVariable = new QAction (tr("Add Variable"),this);
     connect(createNewVariable , SIGNAL(triggered()),this,SLOT(openCreateNewVariable()));
 
-    deleteVariable = new QAction (tr("Delete Variable"),this);
+    deleteVariable = new QAction (tr("Delete Variable ... "),this);
     connect(deleteVariable , SIGNAL(triggered()),this,SLOT(openDeleteVariable()));
+
+    calculateVariable = new QAction (tr("Calculate Variable ..."),this);
+    connect(calculateVariable , SIGNAL(triggered()),this,SLOT(openCalculateVariable()));
 
     //explore menu create Action
     createHistogram = new QAction(tr("Histogram"),this);
@@ -64,6 +68,7 @@ openMenu->addAction(openCSV);
 //data menu child
 dataMenu->addAction(createNewVariable);
 dataMenu->addAction(deleteVariable);
+dataMenu->addAction(calculateVariable);
 //explore menu child
 exploreMenu->addAction(createHistogram);
 }
@@ -117,11 +122,14 @@ void MainWindow::openSHPSlot(){
     }
 
    QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
+
    tableModel->open(dbfPath);
     vv = new VariableView(tableModel,Rcon);
     updateDataView(vv->getSpreadsheetTable());
     updateVariableView(vv->getVariabelViewTable());
     mview->openShapeFile(shpPath);
+
+
 }
 
 void MainWindow::openDBFSlot(){
@@ -154,6 +162,10 @@ void MainWindow::openDeleteVariable(){
      dialog->show();
 }
 
+void MainWindow::openCalculateVariable(){
+    ComputeVariable* dialog =  new ComputeVariable(vv,Rcon ,this );
+     dialog->show();
+}
 
 //inisialisasi slot explore menu
 void MainWindow::openHistogramCreator(){

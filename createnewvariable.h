@@ -2,7 +2,9 @@
 #define CREATENEWVARIABLE_H
 
 #include <QDialog>
+#include <QComboBox>
 #include <variableview.h>
+#include <QListWidget>
 namespace Ui {
 class CreateNewVariable;
 }
@@ -14,12 +16,15 @@ class CreateNewVariable : public QDialog
 public:
     explicit CreateNewVariable(VariableView* vv , QWidget *parent = 0);
     ~CreateNewVariable();
-
+    void updateQCombox(QListWidget* listwidget , QComboBox* combo);
 private slots:
+
     void on_buttonBox_accepted();
 
-private:
 
+private:
+    QListWidget* m_listwidget;
+    QComboBox* m_combo;
     Ui::CreateNewVariable *ui;
     VariableView* vv;
 
