@@ -9,8 +9,6 @@
 #include <deletevariable.h>
 #include <histogramcreator.h>
 
-
-
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -25,6 +23,7 @@ private slots:
     void openCreateNewVariable();
     void openDeleteVariable();
     void openCalculateVariable();
+    void openRandomSampleGenerator();
     //slot explore menu
     void openHistogramCreator();
 private:
@@ -47,6 +46,8 @@ private:
     QAction* createNewVariable;
     QAction* deleteVariable;
     QAction* calculateVariable;
+    QAction* openRSGenerator;
+
     //explore menu action
     QAction* createHistogram;
     QMenu* filemenu;

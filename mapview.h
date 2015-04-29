@@ -14,6 +14,9 @@
 #include <QStatusBar>
 #include <QLabel>
 #include <QLineEdit>
+#include <QSpinBox>
+#include <QCheckBox>
+
 class QTabWidget;
 
 class Layer;
@@ -46,11 +49,15 @@ private:
     QAction *actionSaveMap;
     QAction *actionShapeInfo;
     QToolBar *toolBar;
-    QStatusBar *statusBar;
-    QLabel *statScale;
+
+    QLabel *statRotation;
     QLabel *statCoordinate;
+    QSpinBox *spinRotation;
+    QCheckBox *checkRender;
     QLineEdit *lineScale;
+    QCheckBox *checkScale;
     QLineEdit *lineCoordinate;
+    QStatusBar *statusBar;
 
     MapFrame *mf;
     int newLayerCount;
@@ -64,6 +71,7 @@ protected slots:
     void paint(QPainter &painter);
     void mapClicked(QMouseEvent *event);
     void mapReleased(QMouseEvent *event);
+    void mapMoved(QMouseEvent*);
 
 private slots:
     void addShapeFile();
@@ -80,6 +88,7 @@ private slots:
     void shapeInfo();
 
     void enableToolBar(int tab);
+    void layerPropertiesChanged(QListWidgetItem *item);
 };
 
 #endif // MAPVIEW_H

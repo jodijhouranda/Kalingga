@@ -301,5 +301,35 @@ void VariableView::setNumericVariable(QString name, Rcpp::NumericVector vector){
     int idx = getVariableIndex(name);
     for (int i = 0; i < vector.length(); ++i) {
         table->setItem(i,idx, new QTableWidgetItem(QString::number(vector[i])));
+        table->item(i,idx)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
     }
 }
+//set constant varible
+void VariableView::setConstantVariable(QString name, double cons){
+    int idx = getVariableIndex(name);
+    QString type = getVariableType(name);
+
+    for (int i = 0; i < table->rowCount(); ++i) {
+        table->setItem(i,idx, new QTableWidgetItem(QString::number(cons)));
+        if (type != "String") {
+
+            table->item(i,idx)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
+
+        }
+    }
+}
+//set character variable
+void VariableView::setCharacterVariable(QString name, Rcpp::NumericVector vector){
+    int idx = getVariableIndex(name);
+    for (int i = 0; i < vector.length(); ++i) {
+        table->setItem(i,idx, new QTableWidgetItem(QString::number(vector[i])));
+    }
+}
+
+//get variable type
+
+QString VariableView::getVariableType(QString var){
+    int idx = getVariableIndex(var);
+        return variabelTable->item(idx,1)->text();
+    }
+

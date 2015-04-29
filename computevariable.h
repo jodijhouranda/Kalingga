@@ -59,6 +59,19 @@ private slots:
 
     void on_pushButtonCancel_clicked();
 
+    void on_pushButtonlbrac_clicked();
+
+    void on_pushButtonrbrac_clicked();
+
+
+    void on_listWidgetfunction_doubleClicked(const QModelIndex &index);
+
+
+
+    void on_comboBoxFGroup_currentIndexChanged(int index);
+
+    void on_pushButtondelete_2_clicked();
+
 private:
     Ui::ComputeVariable *ui;
     VariableView* vv;
@@ -66,6 +79,10 @@ private:
     void init();
     void setFormulaViewText(QString string);
     QList<QString> getChoosenAttribute();
+    QStringList functionGroup;
+    QMap<QString,QString> trigonometryMap;
+    QMap<QString,QString> mathMap;
+    QMap<QString,QString> statisticMap;
 };
 
 #endif // COMPUTEVARIABLE_H

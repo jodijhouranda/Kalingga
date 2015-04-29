@@ -1,4 +1,5 @@
 #include "mapview.h"
+#include "layerproperties.h"
 
 #include "mapframe.h"
 #include "shapemapreader.h"
@@ -127,6 +128,8 @@ mapview::mapview(MainWindow *mw, QTabWidget *tabView ,QWidget* parent)
     actionShapeInfo->setIcon(icon6);
     actionShapeInfo->setToolTip("Shape Info");
 
+
+
     toolBar = new QToolBar(mw);
     toolBar->setObjectName(QString::fromUtf8("toolBar"));
 
@@ -142,23 +145,41 @@ mapview::mapview(MainWindow *mw, QTabWidget *tabView ,QWidget* parent)
     toolBar->addAction(actionShapeInfo);
     toolBar->setEnabled(false);
 
-    statScale = new QLabel(mw);
-    statScale->setText("Scale");
+    statRotation = new QLabel(mw);
+    statRotation->setText("Rotation:");
+    spinRotation = new QSpinBox(mw);
+
+    checkRender = new QCheckBox(mw);
+    checkRender->setText("Render");
+    checkRender->setChecked(true);\
+
+    checkScale = new QCheckBox(mw);
+    checkScale->setText("Scale");
+    checkScale->setChecked(false);
     lineScale = new QLineEdit(mw);
-    lineScale->setFixedWidth(80);
+    lineScale->setFixedWidth(100);
+    lineScale->setEnabled(false);
+    QPalette palette = lineScale->palette();
+    palette.setColor(QPalette::Base, Qt::white);
+    lineScale->setPalette(palette);
 
     statCoordinate = new QLabel(mw);
-    statCoordinate->setText("Coordinates");
+    statCoordinate->setText("Coordinates:");
     lineCoordinate = new QLineEdit(mw);
     lineCoordinate->setFixedWidth(120);
+    lineCoordinate->setEnabled(false);
+    lineCoordinate->setPalette(palette);
 
     statusBar = new QStatusBar(mw);
     statusBar->setObjectName(QString::fromUtf8("statusBar"));
     statusBar->addPermanentWidget(statCoordinate);
     statusBar->addPermanentWidget(lineCoordinate);
-    statusBar->addPermanentWidget(statScale);
+    statusBar->addPermanentWidget(checkScale);
     statusBar->addPermanentWidget(lineScale);
-    statusBar->setEnabled(false);
+    statusBar->addPermanentWidget(checkRender);
+    statusBar->addPermanentWidget(statRotation);
+    statusBar->addPermanentWidget(spinRotation);
+    statusBar->hide();
     mw->setStatusBar(statusBar);
 
 
@@ -172,16 +193,19 @@ mapview::mapview(MainWindow *mw, QTabWidget *tabView ,QWidget* parent)
     QObject::connect(layerList, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(layerListChanged(QListWidgetItem*)));
     QObject::connect(layerList, SIGNAL(itemSelectionChanged()), this, SLOT(layerListSelected()));
     QObject::connect(tabView, SIGNAL(currentChanged(int)), this, SLOT(enableToolBar(int)));
+    QObject::connect(layerList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(layerPropertiesChanged(QListWidgetItem*)));
+
 
     mf = new MapFrame();
-    QBrush bg(QPixmap("./images/cell.png"));
-    mf->setBackground(bg);
+
 
     connect(mf,SIGNAL(paint(QPainter&)),this,SLOT(paint(QPainter&)));
     connect(mf,SIGNAL(clicked(QMouseEvent*)),this,SLOT(mapClicked(QMouseEvent*)));
     connect(mf,SIGNAL(released(QMouseEvent*)),this,SLOT(mapReleased(QMouseEvent*)));
+    connect(mf,SIGNAL(moved(QMouseEvent*)),this,SLOT(mapMoved(QMouseEvent*)));
 
     splitter->addWidget(mf);
+    splitter->setStretchFactor(1,1);
 
     //Projection_WGS84_SphericalMercator *proj = new Projection_WGS84_SphericalMercator;
     Projection_WGS84_WorldMercator *proj = new Projection_WGS84_WorldMercator;
@@ -258,9 +282,10 @@ Layer *mapview::addLayer(const QString &fileName, ShapeMapReader *smr, Projectio
             break;
     }
     LayerListItem *item = new LayerListItem(this->layerList);
+    QString name = fileName.mid(fileName.lastIndexOf("/")+1,fileName.size()-fileName.lastIndexOf(".")-1);
     item->setCheckState(Qt::Checked);
     item->setIcon(icon);
-    item->setText(fileName);
+    item->setText(name);
     item->setLayer(layer);
     layerList->addItem(item);
     return layer;
@@ -269,15 +294,8 @@ Layer *mapview::addLayer(const QString &fileName, ShapeMapReader *smr, Projectio
 void mapview::paint(QPainter &painter)
 {
     MapFrame *mf = dynamic_cast<MapFrame *>(sender());
-    painter.setPen(Qt::black);
-    double X = mf->width() - 110;
-    double Y = mf->height() - 50;
-    painter.drawLine(X,Y,X + 100,Y);
-    painter.drawLine(X + 50,Y,X + 50,Y + 10);
-    for(double xx = X;xx <= X + 100;xx += 10)
-    {
-        painter.drawLine(xx,Y,xx,Y - 5);
-    }
+    mf->setBackground(Qt::white);
+
     double factor = 1.0 / mf->GetTranslator()->getScaleFactor();
     factor /= 10.0;
     QString postfix;
@@ -290,27 +308,41 @@ void mapview::paint(QPainter &painter)
     {
         postfix = "km";
     }
-    painter.drawText(QRectF(X,Y - 30,100,25),
-                     Qt::AlignCenter,
-                     QString("%1 %2").arg(QString::number(factor,'f',2)).arg(postfix));
     double zoom = mf->GetTranslator()->getZoom();
-    painter.drawText(QRectF(X,Y + 5,50,25),
-                     Qt::AlignLeft,
-                     QString::number(zoom,'f',5));
+    lineScale->setText(QString("%1 : %2%3").arg(zoom).arg(QString::number(factor,'f',2)).arg(postfix));
 
-    lineScale->setText(QString("%1:%2 %3").arg(zoom).arg(QString::number(factor,'f',2)).arg(postfix));
-
-    if(p_points.count() > 0) {
-        painter.setPen(Qt::blue);
-        for(int i = 1;i < p_points.count();i ++) {
-            painter.drawLine(p_points[i - 1].X,p_points[i - 1].Y,p_points[i].X,p_points[i].Y);
+    if(checkScale->isChecked()){
+        QBrush bg(QPixmap("./images/cell.png"));
+        mf->setBackground(bg);
+        painter.setPen(Qt::black);
+        double X = mf->width() - 110;
+        double Y = mf->height() - 50;
+        painter.drawLine(X,Y,X + 100,Y);
+        painter.drawLine(X + 50,Y,X + 50,Y + 10);
+        for(double xx = X;xx <= X + 100;xx += 10)
+        {
+            painter.drawLine(xx,Y,xx,Y - 5);
         }
-        painter.setPen(Qt::green);
-        for(int i = 0;i < p_points.count();i ++) {
-            painter.drawEllipse(p_points[i].X - 5,p_points[i].Y - 5,10,10);
+
+        painter.drawText(QRectF(X,Y - 30,100,25),
+                         Qt::AlignCenter,
+                         QString("%1 %2").arg(QString::number(factor,'f',2)).arg(postfix));
+
+        painter.drawText(QRectF(X,Y + 5,50,25),
+                         Qt::AlignLeft,
+                         QString::number(zoom,'f',5));
+
+        if(p_points.count() > 0) {
+            painter.setPen(Qt::blue);
+            for(int i = 1;i < p_points.count();i ++) {
+                painter.drawLine(p_points[i - 1].X,p_points[i - 1].Y,p_points[i].X,p_points[i].Y);
+            }
+            painter.setPen(Qt::green);
+            for(int i = 0;i < p_points.count();i ++) {
+                painter.drawEllipse(p_points[i].X - 5,p_points[i].Y - 5,10,10);
+            }
         }
     }
-
 }
 
 void mapview::mapClicked(QMouseEvent *event)
@@ -331,8 +363,14 @@ void mapview::mapClicked(QMouseEvent *event)
                         while (i.hasNext()) {
                             i.next();
                             output +=  QString("%1:%2; ").arg(i.key()).arg(i.value());
+
                         }
+                        output += QString("\ncenter: %1,%2 \ncentroid: %3,%4 \n%5, \n%6, \n%7, \n%8").arg(feature->getCenter().X).arg(feature->getCenter().Y)
+                                .arg(feature->getCentroid().X).arg(feature->getCentroid().Y)
+                                .arg(feature->getLabelScheme()->getFieldName()).arg(feature->getMaxZoom()).arg(feature->getMinZoom());
+
                         output += QString("\n------------------\n");
+
                     }
                 }
             }
@@ -379,6 +417,15 @@ void mapview::mapReleased(QMouseEvent *event)
     }
 }
 
+
+void mapview::mapMoved(QMouseEvent *event )
+{
+    QSimpleSpatial::SimplePoint coord = mf->GetTranslator()->Screen2Coord(event->pos().x(), event->pos().y());
+    QString output;
+    output =  QString("%1 , %2 ").arg(static_cast<int>(coord.X)).arg(static_cast<int>(coord.Y));
+    lineCoordinate->setText(output);\
+}
+
 void mapview::addShapeFile()
 {
     QString filename = QFileDialog::getOpenFileName(
@@ -408,6 +455,7 @@ void mapview::addShapeFile()
         }
     }
 }
+
 void mapview::openShapeFile(QString shpPath)
 {
     QString filename = shpPath;
@@ -432,11 +480,11 @@ void mapview::openShapeFile(QString shpPath)
         }
     }
 }
+
 void mapview::addPointLayer(Layer *layer)
 {
         PaintSchemePoint *schemeCustom = new PaintSchemePoint(QPen(Qt::black),QBrush(Qt::red),5);
         layer->AddScheme(schemeCustom);
-        //layer->setMaxZoom(0.01);
         LabelScheme *labelScheme = new LabelScheme("name",QFont("Tahoma",8),QPen(Qt::darkGray));
         QSimpleSpatial::SimplePoint offset;
         offset.X = 0;
@@ -459,6 +507,7 @@ void mapview::addPolylineLayer(Layer *layer)
 
 void mapview::addPolygonLayer(Layer *layer)
 {
+
         PaintSchemePolygon *schemeCustom = new PaintSchemePolygon();
         layer->AddScheme(schemeCustom);
         LabelScheme * labelScheme = new LabelScheme("name",QFont("Tahoma",9),QPen(Qt::darkGreen));
@@ -466,6 +515,7 @@ void mapview::addPolygonLayer(Layer *layer)
         mf->AddLayer(layer);
         zoom();
 }
+
 
 void mapview::addPointTriggered(bool checked)
 {
@@ -533,13 +583,25 @@ void mapview::shapeInfo()
 }
 
 void mapview::enableToolBar(int tab)
-{    
+{
     if(tab == 2){
         toolBar->setEnabled(true);
-        statusBar->setEnabled(true);
+        statusBar->show();
     }else{
         toolBar->setEnabled(false);
-        statusBar->setEnabled(false);
+        statusBar->hide();
     }
 }
 
+
+void mapview::layerPropertiesChanged(QListWidgetItem *item)
+{
+
+    LayerListItem *listItem = static_cast<LayerListItem *>(item);
+
+    if(listItem) {
+        LayerProperties *properties = new LayerProperties();
+        properties->show();
+    }
+
+}

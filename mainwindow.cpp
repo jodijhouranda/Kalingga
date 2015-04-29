@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <computevariable.h>
+#include <randomsamplegenarator.h>
 #include <QMenuBar>
 #include <QTabWidget>
 #include <QFileDialog>
@@ -47,6 +48,9 @@ void MainWindow::createAction(){
     calculateVariable = new QAction (tr("Calculate Variable ..."),this);
     connect(calculateVariable , SIGNAL(triggered()),this,SLOT(openCalculateVariable()));
 
+    openRSGenerator = new QAction (tr("Generate Random Sample"),this);
+    connect(openRSGenerator , SIGNAL(triggered()),this,SLOT(openRandomSampleGenerator()));
+
     //explore menu create Action
     createHistogram = new QAction(tr("Histogram"),this);
     connect(createHistogram , SIGNAL(triggered()),this,SLOT(openHistogramCreator()));
@@ -69,6 +73,7 @@ openMenu->addAction(openCSV);
 dataMenu->addAction(createNewVariable);
 dataMenu->addAction(deleteVariable);
 dataMenu->addAction(calculateVariable);
+dataMenu->addAction(openRSGenerator);
 //explore menu child
 exploreMenu->addAction(createHistogram);
 }
@@ -172,3 +177,10 @@ void MainWindow::openHistogramCreator(){
     HistogramCreator* dialog =  new HistogramCreator(vv,Rcon,this );
      dialog->show();
 }
+
+//open random sample generator dialog
+void MainWindow::openRandomSampleGenerator(){
+RandomSampleGenarator* dialog = new RandomSampleGenarator(vv,Rcon,this);
+dialog->show();
+}
+

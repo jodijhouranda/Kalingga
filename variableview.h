@@ -17,10 +17,14 @@ public:
     QTableWidget* getVariabelViewTable();
     QTableWidget* getSpreadsheetTable();
     RInside& getRObject();
+    //setter getter method
     QList<QString> getAllVariableNames();
     QList<QString> getNumericVariableNames();
     Rcpp::NumericVector getNumericVector(int idx);
+    QString getVariableType(QString var);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
+    void setCharacterVariable(QString name, Rcpp::NumericVector vector );
+    void setConstantVariable(QString name, double cons);
     int getVariableIndex(QString variabel);
     void createNewVariable(QString name,QString type , QString label);
     void deleteVariable(int idx);

@@ -21,7 +21,9 @@ SOURCES += main.cpp \
     histogram.cpp \
     histogramcreator.cpp \
     variableview.cpp \
-    computevariable.cpp
+    computevariable.cpp \
+    layerproperties.cpp \
+    randomsamplegenarator.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -33,7 +35,9 @@ HEADERS  += \
     histogram.h \
     histogramcreator.h \
     variableview.h \
-    computevariable.h
+    computevariable.h \
+    layerproperties.h \
+    randomsamplegenarator.h
 
 
 FORMS    += \
@@ -42,7 +46,9 @@ FORMS    += \
     dialog.ui \
     histogram.ui \
     histogramcreator.ui \
-    computevariable.ui
+    computevariable.ui \
+    layerproperties.ui \
+    randomsamplegenarator.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg
