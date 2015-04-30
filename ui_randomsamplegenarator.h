@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'randomsamplegenarator.ui'
 **
-** Created: Wed Apr 29 22:33:33 2015
+** Created: Thu Apr 30 21:05:36 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -16,12 +16,12 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QComboBox>
 #include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
 #include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
+#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -29,27 +29,33 @@ QT_BEGIN_NAMESPACE
 class Ui_RandomSampleGenarator
 {
 public:
-    QDialogButtonBox *buttonBox;
     QComboBox *comboBoxVariables;
     QPushButton *pushButtonNewVar;
     QLabel *Result;
     QLabel *equal;
     QComboBox *comboBoxDistributions;
     QGroupBox *groupBox;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayoutPar;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout;
+    QLabel *firstLabel;
+    QLineEdit *firstParameter;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *secondLabel;
+    QLineEdit *secondParameter;
+    QWidget *verticalLayoutWidget_3;
+    QVBoxLayout *verticalLayout_3;
+    QLabel *thirdLabel;
+    QLineEdit *thirdParameter;
     QLabel *Distribution;
+    QPushButton *pushButtonCancel;
+    QPushButton *pushButtonApply;
 
     void setupUi(QDialog *RandomSampleGenarator)
     {
         if (RandomSampleGenarator->objectName().isEmpty())
             RandomSampleGenarator->setObjectName(QString::fromUtf8("RandomSampleGenarator"));
-        RandomSampleGenarator->resize(368, 214);
-        buttonBox = new QDialogButtonBox(RandomSampleGenarator);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(130, 160, 221, 41));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        RandomSampleGenarator->resize(394, 243);
         comboBoxVariables = new QComboBox(RandomSampleGenarator);
         comboBoxVariables->setObjectName(QString::fromUtf8("comboBoxVariables"));
         comboBoxVariables->setGeometry(QRect(10, 50, 151, 22));
@@ -70,32 +76,83 @@ public:
         comboBoxDistributions->setGeometry(QRect(200, 50, 151, 22));
         groupBox = new QGroupBox(RandomSampleGenarator);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 80, 341, 81));
-        horizontalLayoutWidget = new QWidget(groupBox);
-        horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(10, 20, 321, 51));
-        horizontalLayoutPar = new QHBoxLayout(horizontalLayoutWidget);
-        horizontalLayoutPar->setObjectName(QString::fromUtf8("horizontalLayoutPar"));
-        horizontalLayoutPar->setContentsMargins(0, 0, 0, 0);
+        groupBox->setGeometry(QRect(10, 80, 371, 101));
+        verticalLayoutWidget = new QWidget(groupBox);
+        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(10, 30, 111, 41));
+        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        firstLabel = new QLabel(verticalLayoutWidget);
+        firstLabel->setObjectName(QString::fromUtf8("firstLabel"));
+
+        verticalLayout->addWidget(firstLabel);
+
+        firstParameter = new QLineEdit(verticalLayoutWidget);
+        firstParameter->setObjectName(QString::fromUtf8("firstParameter"));
+
+        verticalLayout->addWidget(firstParameter);
+
+        verticalLayoutWidget_2 = new QWidget(groupBox);
+        verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
+        verticalLayoutWidget_2->setGeometry(QRect(130, 30, 111, 41));
+        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        secondLabel = new QLabel(verticalLayoutWidget_2);
+        secondLabel->setObjectName(QString::fromUtf8("secondLabel"));
+
+        verticalLayout_2->addWidget(secondLabel);
+
+        secondParameter = new QLineEdit(verticalLayoutWidget_2);
+        secondParameter->setObjectName(QString::fromUtf8("secondParameter"));
+
+        verticalLayout_2->addWidget(secondParameter);
+
+        verticalLayoutWidget_3 = new QWidget(groupBox);
+        verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
+        verticalLayoutWidget_3->setGeometry(QRect(250, 30, 111, 41));
+        verticalLayout_3 = new QVBoxLayout(verticalLayoutWidget_3);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+        thirdLabel = new QLabel(verticalLayoutWidget_3);
+        thirdLabel->setObjectName(QString::fromUtf8("thirdLabel"));
+
+        verticalLayout_3->addWidget(thirdLabel);
+
+        thirdParameter = new QLineEdit(verticalLayoutWidget_3);
+        thirdParameter->setObjectName(QString::fromUtf8("thirdParameter"));
+
+        verticalLayout_3->addWidget(thirdParameter);
+
         Distribution = new QLabel(RandomSampleGenarator);
         Distribution->setObjectName(QString::fromUtf8("Distribution"));
         Distribution->setGeometry(QRect(200, 30, 61, 16));
+        pushButtonCancel = new QPushButton(RandomSampleGenarator);
+        pushButtonCancel->setObjectName(QString::fromUtf8("pushButtonCancel"));
+        pushButtonCancel->setGeometry(QRect(300, 200, 81, 23));
+        pushButtonApply = new QPushButton(RandomSampleGenarator);
+        pushButtonApply->setObjectName(QString::fromUtf8("pushButtonApply"));
+        pushButtonApply->setGeometry(QRect(210, 200, 81, 23));
 
         retranslateUi(RandomSampleGenarator);
-        QObject::connect(buttonBox, SIGNAL(accepted()), RandomSampleGenarator, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), RandomSampleGenarator, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(RandomSampleGenarator);
     } // setupUi
 
     void retranslateUi(QDialog *RandomSampleGenarator)
     {
-        RandomSampleGenarator->setWindowTitle(QApplication::translate("RandomSampleGenarator", "Dialog", 0, QApplication::UnicodeUTF8));
+        RandomSampleGenarator->setWindowTitle(QApplication::translate("RandomSampleGenarator", "Generate Random Sampel", 0, QApplication::UnicodeUTF8));
         pushButtonNewVar->setText(QApplication::translate("RandomSampleGenarator", "New Variable", 0, QApplication::UnicodeUTF8));
         Result->setText(QApplication::translate("RandomSampleGenarator", "Result", 0, QApplication::UnicodeUTF8));
         equal->setText(QApplication::translate("RandomSampleGenarator", "=", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QApplication::translate("RandomSampleGenarator", "Parameter", 0, QApplication::UnicodeUTF8));
+        firstLabel->setText(QApplication::translate("RandomSampleGenarator", "label", 0, QApplication::UnicodeUTF8));
+        secondLabel->setText(QApplication::translate("RandomSampleGenarator", "label", 0, QApplication::UnicodeUTF8));
+        thirdLabel->setText(QApplication::translate("RandomSampleGenarator", "label", 0, QApplication::UnicodeUTF8));
         Distribution->setText(QApplication::translate("RandomSampleGenarator", "Distribution", 0, QApplication::UnicodeUTF8));
+        pushButtonCancel->setText(QApplication::translate("RandomSampleGenarator", "cancel", 0, QApplication::UnicodeUTF8));
+        pushButtonApply->setText(QApplication::translate("RandomSampleGenarator", "apply", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

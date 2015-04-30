@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'computevariable.h'
 **
-** Created: Wed Apr 29 21:22:21 2015
+** Created: Thu Apr 30 21:02:29 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

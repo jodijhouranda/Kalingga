@@ -266,6 +266,18 @@ QList<QString> VariableView::getNumericVariableNames(){
     return allVar;
 }
 
+//get All numeric variable in spreadsheet
+QList<QString> VariableView::getRealVariableNames(){
+    QList<QString> allVar;
+    for (int i = 0; i < variabelTable->rowCount(); ++i) {
+        if (variabelTable->item(i,1)->text() == "Real") {
+            allVar << variabelTable->item(i,0)->text();
+        }
+
+    }
+    return allVar;
+}
+
 // delete one variable
 void VariableView::deleteVariable(int idx){
     table->removeColumn(idx);
@@ -325,7 +337,13 @@ void VariableView::setCharacterVariable(QString name, Rcpp::NumericVector vector
         table->setItem(i,idx, new QTableWidgetItem(QString::number(vector[i])));
     }
 }
-
+//set integer variable
+void VariableView::setIntegerVariable(QString name, Rcpp::NumericVector vector){
+    int idx = getVariableIndex(name);
+    for (int i = 0; i < vector.length(); ++i) {
+        table->setItem(i,idx, new QTableWidgetItem(QString::number(vector[i])));
+    }
+}
 //get variable type
 
 QString VariableView::getVariableType(QString var){
@@ -333,3 +351,7 @@ QString VariableView::getVariableType(QString var){
         return variabelTable->item(idx,1)->text();
     }
 
+//get Row Count
+int VariableView::getRowCount(){
+    return table->rowCount();
+}

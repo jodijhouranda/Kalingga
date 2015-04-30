@@ -20,14 +20,17 @@ public:
     //setter getter method
     QList<QString> getAllVariableNames();
     QList<QString> getNumericVariableNames();
+    QList<QString> getRealVariableNames();
     Rcpp::NumericVector getNumericVector(int idx);
     QString getVariableType(QString var);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVariable(QString name, Rcpp::NumericVector vector );
     void setConstantVariable(QString name, double cons);
+    void setIntegerVariable(QString name ,Rcpp::NumericVector vector );
     int getVariableIndex(QString variabel);
     void createNewVariable(QString name,QString type , QString label);
     void deleteVariable(int idx);
+    int getRowCount();
 private:
     Spreadsheet* ss ;
     Rcpp::DataFrame frame;

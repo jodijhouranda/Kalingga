@@ -34,3 +34,15 @@ void CreateNewVariable::updateQCombox(QListWidget* listwidget , QComboBox* combo
     m_combo = combo;
 }
 
+void CreateNewVariable::inactivatedIntegerType(){
+    ui->comboBoxType->setItemData(1, 0, Qt::UserRole - 1);
+}
+void CreateNewVariable::inactivatedRealType(){
+    ui->comboBoxType->setItemData(0, 0, Qt::UserRole - 1);
+}
+void CreateNewVariable::inactivatedStringType(){
+    ui->comboBoxType->setItemData(2, 0, Qt::UserRole - 1);
+}
+
+
+

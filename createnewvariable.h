@@ -17,6 +17,10 @@ public:
     explicit CreateNewVariable(VariableView* vv , QWidget *parent = 0);
     ~CreateNewVariable();
     void updateQCombox(QListWidget* listwidget , QComboBox* combo);
+    void inactivatedRealType();
+    void inactivatedIntegerType();
+    void inactivatedStringType();
+
 private slots:
 
     void on_buttonBox_accepted();
