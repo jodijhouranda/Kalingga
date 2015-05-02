@@ -15,6 +15,7 @@ MainWindow::MainWindow(RInside & R , QWidget *parent ) : QMainWindow(parent) ,Rc
 
 {
     setupWindowsSetting();
+    setMenubarVisible(false);
 
 
 }
@@ -24,7 +25,14 @@ void MainWindow::setupWindowsSetting(){
  this->showMaximized();
     createAction();
     setupMenuBar();
-    createTabView();
+
+    centralView = new QStackedWidget(this);
+
+    mview = new mapview(this,0,centralView);
+    mview->disableToolBar();
+    centralView->addWidget(mview);
+    setCentralWidget(centralView);
+
 }
 
 void MainWindow::createAction(){
@@ -58,51 +66,50 @@ void MainWindow::createAction(){
 
 //setup menubar for mainwindow
 void MainWindow::setupMenuBar(){
-QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
-QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
-QMenu *exploreMenu = menuBar()->addMenu(tr("&Explore"));
-QMenu *toolsMenu = menuBar()->addMenu(tr("&Tools"));
-QMenu *analysisMenu = menuBar()->addMenu(tr("&Analysis"));
+fileMenu = menuBar()->addMenu(tr("&File"));
+viewMenu = menuBar()->addMenu(tr("&View"));
+attributeMenu = menuBar()->addMenu(tr("&Attribute"));
+mapMenu = menuBar()->addMenu(tr("&Map"));
+toolsMenu = menuBar()->addMenu(tr("&Tools"));
+analysisMenu = menuBar()->addMenu(tr("&Analysis"));
+pluginMenu = menuBar()->addMenu(tr("&Plugin"));
+aboutMenu = menuBar()->addMenu(tr("&Help"));
+
 //file menu child
-QMenu *openMenu = fileMenu->addMenu(tr("Create Project From"));
+QMenu *openMenu = fileMenu->addMenu(tr("Open File"));
 openMenu->addAction(openSHP);
 openMenu->addAction(openDBF);
 openMenu->addAction(openCSV);
 
 //data menu child
-dataMenu->addAction(createNewVariable);
-dataMenu->addAction(deleteVariable);
-dataMenu->addAction(calculateVariable);
-dataMenu->addAction(openRSGenerator);
+attributeMenu->addAction(createNewVariable);
+attributeMenu->addAction(deleteVariable);
+attributeMenu->addAction(calculateVariable);
+attributeMenu->addAction(openRSGenerator);
 //explore menu child
-exploreMenu->addAction(createHistogram);
-}
-void MainWindow::createTabView(){
-    QWidget *centralView = new QWidget(this);
-    tabView = new QTabWidget(centralView);
-    tabView->setTabPosition(QTabWidget::South);
-    tabView->setFixedSize(1370,625);
-    tabView->addTab(new QWidget(),"Data View");
-    tabView->addTab(new QWidget(),"Variabel View");
-    mview = new mapview(this,tabView);
-    tabView->addTab(mview,"Map View");
-
-    setCentralWidget(centralView);
 }
 
 
 //update ui
-void MainWindow::updateDataView(QTableWidget* ss){
-    tabView->removeTab(0);
-    tabView->insertTab(0,ss, tr("Data View"));
-    tabView->setCurrentIndex(0);
-}
-
-void MainWindow::updateVariableView(QTableWidget* vv){
-    tabView->removeTab(1);
-    tabView->insertTab(1,vv, tr("Variable View"));
+void MainWindow::openDataView(){
+    centralView->setCurrentIndex(1);
+    setWindowTitle("KalinggaSoft : Data View");
+    mview->disableToolBar();
 
 }
+
+void MainWindow::openVariableView(){
+    centralView->setCurrentIndex(2);
+    setWindowTitle("KalinggaSoft : Variable View");
+    mview->disableToolBar();
+}
+
+void MainWindow::openMapView(){
+    centralView->setCurrentIndex(0);
+    setWindowTitle("KalinggaSoft : Map View");
+    mview->enableToolBar();
+}
+
 //All File dan data Slots
 
 //1 open file slot
@@ -113,8 +120,9 @@ void MainWindow::openCSVSlot(){
     std::string cmd = cmd0 + csvPath.toStdString() + cmd1 ;
     Rcpp::DataFrame data = Rcon.parseEval(cmd);
     vv = new VariableView(data,Rcon);
-    updateDataView(vv->getSpreadsheetTable());
-    updateVariableView(vv->getVariabelViewTable());
+
+    updateViewMenuDataOnly();
+    openDataView();
   }
 
 void MainWindow::openSHPSlot(){
@@ -130,11 +138,12 @@ void MainWindow::openSHPSlot(){
 
    tableModel->open(dbfPath);
     vv = new VariableView(tableModel,Rcon);
-    updateDataView(vv->getSpreadsheetTable());
-    updateVariableView(vv->getVariabelViewTable());
+    centralView->addWidget(vv->getSpreadsheetTable());
+    centralView->addWidget(vv->getVariabelViewTable());
     mview->openShapeFile(shpPath);
-
-
+    openMapView();
+    mview->enableToolBar();
+    updateViewMenu();
 }
 
 void MainWindow::openDBFSlot(){
@@ -149,9 +158,8 @@ void MainWindow::openDBFSlot(){
    QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
    tableModel->open(dbfPath);
     vv = new VariableView(tableModel,Rcon);
-    updateDataView(vv->getSpreadsheetTable());
-    updateVariableView(vv->getVariabelViewTable());
-
+    updateViewMenuDataOnly();
+    openDataView();
 }
 
 //inisialisasi slot data menu
@@ -184,3 +192,50 @@ RandomSampleGenarator* dialog = new RandomSampleGenarator(vv,Rcon,this);
 dialog->show();
 }
 
+void MainWindow::updateViewMenu(){
+    QAction* openDataView = new QAction(tr("Data View"),this);
+    connect(openDataView, SIGNAL(triggered()),this,SLOT(openDataView()));
+    viewMenu->addAction(openDataView);
+
+    QAction* openVariableView = new QAction(tr("Variable View"),this);
+    connect(openVariableView, SIGNAL(triggered()),this,SLOT(openVariableView()));
+    viewMenu->addAction(openVariableView);
+
+    QAction* openMapView = new QAction(tr("Map View"),this);
+    connect(openMapView, SIGNAL(triggered()),this,SLOT(openMapView()));
+    viewMenu->addAction(openMapView);
+    setMenubarVisible(true);
+}
+
+void MainWindow::updateViewMenuDataOnly(){
+    centralView->addWidget(vv->getSpreadsheetTable());
+    centralView->addWidget(vv->getVariabelViewTable());
+
+    QAction* openDataView = new QAction(tr("Data View"),this);
+    connect(openDataView, SIGNAL(triggered()),this,SLOT(openDataView()));
+    viewMenu->addAction(openDataView);
+
+    QAction* openVariableView = new QAction(tr("Variable View"),this);
+    connect(openVariableView, SIGNAL(triggered()),this,SLOT(openVariableView()));
+    viewMenu->addAction(openVariableView);
+    setMenubarVisible(true);
+}
+
+void MainWindow::setMenubarVisible(bool x){
+
+    if (x) {
+        viewMenu->menuAction()->setVisible(true);
+        attributeMenu->menuAction()->setVisible(true);
+        mapMenu->menuAction()->setVisible(true);
+        toolsMenu->menuAction()->setVisible(true);
+        analysisMenu->menuAction()->setVisible(true);
+        pluginMenu->menuAction()->setVisible(true);
+    } else {
+        viewMenu->menuAction()->setVisible(false);
+        attributeMenu->menuAction()->setVisible(false);
+        mapMenu->menuAction()->setVisible(false);
+        toolsMenu->menuAction()->setVisible(false);
+        analysisMenu->menuAction()->setVisible(false);
+        pluginMenu->menuAction()->setVisible(false);
+    }
+}

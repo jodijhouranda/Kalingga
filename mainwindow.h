@@ -8,7 +8,8 @@
 #include <createnewvariable.h>
 #include <deletevariable.h>
 #include <histogramcreator.h>
-
+#include <QHBoxLayout>
+#include <QStackedWidget>
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -26,14 +27,18 @@ private slots:
     void openRandomSampleGenerator();
     //slot explore menu
     void openHistogramCreator();
+    //slot window menu
+
+    void openDataView();
+    void openVariableView();
+    void openMapView();
 private:
     void setupWindowsSetting();
     void setupMenuBar();
-    void createTabView();
     void createAction();
-    void updateDataView(QTableWidget* ss);
-    void updateVariableView(QTableWidget* table);
-
+    void updateViewMenu();
+    void updateViewMenuDataOnly();
+    void setMenubarVisible(bool x);
     VariableView* vv;
     QTabWidget *tabView;
 
@@ -50,8 +55,15 @@ private:
 
     //explore menu action
     QAction* createHistogram;
-    QMenu* filemenu;
-
+    QMenu* fileMenu;
+    QMenu *viewMenu;
+    QMenu *attributeMenu;
+    QMenu *mapMenu;
+    QMenu *toolsMenu;
+    QMenu *analysisMenu;
+    QMenu *pluginMenu;
+    QMenu *aboutMenu;
+    QStackedWidget *centralView;
 
 
 };

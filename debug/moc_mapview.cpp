@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mapview.h'
 **
-** Created: Thu Apr 30 21:02:06 2015
+** Created: Sat May 2 16:35:44 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_mapview[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -47,8 +47,7 @@ static const uint qt_meta_data_mapview[] = {
      281,  276,    8,    8, 0x08,
      316,    8,    8,    8, 0x08,
      336,    8,    8,    8, 0x08,
-     352,  348,    8,    8, 0x08,
-     371,  276,    8,    8, 0x08,
+     348,  276,    8,    8, 0x08,
 
        0        // eod
 };
@@ -64,8 +63,7 @@ static const char qt_meta_stringdata_mapview[] = {
     "addPointTriggered(bool)\0saveLayer()\0"
     "zoom()\0zoomIn()\0zoomOut()\0item\0"
     "layerListChanged(QListWidgetItem*)\0"
-    "layerListSelected()\0shapeInfo()\0tab\0"
-    "enableToolBar(int)\0"
+    "layerListSelected()\0shapeInfo()\0"
     "layerPropertiesChanged(QListWidgetItem*)\0"
 };
 
@@ -91,8 +89,7 @@ void mapview::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 13: _t->layerListChanged((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
         case 14: _t->layerListSelected(); break;
         case 15: _t->shapeInfo(); break;
-        case 16: _t->enableToolBar((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 17: _t->layerPropertiesChanged((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
+        case 16: _t->layerPropertiesChanged((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -130,9 +127,9 @@ int mapview::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 17;
     }
     return _id;
 }

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Thu Apr 30 21:02:02 2015
+** Created: Sat May 2 16:35:39 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -39,6 +39,9 @@ static const uint qt_meta_data_MainWindow[] = {
       99,   11,   11,   11, 0x08,
      123,   11,   11,   11, 0x08,
      151,   11,   11,   11, 0x08,
+     174,   11,   11,   11, 0x08,
+     189,   11,   11,   11, 0x08,
+     208,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -48,7 +51,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "openDBFSlot()\0openCreateNewVariable()\0"
     "openDeleteVariable()\0openCalculateVariable()\0"
     "openRandomSampleGenerator()\0"
-    "openHistogramCreator()\0"
+    "openHistogramCreator()\0openDataView()\0"
+    "openVariableView()\0openMapView()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -65,6 +69,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 5: _t->openCalculateVariable(); break;
         case 6: _t->openRandomSampleGenerator(); break;
         case 7: _t->openHistogramCreator(); break;
+        case 8: _t->openDataView(); break;
+        case 9: _t->openVariableView(); break;
+        case 10: _t->openMapView(); break;
         default: ;
         }
     }
@@ -103,9 +110,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 11;
     }
     return _id;
 }

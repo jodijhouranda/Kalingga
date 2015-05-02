@@ -192,7 +192,6 @@ mapview::mapview(MainWindow *mw, QTabWidget *tabView ,QWidget* parent)
     QObject::connect(actionShapeInfo, SIGNAL(triggered()), this, SLOT(shapeInfo()));
     QObject::connect(layerList, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(layerListChanged(QListWidgetItem*)));
     QObject::connect(layerList, SIGNAL(itemSelectionChanged()), this, SLOT(layerListSelected()));
-    QObject::connect(tabView, SIGNAL(currentChanged(int)), this, SLOT(enableToolBar(int)));
     QObject::connect(layerList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(layerPropertiesChanged(QListWidgetItem*)));
 
 
@@ -582,17 +581,19 @@ void mapview::shapeInfo()
     }
 }
 
-void mapview::enableToolBar(int tab)
+void mapview::enableToolBar()
 {
-    if(tab == 2){
         toolBar->setEnabled(true);
         statusBar->show();
-    }else{
-        toolBar->setEnabled(false);
-        statusBar->hide();
-    }
+        statusBar->setEnabled(true);
 }
+void mapview::disableToolBar()
+{
+        toolBar->setEnabled(false);
+        statusBar->show();
+        statusBar->setEnabled(false);
 
+}
 
 void mapview::layerPropertiesChanged(QListWidgetItem *item)
 {

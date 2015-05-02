@@ -33,6 +33,8 @@ public:
    explicit mapview(MainWindow* MainWindow, QTabWidget* tabView, QWidget* parent = 0);
     ~mapview();
     void openShapeFile(QString shpPath);
+    void enableToolBar();
+    void disableToolBar();
 protected:
     void keyPressEvent(QKeyEvent *event);
 
@@ -86,8 +88,6 @@ private slots:
     void layerListChanged(QListWidgetItem *item);
     void layerListSelected();
     void shapeInfo();
-
-    void enableToolBar(int tab);
     void layerPropertiesChanged(QListWidgetItem *item);
 };
 
