@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'createnewvariable.ui'
 **
-** Created: Wed Apr 29 21:05:23 2015
+** Created: Wed May 6 22:24:08 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

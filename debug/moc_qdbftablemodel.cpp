@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qdbftablemodel.h'
 **
-** Created: Wed Apr 29 21:22:31 2015
+** Created: Wed May 6 22:26:37 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

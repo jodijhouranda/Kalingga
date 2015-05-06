@@ -18,12 +18,16 @@ SOURCES += main.cpp \
     createnewvariable.cpp \
     deletevariable.cpp \
     dialog.cpp \
-    histogram.cpp \
     histogramcreator.cpp \
     variableview.cpp \
     computevariable.cpp \
     layerproperties.cpp \
-    randomsamplegenarator.cpp
+    randomsamplegenarator.cpp \
+    recodevariable.cpp \
+    resultview.cpp \
+    resultviewitem.cpp \
+    resultindex.cpp \
+    chart.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -32,23 +36,27 @@ HEADERS  += \
     createnewvariable.h \
     deletevariable.h \
     dialog.h \
-    histogram.h \
     histogramcreator.h \
     variableview.h \
     computevariable.h \
     layerproperties.h \
-    randomsamplegenarator.h
+    randomsamplegenarator.h \
+    recodevariable.h \
+    resultview.h \
+    resultviewitem.h \
+    resultindex.h \
+    chart.h
 
 
 FORMS    += \
     createnewvariable.ui \
     deletevariable.ui \
     dialog.ui \
-    histogram.ui \
     histogramcreator.ui \
     computevariable.ui \
     layerproperties.ui \
-    randomsamplegenarator.ui
+    randomsamplegenarator.ui \
+    recodevariable.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg

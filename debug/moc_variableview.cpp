@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'variableview.h'
 **
-** Created: Thu Apr 30 21:02:25 2015
+** Created: Wed May 6 22:26:13 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'shapemapreader.h'
 **
-** Created: Wed Apr 29 21:22:27 2015
+** Created: Wed May 6 22:26:33 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

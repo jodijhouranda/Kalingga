@@ -5,12 +5,12 @@
 #include <variableview.h>
 #include <RInside.h>
 #include <QGraphicsItem>
-#include <histogram.h>
+#include <chart.h>
 namespace Ui {
 class HistogramCreator;
 }
 
-class HistogramCreator : public QDialog
+class HistogramCreator : public QDialog , public Chart
 {
     Q_OBJECT
 
@@ -20,7 +20,6 @@ public:
 
 private slots:
     void on_buttonBox_accepted();
-    void filterSVGFile();
 private:
     Ui::HistogramCreator *ui;
     VariableView* vv;

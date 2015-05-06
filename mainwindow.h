@@ -10,12 +10,18 @@
 #include <histogramcreator.h>
 #include <QHBoxLayout>
 #include <QStackedWidget>
+#include <resultview.h>
+#include <resultviewitem.h>
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
 public:
     explicit MainWindow(RInside & R,QWidget *parent = 0);
     RInside& Rcon;
+static ResultView* result;
+
+
+static void enableResultView();
 private slots:
     //slot data menu
     void openCSVSlot();
@@ -32,12 +38,14 @@ private slots:
     void openDataView();
     void openVariableView();
     void openMapView();
+    void openResultView();
 private:
     void setupWindowsSetting();
     void setupMenuBar();
     void createAction();
     void updateViewMenu();
     void updateViewMenuDataOnly();
+
     void setMenubarVisible(bool x);
     VariableView* vv;
     QTabWidget *tabView;
@@ -63,9 +71,12 @@ private:
     QMenu *analysisMenu;
     QMenu *pluginMenu;
     QMenu *aboutMenu;
-    QStackedWidget *centralView;
-
-
+//view menu action
+    QAction* mapViewAct;
+    QAction* dataViewAct;
+    QAction* variableViewAct;
+    static QStackedWidget* centralView;
+    static QAction* resultViewAct;
 };
 
 #endif // MAINWINDOW_H

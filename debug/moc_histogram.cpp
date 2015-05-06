@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'histogram.h'
 **
-** Created: Wed Apr 29 21:22:11 2015
+** Created: Tue May 5 16:38:06 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -9,12 +9,22 @@
 #include <QMessageBox>
 #include <qdbftablemodel.h>
 #include <QPointer>
+
+#include <QPushButton>
 mapview* mview;
+ResultView* MainWindow::result;
+QStackedWidget* MainWindow::centralView;
+QAction* MainWindow::resultViewAct;
+void MainWindow::enableResultView(){
+    centralView->setCurrentIndex(3);
+    resultViewAct->setVisible(true);
+}
 
 MainWindow::MainWindow(RInside & R , QWidget *parent ) : QMainWindow(parent) ,Rcon(R)
 
 {
     setupWindowsSetting();
+    result = new ResultView(this);
     setMenubarVisible(false);
 
 
@@ -80,12 +90,31 @@ QMenu *openMenu = fileMenu->addMenu(tr("Open File"));
 openMenu->addAction(openSHP);
 openMenu->addAction(openDBF);
 openMenu->addAction(openCSV);
+//view menu child
 
+
+
+mapViewAct = new QAction(tr("Map View"),this);
+connect(mapViewAct, SIGNAL(triggered()),this,SLOT(openMapView()));
+viewMenu->addAction(mapViewAct);
+
+dataViewAct = new QAction(tr("Data View"),this);
+connect(dataViewAct, SIGNAL(triggered()),this,SLOT(openDataView()));
+viewMenu->addAction(dataViewAct);
+
+variableViewAct = new QAction(tr("Variable View"),this);
+connect(variableViewAct, SIGNAL(triggered()),this,SLOT(openVariableView()));
+viewMenu->addAction(variableViewAct);
+
+resultViewAct = new QAction(tr("Result View"),this);
+connect(resultViewAct, SIGNAL(triggered()),this,SLOT(openResultView()));
+viewMenu->addAction(resultViewAct);
 //data menu child
 attributeMenu->addAction(createNewVariable);
 attributeMenu->addAction(deleteVariable);
 attributeMenu->addAction(calculateVariable);
 attributeMenu->addAction(openRSGenerator);
+attributeMenu->addAction(createHistogram);
 //explore menu child
 }
 
@@ -108,6 +137,12 @@ void MainWindow::openMapView(){
     centralView->setCurrentIndex(0);
     setWindowTitle("KalinggaSoft : Map View");
     mview->enableToolBar();
+}
+
+void MainWindow::openResultView(){
+    centralView->setCurrentIndex(3);
+    setWindowTitle("KalinggaSoft : Result View");
+    mview->disableToolBar();
 }
 
 //All File dan data Slots
@@ -143,6 +178,8 @@ void MainWindow::openSHPSlot(){
     mview->openShapeFile(shpPath);
     openMapView();
     mview->enableToolBar();
+
+    centralView->addWidget(result);
     updateViewMenu();
 }
 
@@ -193,32 +230,15 @@ dialog->show();
 }
 
 void MainWindow::updateViewMenu(){
-    QAction* openDataView = new QAction(tr("Data View"),this);
-    connect(openDataView, SIGNAL(triggered()),this,SLOT(openDataView()));
-    viewMenu->addAction(openDataView);
-
-    QAction* openVariableView = new QAction(tr("Variable View"),this);
-    connect(openVariableView, SIGNAL(triggered()),this,SLOT(openVariableView()));
-    viewMenu->addAction(openVariableView);
-
-    QAction* openMapView = new QAction(tr("Map View"),this);
-    connect(openMapView, SIGNAL(triggered()),this,SLOT(openMapView()));
-    viewMenu->addAction(openMapView);
-    setMenubarVisible(true);
+   setMenubarVisible(true);
+    resultViewAct->setVisible(false);
 }
 
 void MainWindow::updateViewMenuDataOnly(){
-    centralView->addWidget(vv->getSpreadsheetTable());
-    centralView->addWidget(vv->getVariabelViewTable());
+setMenubarVisible(true);
+    mapViewAct->setVisible(false);
+    resultViewAct->setVisible(false);
 
-    QAction* openDataView = new QAction(tr("Data View"),this);
-    connect(openDataView, SIGNAL(triggered()),this,SLOT(openDataView()));
-    viewMenu->addAction(openDataView);
-
-    QAction* openVariableView = new QAction(tr("Variable View"),this);
-    connect(openVariableView, SIGNAL(triggered()),this,SLOT(openVariableView()));
-    viewMenu->addAction(openVariableView);
-    setMenubarVisible(true);
 }
 
 void MainWindow::setMenubarVisible(bool x){
