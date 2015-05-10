@@ -10,7 +10,7 @@ namespace Ui {
 class HistogramCreator;
 }
 
-class HistogramCreator : public QDialog , public Chart
+class HistogramCreator : public QDialog ,public Chart
 {
     Q_OBJECT
 
@@ -24,11 +24,9 @@ private:
     Ui::HistogramCreator *ui;
     VariableView* vv;
     RInside& rconn;
-    QString m_tempfile;
-    QString m_svgfile;
     QString m_cmd;
-    QGraphicsItem *m_svgItem;
     QString data;
+
 };
 
 #endif // HISTOGRAMCREATOR_H

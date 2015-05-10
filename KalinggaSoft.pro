@@ -27,7 +27,9 @@ SOURCES += main.cpp \
     resultview.cpp \
     resultviewitem.cpp \
     resultindex.cpp \
-    chart.cpp
+    chart.cpp \
+    chartconfig.cpp \
+    histogramconfig.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -45,7 +47,9 @@ HEADERS  += \
     resultview.h \
     resultviewitem.h \
     resultindex.h \
-    chart.h
+    chart.h \
+    chartconfig.h \
+    histogramconfig.h
 
 
 FORMS    += \
@@ -56,7 +60,8 @@ FORMS    += \
     computevariable.ui \
     layerproperties.ui \
     randomsamplegenarator.ui \
-    recodevariable.ui
+    recodevariable.ui \
+    histogramconfig.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg

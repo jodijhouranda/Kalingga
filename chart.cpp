@@ -1,16 +1,10 @@
 #include "chart.h"
-#include <QFile>
-#include <QGraphicsSvgItem>
-#include <QTextStream>
-#include <QGraphicsScene>
-#include <QDebug>
-#include <QGraphicsView>
-#include <resultviewitem.h>
 #include <mainwindow.h>
-#include <QVBoxLayout>
+#include <QPushButton>
+#include <histogramconfig.h>
+#include <QDebug>
 Chart::Chart()
 {
-
 }
 
 Chart::~Chart()
@@ -18,7 +12,7 @@ Chart::~Chart()
 
 }
 
-void Chart::filterSVGFile(QString m_tempfile , QString m_svgfile){
+void Chart::filterSVGFile(){
     // cairoDevice creates richer SVG than Qt can display
     // but per Michaele Lawrence, a simple trick is to s/symbol/g/ which we do here
     QFile infile(m_tempfile);
@@ -40,26 +34,44 @@ void Chart::filterSVGFile(QString m_tempfile , QString m_svgfile){
     outfile.close();
 }
 
-void Chart::setupChartView(QString m_svgfile ,QString chartName ,QString variable){
-
-    m_svgItem = new QGraphicsSvgItem(m_svgfile);
-    QGraphicsScene *s = new QGraphicsScene();
-    s->addItem(m_svgItem);
+void Chart::setupChartView(QString chartName ,QString variable ,QWidget* configWidget){
     QWidget* widget = new QWidget();
-    QGraphicsView* graph = new QGraphicsView(widget);
-    QVBoxLayout* layout = new QVBoxLayout();
+
+    graph = new QSvgWidget(widget);
+    QHBoxLayout* layout = new QHBoxLayout();
+    QWidget* cWidget = configWidget;
+    cWidget->setParent(widget);
     layout->addWidget(graph);
     layout->setMargin(0);
     widget->setLayout(layout);
-    graph->setScene(s);
-    graph->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    QString var = QString("%1(%2)").arg(chartName,variable);
+    graph->setFixedSize(600,600);
+    cWidget->setFixedWidth(200);
+    cWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    QString var = QString("%1 (%2)").arg(chartName,variable);
     QStringList item;
     QList<QWidget*> list;
     list << widget;
     item << var;
-    ResultViewItem* rvi = new ResultViewItem(item,list,chartName+" Result");
+    ResultViewItem* rvi = new ResultViewItem(item,list,var);
     MainWindow::result->setResultViewItem(rvi);
     MainWindow::enableResultView();
 
 }
+
+void Chart::setTempFile(RInside& rconn){
+    tfile ="tf" +QString::number(qrand());
+    sfile = "sf"+QString::number(qrand());
+    qDebug()<<tfile +sfile;
+    m_tempfile = QString::fromStdString(Rcpp::as<std::string>(rconn.parseEval(QString("%1 <- tempfile()").arg(tfile).toStdString())));
+    m_svgfile = QString::fromStdString(Rcpp::as<std::string>(rconn.parseEval(QString("%1 <- tempfile()").arg(sfile).toStdString())));
+
+    rconn.parseEval("library(ggplot2)");
+}
+
+void Chart::printGraph(RInside& rconn){
+    rconn.parseEvalQ(QString("svg(width=6,height=6,pointsize=10,filename= %1);").arg(tfile).toStdString());
+    rconn.parseEvalQ("print(gr);dev.off();");
+    filterSVGFile();
+    graph->load(m_svgfile);
+}
+

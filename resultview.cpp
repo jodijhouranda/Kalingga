@@ -27,19 +27,29 @@ ResultView::~ResultView()
 
 void ResultView::changeStacketWidget(QTreeWidgetItem* item,int col){
     if (tree->indexOfTopLevelItem(item->parent())==-1) {
-        return;
+        int r = tree->indexOfTopLevelItem(item);
+        qDebug() << indexGenerator(r);
+        stackedWidget->setCurrentIndex(stackedWidget->indexOf(map[indexGenerator(r)]));
+    }else{
+        int r = tree->indexOfTopLevelItem(item->parent());
+        int c = item->parent()->indexOfChild(item);
+        qDebug() << indexGenerator(r,c);
+        stackedWidget->setCurrentIndex(stackedWidget->indexOf(map[indexGenerator(r,c)]));
     }
-    int r = tree->indexOfTopLevelItem(item->parent());
-    int c = item->parent()->indexOfChild(item);
-    qDebug() << indexGenerator(r,c);
-    stackedWidget->setCurrentIndex(stackedWidget->indexOf(map[indexGenerator(r,c)]));
+
 }
 
 void ResultView::setResultViewItem(ResultViewItem* item){
     QTreeWidgetItem* root = new QTreeWidgetItem();
     tree->addTopLevelItem(root);
     root->setText(0,item->getTittle());
-    iterateTreeItems(item->getTreeList(),item->getResultWidgets(),root);
+    if(item->getTreeList().count()==1){
+        int r = tree->indexOfTopLevelItem(root);
+        map.insert(indexGenerator(r),item->getResultWidgets().at(0));
+        stackedWidget->addWidget(item->getResultWidgets().at(0));
+    }else {
+        iterateTreeItems(item->getTreeList(),item->getResultWidgets(),root);
+    }
 }
 
 void ResultView::iterateTreeItems(QStringList listItem, QList<QWidget*> listWidget, QTreeWidgetItem* root){
@@ -57,5 +67,10 @@ void ResultView::iterateTreeItems(QStringList listItem, QList<QWidget*> listWidg
 
 QString ResultView::indexGenerator(int ridx, int cidx){
     QString idx = QString::number(ridx) +" "+QString::number(cidx);
+    return idx;
+}
+
+QString ResultView::indexGenerator(int ridx){
+    QString idx = QString::number(ridx);
     return idx;
 }

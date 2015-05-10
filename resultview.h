@@ -21,6 +21,7 @@ private:
     QTreeWidget* tree;
     QStackedWidget* stackedWidget;
     QString indexGenerator(int ridx , int cidx);
+    QString indexGenerator(int ridx);
     void iterateTreeItems(QStringList listItem, QList<QWidget*> listWidget, QTreeWidgetItem* root);
      QMap <QString ,QWidget*> map;
 private slots :

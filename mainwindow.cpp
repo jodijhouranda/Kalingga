@@ -79,6 +79,8 @@ void MainWindow::setupMenuBar(){
 fileMenu = menuBar()->addMenu(tr("&File"));
 viewMenu = menuBar()->addMenu(tr("&View"));
 attributeMenu = menuBar()->addMenu(tr("&Attribute"));
+QMenu* explore = new QMenu(tr("Explore"));
+
 mapMenu = menuBar()->addMenu(tr("&Map"));
 toolsMenu = menuBar()->addMenu(tr("&Tools"));
 analysisMenu = menuBar()->addMenu(tr("&Analysis"));
@@ -114,8 +116,8 @@ attributeMenu->addAction(createNewVariable);
 attributeMenu->addAction(deleteVariable);
 attributeMenu->addAction(calculateVariable);
 attributeMenu->addAction(openRSGenerator);
-attributeMenu->addAction(createHistogram);
-//explore menu child
+attributeMenu->addMenu(explore);
+explore->addAction(createHistogram);
 }
 
 

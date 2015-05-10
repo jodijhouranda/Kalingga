@@ -1,16 +1,32 @@
 #ifndef CHART_H
 #define CHART_H
+#include <QFile>
+#include <QGraphicsSvgItem>
+#include <QTextStream>
+#include <QGraphicsScene>
+#include <QDebug>
+#include <QGraphicsView>
+#include <resultviewitem.h>
 
-#include <QGraphicsItem>
+#include <QHBoxLayout>
+#include <QSvgWidget>
+#include <RInside.h>
 class Chart
 {
 public:
     Chart();
     ~Chart();
-    void setupChartView(QString m_svgfile ,QString chartName ,QString variable);
-    void filterSVGFile(QString m_tempfile , QString m_svgfile);
+    void setupChartView(QString chartName ,QString variable,QWidget* configWidget);
+    void filterSVGFile();
+    void setTempFile(RInside& rconn);
+    void printGraph(RInside& rconn);
+    QSvgWidget* graph;
 private:
-    QGraphicsItem *m_svgItem;
+    QString m_tempfile;
+    QString m_svgfile;
+    QString tfile;
+    QString sfile;
+
 };
 
 #endif // CHART_H

@@ -22,7 +22,9 @@ public:
     QList<QString> getNumericVariableNames();
     QList<QString> getRealVariableNames();
     Rcpp::NumericVector getNumericVector(int idx);
+    Rcpp::CharacterVector getCharacterVector(int idx);
     QString getVariableType(QString var);
+    void sendDataFrame(RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVariable(QString name, Rcpp::NumericVector vector );
     void setConstantVariable(QString name, double cons);

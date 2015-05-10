@@ -61,7 +61,6 @@ void VariableView::getVariabelAttribute(){
 
 void VariableView::getVariabelAttributeDBF(){
 
-
     variabelTable = new QTableWidget(table->columnCount(), 3, 0);
     variabelTable->setMinimumSize(1365,595);
     variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -291,10 +290,17 @@ Rcpp::NumericVector VariableView::getNumericVector(int idx){
         vector(i) = table->item(i,idx)->text().toDouble();
     }
 
-    qDebug()<< "sampai";
     return vector;
 }
+Rcpp::CharacterVector VariableView::getCharacterVector(int idx){
+    Rcpp::CharacterVector vector(table->rowCount());
+    for (int i = 0; i < table->rowCount(); ++i) {
 
+        vector[i] =  table->item(i,idx)->text().toStdString();
+    }
+
+    return vector;
+}
 //get R object
 RInside& VariableView::getRObject(){
     return rconn;
@@ -355,3 +361,26 @@ QString VariableView::getVariableType(QString var){
 int VariableView::getRowCount(){
     return table->rowCount();
 }
+
+void VariableView::sendDataFrame(RInside& m_r){
+    QString allVarName;
+    for (int i = 0; i < variabelTable->rowCount(); ++i) {
+        if (variabelTable->item(i,1)->text() == "String") {
+            m_r[variabelTable->item(i,0)->text().toStdString()] = getCharacterVector(i);
+        }else{
+            m_r[variabelTable->item(i,0)->text().toStdString()] = getNumericVector(i);
+
+        }
+        if (i!= variabelTable->rowCount()-1) {
+
+            allVarName += variabelTable->item(i,0)->text() +",";
+        } else {
+            allVarName += variabelTable->item(i,0)->text();
+        }
+    }
+    qDebug()<<allVarName;
+    QString command = QString("dframe <- data.frame(%1)").arg(allVarName);
+    m_r.parseEvalQ(command.toStdString());
+
+}
+

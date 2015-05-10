@@ -1,5 +1,6 @@
 #include "histogramcreator.h"
 #include "ui_histogramcreator.h"
+#include "histogramconfig.h"
 HistogramCreator::HistogramCreator(VariableView* vv ,RInside &rconn, QWidget *parent ) :
     QDialog(parent),
     ui(new Ui::HistogramCreator),
@@ -9,8 +10,8 @@ HistogramCreator::HistogramCreator(VariableView* vv ,RInside &rconn, QWidget *pa
     ui->setupUi(this);
     QList<QString> allVar = vv->getNumericVariableNames();
     ui->listWidgetVariables->addItems(allVar);
-    m_tempfile = QString::fromStdString(Rcpp::as<std::string>(rconn.parseEval("tfile <- tempfile()")));
-    m_svgfile = QString::fromStdString(Rcpp::as<std::string>(rconn.parseEval("sfile <- tempfile()")));
+
+    setTempFile(rconn);
 
 }
 
@@ -23,21 +24,23 @@ HistogramCreator::~HistogramCreator()
 void HistogramCreator::on_buttonBox_accepted()
 {
 
-    QString selectedVar = ui->listWidgetVariables->item(ui->listWidgetVariables->currentRow())->text();
-    Rcpp::NumericVector vektor = vv->getNumericVector(vv->getVariableIndex(selectedVar));
     QString x = ui->listWidgetVariables->currentItem()->text();
+    HistogramConfig* conf = new HistogramConfig(this,rconn);
+    conf->setVariable(x);
+    setupChartView("Histogram",x, conf);
     QString command;
-    rconn[x.toStdString()] = vektor;
     try {
-
-
-        command = QString("library(ggplot2);svg(width=6,height=6,pointsize=10,filename=tfile);hist(%1);dev.off();").arg(x);
+        vv->sendDataFrame(rconn);
+        command = QString("gr<-(ggplot(dframe, aes(x=%1))+ geom_histogram());").arg(x);
         rconn.parseEvalQ(command.toStdString());
+
+        printGraph(rconn);
     } catch (...) {
 
     }
-    filterSVGFile(m_tempfile,m_svgfile);
-    setupChartView(m_svgfile,"Histogram",x);
+
+
+
 
 
 }

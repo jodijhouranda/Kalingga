@@ -16,6 +16,8 @@ INPUT(
 ./release/resultviewitem.o
 ./release/resultindex.o
 ./release/chart.o
+./release/chartconfig.o
+./release/histogramconfig.o
 ./release/shapemapreader.o
 ./release/pointfeature.o
 ./release/feature.o
@@ -49,6 +51,7 @@ INPUT(
 ./release/moc_randomsamplegenarator.o
 ./release/moc_recodevariable.o
 ./release/moc_resultview.o
+./release/moc_histogramconfig.o
 ./release/moc_shapemapreader.o
 ./release/moc_mapreader.o
 ./release/moc_mapframe.o

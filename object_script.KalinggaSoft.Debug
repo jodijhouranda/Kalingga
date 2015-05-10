@@ -16,6 +16,8 @@ INPUT(
 ./debug/resultviewitem.o
 ./debug/resultindex.o
 ./debug/chart.o
+./debug/chartconfig.o
+./debug/histogramconfig.o
 ./debug/shapemapreader.o
 ./debug/pointfeature.o
 ./debug/feature.o
@@ -49,6 +51,7 @@ INPUT(
 ./debug/moc_randomsamplegenarator.o
 ./debug/moc_recodevariable.o
 ./debug/moc_resultview.o
+./debug/moc_histogramconfig.o
 ./debug/moc_shapemapreader.o
 ./debug/moc_mapreader.o
 ./debug/moc_mapframe.o
