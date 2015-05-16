@@ -1,6 +1,7 @@
 #include "histogramconfig.h"
 #include "ui_histogramconfig.h"
 #include <QDebug>
+#include <QColorDialog>
 HistogramConfig::HistogramConfig(HistogramCreator* histo,RInside& rconn,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::HistogramConfig),
@@ -10,6 +11,7 @@ HistogramConfig::HistogramConfig(HistogramCreator* histo,RInside& rconn,QWidget 
     ui->setupUi(this);
     geomHisto = QString("geom_histogram(%1)");
     geomDensity = QString("geom_density(%1)");
+
  }
 
 HistogramConfig::~HistogramConfig()
@@ -79,10 +81,12 @@ void HistogramConfig::drawPlot(){
     histo->printGraph(rconn);
 }
 
-void HistogramConfig::on_spinBoxBinwidth_valueChanged(const QString &arg1)
+
+
+void HistogramConfig::on_spinBoxBinwidth_valueChanged(int arg1)
 {
 
     rconn.parseEvalQ(QString("rng <- (max(%1)-min(%1))").arg(variable).toStdString());
-    binwidth = ("binwidth = rng/" + arg1.toInt()/70*30);
+    binwidth = "binwidth = rng/30 + ((1/3000)*rng)*" + QString::number(arg1-50);
     drawPlot();
 }

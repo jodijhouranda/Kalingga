@@ -22,7 +22,8 @@ public:
 private slots:
     void on_comboBox_currentIndexChanged(int index);
 
-    void on_spinBoxBinwidth_valueChanged(const QString &arg1);
+
+    void on_spinBoxBinwidth_valueChanged(int arg1);
 
 private:
     void drawPlot();
