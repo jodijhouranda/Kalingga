@@ -18,6 +18,7 @@ ResultView::ResultView(QWidget* parent)
     splitter->addWidget(stackedWidget);
     splitter->setStretchFactor(1,1);
    connect(tree,SIGNAL(itemClicked(QTreeWidgetItem*,int)),this,SLOT(changeStacketWidget(QTreeWidgetItem*,int)));
+
 }
 
 ResultView::~ResultView()
@@ -50,6 +51,8 @@ void ResultView::setResultViewItem(ResultViewItem* item){
     }else {
         iterateTreeItems(item->getTreeList(),item->getResultWidgets(),root);
     }
+
+
 }
 
 void ResultView::iterateTreeItems(QStringList listItem, QList<QWidget*> listWidget, QTreeWidgetItem* root){

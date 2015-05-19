@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>HistogramConfig</class>
- <widget class="QWidget" name="HistogramConfig">
+ <class>ScatterConfig</class>
+ <widget class="QWidget" name="ScatterConfig">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>211</width>
-    <height>647</height>
+    <width>221</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,11 +19,11 @@
      <x>0</x>
      <y>40</y>
      <width>201</width>
-     <height>271</height>
+     <height>201</height>
     </rect>
    </property>
    <property name="title">
-    <string>Histogram</string>
+    <string>Scatter</string>
    </property>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
@@ -35,7 +35,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Binwidth</string>
+     <string>Shape</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -79,17 +79,7 @@
      </property>
     </layout>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>30</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QSlider" name="horizontalSlider">
+   <widget class="QSlider" name="horizontalSliderAlp">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -130,34 +120,11 @@
      <string>Alpha</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Weight</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_2">
+   <widget class="QComboBox" name="comboBox_shape">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>170</y>
-      <width>91</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_linetype">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>200</y>
+      <y>30</y>
       <width>91</width>
       <height>22</height>
      </rect>
@@ -167,30 +134,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>210</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Line Type</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_Size">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>230</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>230</y>
+      <y>170</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -210,7 +154,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QComboBox" name="comboBox_coloraes"/>
+      <widget class="QComboBox" name="comboBox_color"/>
      </item>
     </layout>
    </widget>
@@ -240,7 +184,44 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QComboBox" name="comboBox_fillaes"/>
+      <widget class="QComboBox" name="comboBox_fill"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>160</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_size">
+     <property name="leftMargin">
+      <number>1</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="lineEditSize">
+       <property name="text">
+        <string>2</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>160</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QComboBox" name="comboBox_size"/>
      </item>
     </layout>
    </widget>
@@ -249,32 +230,32 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>320</y>
+     <y>250</y>
      <width>201</width>
-     <height>291</height>
+     <height>251</height>
     </rect>
    </property>
    <property name="title">
-    <string>Density</string>
+    <string>Smooth</string>
    </property>
    <widget class="QLabel" name="label_16">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>20</y>
       <width>47</width>
       <height>13</height>
      </rect>
     </property>
     <property name="text">
-     <string>Adjust</string>
+     <string>Se</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_17">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>80</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -287,7 +268,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>120</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -300,7 +281,7 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>130</y>
+      <y>110</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -311,24 +292,11 @@
      </property>
     </layout>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_adjust">
+   <widget class="QSlider" name="horizontalSlider_smot">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>60</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>1</string>
-    </property>
-   </widget>
-   <widget class="QSlider" name="horizontalSlider_Dens">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>170</y>
+      <y>150</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -342,8 +310,11 @@
     <property name="pageStep">
      <number>1</number>
     </property>
+    <property name="value">
+     <number>5</number>
+    </property>
     <property name="sliderPosition">
-     <number>10</number>
+     <number>5</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -356,7 +327,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>150</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -365,34 +336,11 @@
      <string>Alpha</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_20">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>210</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Weight</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_WeightDens">
+   <widget class="QComboBox" name="comboBox_linetype_s">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>200</y>
-      <width>91</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_linetype_Dens">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>230</y>
+      <y>180</y>
       <width>91</width>
       <height>22</height>
      </rect>
@@ -402,7 +350,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>240</y>
+      <y>180</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -411,21 +359,11 @@
      <string>Line Type</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_Size_Dens">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>260</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_22">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>260</y>
+      <y>220</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -443,17 +381,13 @@
       <height>31</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
-     <item>
-      <widget class="QComboBox" name="comboBox_colorDens"/>
-     </item>
-    </layout>
+    <layout class="QHBoxLayout" name="horizontalLayout_5"/>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_6">
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>90</y>
+      <y>70</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -468,22 +402,22 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>130</y>
+      <y>110</y>
       <width>91</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
-      <widget class="QComboBox" name="comboBox_fillDens"/>
+      <widget class="QComboBox" name="comboBox_fills"/>
      </item>
     </layout>
    </widget>
-   <widget class="QComboBox" name="comboBox_kernel">
+   <widget class="QComboBox" name="comboBox_method">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>30</y>
+      <y>40</y>
       <width>91</width>
       <height>22</height>
      </rect>
@@ -493,26 +427,108 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
+      <y>40</y>
       <width>47</width>
       <height>13</height>
      </rect>
     </property>
     <property name="text">
-     <string>Kernel</string>
+     <string>Method</string>
     </property>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>210</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QComboBox" name="comboBox_sizes"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>210</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_size_2">
+     <property name="leftMargin">
+      <number>1</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="lineEditSize_2">
+       <property name="text">
+        <string>0.5</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>20</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_colors">
+    <property name="geometry">
+     <rect>
+      <x>71</x>
+      <y>75</y>
+      <width>89</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <zorder>label_16</zorder>
+   <zorder>label_17</zorder>
+   <zorder>label_18</zorder>
+   <zorder>verticalLayoutWidget_5</zorder>
+   <zorder>horizontalSlider_smot</zorder>
+   <zorder>label_19</zorder>
+   <zorder>comboBox_linetype_s</zorder>
+   <zorder>label_21</zorder>
+   <zorder>label_22</zorder>
+   <zorder>horizontalLayoutWidget_5</zorder>
+   <zorder>verticalLayoutWidget_6</zorder>
+   <zorder>horizontalLayoutWidget_6</zorder>
+   <zorder>comboBox_method</zorder>
+   <zorder>label_23</zorder>
+   <zorder>horizontalLayoutWidget_4</zorder>
+   <zorder>verticalLayoutWidget_4</zorder>
+   <zorder>checkBox</zorder>
+   <zorder>comboBox_sizes</zorder>
+   <zorder>comboBox_colors</zorder>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_3">
+  <widget class="QWidget" name="horizontalLayoutWidget_7">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>10</y>
      <width>181</width>
      <height>22</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <layout class="QHBoxLayout" name="horizontalLayout_8">
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
@@ -524,17 +540,17 @@
      <widget class="QComboBox" name="comboBox">
       <item>
        <property name="text">
-        <string>Histogram</string>
+        <string>Scatter</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Density</string>
+        <string>Smooth</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Histogram &amp; Density</string>
+        <string>Scatter and Smooth</string>
        </property>
       </item>
      </widget>

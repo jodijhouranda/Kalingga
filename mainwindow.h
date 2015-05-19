@@ -12,6 +12,7 @@
 #include <QStackedWidget>
 #include <resultview.h>
 #include <resultviewitem.h>
+#include <twovariablepicker.h>
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -33,6 +34,7 @@ private slots:
     void openRandomSampleGenerator();
     //slot explore menu
     void openHistogramCreator();
+    void openScatterCreator();
     //slot window menu
 
     void openDataView();
@@ -63,6 +65,7 @@ private:
 
     //explore menu action
     QAction* createHistogram;
+    QAction* createScatter;
     QMenu* fileMenu;
     QMenu *viewMenu;
     QMenu *attributeMenu;

@@ -21,6 +21,7 @@ public:
     void setTempFile(RInside& rconn);
     void printGraph(RInside& rconn);
     QSvgWidget* graph;
+
 private:
     QString m_tempfile;
     QString m_svgfile;

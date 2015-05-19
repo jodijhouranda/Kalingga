@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = KalinggaSoft
@@ -29,17 +30,8 @@ SOURCES += main.cpp \
     chart.cpp \
     chartconfig.cpp \
     histogramconfig.cpp \
-    debug/qrc_icon.cpp \
-    qsimplespatial/_layer.cpp \
-    qtcolorpicker/examples/build-simple-Desktop-Debug/debug/moc_qtcolorpicker.cpp \
-    qtcolorpicker/examples/draw/draw.cpp \
-    qtcolorpicker/examples/draw/drawboard.cpp \
-    qtcolorpicker/examples/draw/main.cpp \
-    qtcolorpicker/examples/simple/main.cpp \
-    qtcolorpicker/plugin/plugin.cpp \
-    qtcolorpicker/src/qtcolorpicker.cpp \
-    mapviewcontroller.cpp \
-    randomsamplegenerator.cpp
+    twovariablepicker.cpp \
+    scatterconfig.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -60,28 +52,8 @@ HEADERS  += \
     chart.h \
     chartconfig.h \
     histogramconfig.h \
-    qsimplespatial/_layer.h \
-    qsimplespatial/config.h \
-    qsimplespatial/mapwriter.h \
-    qsimplespatial/shapeglobal.h \
-    qtcolorpicker/examples/draw/draw.h \
-    qtcolorpicker/examples/draw/drawboard.h \
-    qtcolorpicker/plugin/plugin.h \
-    qtcolorpicker/src/qtcolorpicker.h \
-    mapviewcontroller.h \
-    randomsamplegenerator.h \
-    ui_computevariable.h \
-    ui_createnewvariable.h \
-    ui_deletevariable.h \
-    ui_dialog.h \
-    ui_histogram.h \
-    ui_histogramconfig.h \
-    ui_histogramcreator.h \
-    ui_layerproperties.h \
-    ui_randomsamplegenarator.h \
-    ui_randomsamplegenerator.h \
-    ui_recodevariable.h
-
+    twovariablepicker.h \
+    scatterconfig.h
 
 
 FORMS    += \
@@ -93,7 +65,9 @@ FORMS    += \
     layerproperties.ui \
     randomsamplegenarator.ui \
     recodevariable.ui \
-    histogramconfig.ui
+    histogramconfig.ui \
+    twovariablepicker.ui \
+    scatterconfig.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg
@@ -109,14 +83,13 @@ DISTFILES += \
     images/zoom.png \
     images/zoomin.png \
     images/zoomout.png \
-    images/arrow.png \
-
+    images/arrow.png
 
 DESTDIR = $$PWD
-include (./qtcolorpicker/src/qtcolorpicker.pri)
+
 
 include (./qsimplespatial/qsimplespatial_static.pri)
-
+include (./qtcolorpicker/src/qtcolorpicker.pri)
 ## comment this out if you need a different version of R,
 ## and set set R_HOME accordingly as an environment variable
 R_HOME = 		$$system(R RHOME)

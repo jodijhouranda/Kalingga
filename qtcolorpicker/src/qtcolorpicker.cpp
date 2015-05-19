@@ -276,7 +276,6 @@ QtColorPicker::QtColorPicker(QWidget *parent,
     setCheckable(true);
 
     // Set text
-    setText(tr("Black"));
     firstInserted = false;
 
     // Create and set icon
@@ -441,7 +440,6 @@ void QtColorPicker::setCurrentColor(const QColor &color)
     }
 
     col = color;
-    setText(item->text());
 
     dirty = true;
 
@@ -462,8 +460,7 @@ void QtColorPicker::insertColor(const QColor &color, const QString &text, int in
 {
     popup->insertColor(color, text, index);
     if (!firstInserted) {
-	col = color;
-	setText(text);
+    col = color;
 	firstInserted = true;
     }
 }

@@ -72,6 +72,9 @@ void MainWindow::createAction(){
     //explore menu create Action
     createHistogram = new QAction(tr("Histogram"),this);
     connect(createHistogram , SIGNAL(triggered()),this,SLOT(openHistogramCreator()));
+
+    createScatter = new QAction(tr("Scatter"),this);
+    connect(createScatter , SIGNAL(triggered()),this,SLOT(openScatterCreator()));
 }
 
 //setup menubar for mainwindow
@@ -118,6 +121,7 @@ attributeMenu->addAction(calculateVariable);
 attributeMenu->addAction(openRSGenerator);
 attributeMenu->addMenu(explore);
 explore->addAction(createHistogram);
+explore->addAction(createScatter);
 }
 
 
@@ -157,7 +161,9 @@ void MainWindow::openCSVSlot(){
     std::string cmd = cmd0 + csvPath.toStdString() + cmd1 ;
     Rcpp::DataFrame data = Rcon.parseEval(cmd);
     vv = new VariableView(data,Rcon);
-
+    centralView->addWidget(vv->getSpreadsheetTable());
+    centralView->addWidget(vv->getVariabelViewTable());
+    centralView->addWidget(result);
     updateViewMenuDataOnly();
     openDataView();
   }
@@ -197,6 +203,9 @@ void MainWindow::openDBFSlot(){
    QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
    tableModel->open(dbfPath);
     vv = new VariableView(tableModel,Rcon);
+    centralView->addWidget(vv->getSpreadsheetTable());
+    centralView->addWidget(vv->getVariabelViewTable());
+    centralView->addWidget(result);
     updateViewMenuDataOnly();
     openDataView();
 }
@@ -224,6 +233,10 @@ void MainWindow::openHistogramCreator(){
     HistogramCreator* dialog =  new HistogramCreator(vv,Rcon,this );
      dialog->show();
 }
+void MainWindow::openScatterCreator(){
+    TwoVariablePicker* dialog = new TwoVariablePicker(vv,Rcon,TwoVariablePicker::SCATTER);
+    dialog->show();
+}
 
 //open random sample generator dialog
 void MainWindow::openRandomSampleGenerator(){
@@ -237,7 +250,7 @@ void MainWindow::updateViewMenu(){
 }
 
 void MainWindow::updateViewMenuDataOnly(){
-setMenubarVisible(true);
+    setMenubarVisible(true);
     mapViewAct->setVisible(false);
     resultViewAct->setVisible(false);
 

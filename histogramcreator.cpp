@@ -24,13 +24,14 @@ HistogramCreator::~HistogramCreator()
 void HistogramCreator::on_buttonBox_accepted()
 {
 
+    vv->sendDataFrame(rconn);
+
     QString x = ui->listWidgetVariables->currentItem()->text();
-    HistogramConfig* conf = new HistogramConfig(this,rconn);
-    conf->setVariable(x);
+    HistogramConfig* conf = new HistogramConfig(this,rconn,x,vv);
+
     setupChartView("Histogram",x, conf);
     QString command;
     try {
-        vv->sendDataFrame(rconn);
         command = QString("gr<-(ggplot(dframe, aes(x=%1))+ geom_histogram());").arg(x);
         rconn.parseEvalQ(command.toStdString());
 
