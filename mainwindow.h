@@ -35,6 +35,7 @@ private slots:
     //slot explore menu
     void openHistogramCreator();
     void openScatterCreator();
+    void openBoxplotCreator();
     //slot window menu
 
     void openDataView();
@@ -66,6 +67,7 @@ private:
     //explore menu action
     QAction* createHistogram;
     QAction* createScatter;
+    QAction* createBoxplot;
     QMenu* fileMenu;
     QMenu *viewMenu;
     QMenu *attributeMenu;

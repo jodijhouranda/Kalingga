@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     chartconfig.cpp \
     histogramconfig.cpp \
     twovariablepicker.cpp \
-    scatterconfig.cpp
+    scatterconfig.cpp \
+    boxconfig.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -53,7 +54,8 @@ HEADERS  += \
     chartconfig.h \
     histogramconfig.h \
     twovariablepicker.h \
-    scatterconfig.h
+    scatterconfig.h \
+    boxconfig.h
 
 
 FORMS    += \
@@ -67,7 +69,8 @@ FORMS    += \
     recodevariable.ui \
     histogramconfig.ui \
     twovariablepicker.ui \
-    scatterconfig.ui
+    scatterconfig.ui \
+    boxconfig.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg

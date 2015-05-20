@@ -75,6 +75,9 @@ void MainWindow::createAction(){
 
     createScatter = new QAction(tr("Scatter"),this);
     connect(createScatter , SIGNAL(triggered()),this,SLOT(openScatterCreator()));
+    createBoxplot = new QAction(tr("Boxplot"),this);
+    connect(createBoxplot , SIGNAL(triggered()),this,SLOT(openBoxplotCreator()));
+
 }
 
 //setup menubar for mainwindow
@@ -122,6 +125,7 @@ attributeMenu->addAction(openRSGenerator);
 attributeMenu->addMenu(explore);
 explore->addAction(createHistogram);
 explore->addAction(createScatter);
+explore->addAction(createBoxplot);
 }
 
 
@@ -237,7 +241,10 @@ void MainWindow::openScatterCreator(){
     TwoVariablePicker* dialog = new TwoVariablePicker(vv,Rcon,TwoVariablePicker::SCATTER);
     dialog->show();
 }
-
+void MainWindow::openBoxplotCreator(){
+    TwoVariablePicker* dialog = new TwoVariablePicker(vv,Rcon,TwoVariablePicker::BOXPLOT);
+    dialog->show();
+}
 //open random sample generator dialog
 void MainWindow::openRandomSampleGenerator(){
 RandomSampleGenarator* dialog = new RandomSampleGenarator(vv,Rcon,this);
