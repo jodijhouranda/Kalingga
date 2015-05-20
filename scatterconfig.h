@@ -7,7 +7,6 @@
 #include <chartconfig.h>
 #include <qtColorpicker.h>
 #include <QComboBox>
-#include <twovariablepicker.h>
 namespace Ui {
 
 class ScatterConfig;

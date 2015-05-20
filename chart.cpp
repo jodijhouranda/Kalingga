@@ -66,6 +66,7 @@ void Chart::setTempFile(RInside& rconn){
     m_svgfile = QString::fromStdString(Rcpp::as<std::string>(rconn.parseEval(QString("%1 <- tempfile()").arg(sfile).toStdString())));
 
     rconn.parseEval("library(ggplot2)");
+    rconn.parseEval("library(GGally)");
 }
 
 void Chart::printGraph(RInside& rconn){

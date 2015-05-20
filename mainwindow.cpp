@@ -9,7 +9,7 @@
 #include <QMessageBox>
 #include <qdbftablemodel.h>
 #include <QPointer>
-
+#include <parallechart.h>
 #include <QPushButton>
 mapview* mview;
 ResultView* MainWindow::result;
@@ -75,8 +75,12 @@ void MainWindow::createAction(){
 
     createScatter = new QAction(tr("Scatter"),this);
     connect(createScatter , SIGNAL(triggered()),this,SLOT(openScatterCreator()));
+
     createBoxplot = new QAction(tr("Boxplot"),this);
     connect(createBoxplot , SIGNAL(triggered()),this,SLOT(openBoxplotCreator()));
+
+    createParallel = new QAction(tr("Parallel Coordinates Plot"),this);
+    connect(createParallel , SIGNAL(triggered()),this,SLOT(openParallelCreator()));
 
 }
 
@@ -126,6 +130,7 @@ attributeMenu->addMenu(explore);
 explore->addAction(createHistogram);
 explore->addAction(createScatter);
 explore->addAction(createBoxplot);
+explore->addAction(createParallel);
 }
 
 
@@ -238,11 +243,15 @@ void MainWindow::openHistogramCreator(){
      dialog->show();
 }
 void MainWindow::openScatterCreator(){
-    TwoVariablePicker* dialog = new TwoVariablePicker(vv,Rcon,TwoVariablePicker::SCATTER);
+    TwoVariablePicker* dialog = new TwoVariablePicker(vv,Rcon,TwoVariablePicker::SCATTER,this);
     dialog->show();
 }
 void MainWindow::openBoxplotCreator(){
-    TwoVariablePicker* dialog = new TwoVariablePicker(vv,Rcon,TwoVariablePicker::BOXPLOT);
+    TwoVariablePicker* dialog = new TwoVariablePicker(vv,Rcon,TwoVariablePicker::BOXPLOT,this);
+    dialog->show();
+}
+void MainWindow::openParallelCreator(){
+    ParalleChart* dialog = new ParalleChart(vv,Rcon,this);
     dialog->show();
 }
 //open random sample generator dialog

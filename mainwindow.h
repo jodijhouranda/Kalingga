@@ -36,6 +36,7 @@ private slots:
     void openHistogramCreator();
     void openScatterCreator();
     void openBoxplotCreator();
+    void openParallelCreator();
     //slot window menu
 
     void openDataView();
@@ -68,6 +69,7 @@ private:
     QAction* createHistogram;
     QAction* createScatter;
     QAction* createBoxplot;
+    QAction* createParallel;
     QMenu* fileMenu;
     QMenu *viewMenu;
     QMenu *attributeMenu;

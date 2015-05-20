@@ -32,7 +32,9 @@ SOURCES += main.cpp \
     histogramconfig.cpp \
     twovariablepicker.cpp \
     scatterconfig.cpp \
-    boxconfig.cpp
+    boxconfig.cpp \
+    parallechart.cpp \
+    parallelchartconfig.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -55,7 +57,9 @@ HEADERS  += \
     histogramconfig.h \
     twovariablepicker.h \
     scatterconfig.h \
-    boxconfig.h
+    boxconfig.h \
+    parallechart.h \
+    parallelchartconfig.h
 
 
 FORMS    += \
@@ -70,7 +74,9 @@ FORMS    += \
     histogramconfig.ui \
     twovariablepicker.ui \
     scatterconfig.ui \
-    boxconfig.ui
+    boxconfig.ui \
+    parallechart.ui \
+    parallelchartconfig.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg
