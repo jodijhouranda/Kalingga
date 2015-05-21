@@ -1,17 +1,19 @@
 #include "histogramcreator.h"
 #include "ui_histogramcreator.h"
 #include "histogramconfig.h"
-HistogramCreator::HistogramCreator(VariableView* vv ,RInside &rconn, QWidget *parent ) :
+#include <recodevariable.h>
+HistogramCreator::HistogramCreator(VariableView* vv ,RInside &rconn,int type,QWidget *parent ) :
     QDialog(parent),
     ui(new Ui::HistogramCreator),
     vv(vv),
-    rconn(rconn)
+    rconn(rconn),
+    type(type)
 {
     ui->setupUi(this);
     QList<QString> allVar = vv->getNumericVariableNames();
     ui->listWidgetVariables->addItems(allVar);
 
-    setTempFile(rconn);
+
 
 }
 
@@ -20,10 +22,24 @@ HistogramCreator::~HistogramCreator()
     delete ui;
 
 }
-
+const int HistogramCreator::HISTOGRAM=0;
+const int HistogramCreator::RECODEVARIABLE=1;
 void HistogramCreator::on_buttonBox_accepted()
 {
+    switch (type) {
+    case HISTOGRAM:
 
+        generateHistogram();
+        break;
+    case RECODEVARIABLE:
+        generateRecode();
+        break;
+    }
+
+}
+
+void HistogramCreator::generateHistogram(){
+    setTempFile(rconn);
     vv->sendDataFrame(rconn);
 
     QString x = ui->listWidgetVariables->currentItem()->text();
@@ -39,11 +55,9 @@ void HistogramCreator::on_buttonBox_accepted()
     } catch (...) {
 
     }
-
-
-
-
-
 }
-
-
+void HistogramCreator::generateRecode(){
+    QString x = ui->listWidgetVariables->currentItem()->text();
+    RecodeVariable* recode = new RecodeVariable(vv,x);
+    recode->show();
+}

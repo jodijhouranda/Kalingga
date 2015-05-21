@@ -15,9 +15,10 @@ class HistogramCreator : public QDialog ,public Chart
     Q_OBJECT
 
 public:
-    explicit HistogramCreator(VariableView* vv ,RInside &rconn, QWidget *parent = 0);
+    explicit HistogramCreator(VariableView* vv ,RInside &rconn,int type,QWidget *parent = 0);
     ~HistogramCreator();
-
+    static const int HISTOGRAM;
+    static const int RECODEVARIABLE;
 private slots:
     void on_buttonBox_accepted();
 private:
@@ -26,7 +27,9 @@ private:
     RInside& rconn;
     QString m_cmd;
     QString data;
-
+    int type;
+    void generateHistogram();
+    void generateRecode();
 };
 
 #endif // HISTOGRAMCREATOR_H

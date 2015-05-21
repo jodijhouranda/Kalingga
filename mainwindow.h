@@ -31,6 +31,7 @@ private slots:
     void openCreateNewVariable();
     void openDeleteVariable();
     void openCalculateVariable();
+    void openRecodeVariable();
     void openRandomSampleGenerator();
     //slot explore menu
     void openHistogramCreator();
@@ -63,6 +64,7 @@ private:
     QAction* createNewVariable;
     QAction* deleteVariable;
     QAction* calculateVariable;
+    QAction* recodeVariable;
     QAction* openRSGenerator;
 
     //explore menu action

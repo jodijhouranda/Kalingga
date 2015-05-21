@@ -66,6 +66,9 @@ void MainWindow::createAction(){
     calculateVariable = new QAction (tr("Calculate Variable ..."),this);
     connect(calculateVariable , SIGNAL(triggered()),this,SLOT(openCalculateVariable()));
 
+    recodeVariable = new QAction (tr("Recode Variable ..."),this);
+    connect(recodeVariable , SIGNAL(triggered()),this,SLOT(openRecodeVariable()));
+
     openRSGenerator = new QAction (tr("Generate Random Sample"),this);
     connect(openRSGenerator , SIGNAL(triggered()),this,SLOT(openRandomSampleGenerator()));
 
@@ -126,6 +129,7 @@ attributeMenu->addAction(createNewVariable);
 attributeMenu->addAction(deleteVariable);
 attributeMenu->addAction(calculateVariable);
 attributeMenu->addAction(openRSGenerator);
+attributeMenu->addAction(recodeVariable);
 attributeMenu->addMenu(explore);
 explore->addAction(createHistogram);
 explore->addAction(createScatter);
@@ -236,10 +240,14 @@ void MainWindow::openCalculateVariable(){
     ComputeVariable* dialog =  new ComputeVariable(vv,Rcon ,this );
      dialog->show();
 }
+void MainWindow::openRecodeVariable(){
+    HistogramCreator* dialog =  new HistogramCreator(vv,Rcon,HistogramCreator::RECODEVARIABLE,this );
+     dialog->show();;
+}
 
 //inisialisasi slot explore menu
 void MainWindow::openHistogramCreator(){
-    HistogramCreator* dialog =  new HistogramCreator(vv,Rcon,this );
+    HistogramCreator* dialog =  new HistogramCreator(vv,Rcon,HistogramCreator::HISTOGRAM,this );
      dialog->show();
 }
 void MainWindow::openScatterCreator(){
