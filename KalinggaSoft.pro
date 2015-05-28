@@ -34,7 +34,9 @@ SOURCES += main.cpp \
     scatterconfig.cpp \
     boxconfig.cpp \
     parallechart.cpp \
-    parallelchartconfig.cpp
+    parallelchartconfig.cpp \
+    integerdelegate.cpp \
+    doubledelegate.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -59,7 +61,9 @@ HEADERS  += \
     scatterconfig.h \
     boxconfig.h \
     parallechart.h \
-    parallelchartconfig.h
+    parallelchartconfig.h \
+    integerdelegate.h \
+    doubledelegate.h
 
 
 FORMS    += \

@@ -10,11 +10,26 @@ HistogramCreator::HistogramCreator(VariableView* vv ,RInside &rconn,int type,QWi
     type(type)
 {
     ui->setupUi(this);
-    QList<QString> allVar = vv->getNumericVariableNames();
-    ui->listWidgetVariables->addItems(allVar);
+setupUi();
 
 
 
+}
+
+const int HistogramCreator::HISTOGRAM=0;
+const int HistogramCreator::RECODEVARIABLE=1;
+void HistogramCreator::setupUi(){
+    QList<QString> allVar;
+    switch (type) {
+    case HISTOGRAM:
+        allVar = vv->getNumericVariableNames();
+        ui->listWidgetVariables->addItems(allVar);
+        break;
+    case RECODEVARIABLE:
+        allVar = vv->getAllVariableNames();
+        ui->listWidgetVariables->addItems(allVar);
+        break;
+    }
 }
 
 HistogramCreator::~HistogramCreator()
@@ -22,13 +37,11 @@ HistogramCreator::~HistogramCreator()
     delete ui;
 
 }
-const int HistogramCreator::HISTOGRAM=0;
-const int HistogramCreator::RECODEVARIABLE=1;
 void HistogramCreator::on_buttonBox_accepted()
 {
+    QList<QString> allVar;
     switch (type) {
     case HISTOGRAM:
-
         generateHistogram();
         break;
     case RECODEVARIABLE:

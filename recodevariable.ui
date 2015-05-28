@@ -37,6 +37,9 @@
     <property name="text">
      <string>Value</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEditovalue">
     <property name="geometry">
@@ -143,7 +146,7 @@
      <string>Range, from value to highest</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_5">
+   <widget class="QLineEdit" name="lineEdit_ohighestrange">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -223,6 +226,9 @@
     <property name="text">
      <string>Value</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_nvalue">
     <property name="geometry">
@@ -290,30 +296,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QListView" name="listView">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>160</y>
-     <width>191</width>
-     <height>241</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pushButtonAdd">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>210</y>
-     <width>51</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Add</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButtonChange">
    <property name="geometry">
     <rect>
      <x>240</x>
@@ -323,7 +306,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Change</string>
+    <string>Add</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButtonRemove">
@@ -352,17 +335,29 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <zorder>groupBox</zorder>
-  <zorder>label</zorder>
-  <zorder>label_variable</zorder>
-  <zorder>groupBox_2</zorder>
-  <zorder>horizontalLayoutWidget</zorder>
-  <zorder>listView</zorder>
-  <zorder>pushButtonAdd</zorder>
-  <zorder>Result</zorder>
-  <zorder>pushButtonChange</zorder>
-  <zorder>pushButtonRemove</zorder>
-  <zorder>buttonBox</zorder>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>160</y>
+     <width>121</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Old Value -&gt; New Value</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>180</y>
+     <width>191</width>
+     <height>231</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

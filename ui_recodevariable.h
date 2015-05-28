@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'recodevariable.ui'
 **
-** Created: Fri May 22 00:11:27 2015
+** Created: Sat May 23 22:16:59 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -22,7 +22,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
-#include <QtGui/QListView>
+#include <QtGui/QListWidget>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QWidget>
@@ -43,7 +43,7 @@ public:
     QRadioButton *radioButton_olowestrange;
     QLineEdit *lineEdit_olowestrange;
     QRadioButton *radioButton_ohighestrange;
-    QLineEdit *lineEdit_5;
+    QLineEdit *lineEdit_ohighestrange;
     QRadioButton *radioButton_oother;
     QLabel *label;
     QLabel *label_variable;
@@ -57,11 +57,11 @@ public:
     QLabel *Result;
     QComboBox *comboBoxVariables;
     QPushButton *pushButtonNewVar;
-    QListView *listView;
     QPushButton *pushButtonAdd;
-    QPushButton *pushButtonChange;
     QPushButton *pushButtonRemove;
     QDialogButtonBox *buttonBox;
+    QLabel *label_4;
+    QListWidget *listWidget;
 
     void setupUi(QDialog *RecodeVariable)
     {
@@ -74,6 +74,7 @@ public:
         radioButtonovalue = new QRadioButton(groupBox);
         radioButtonovalue->setObjectName(QString::fromUtf8("radioButtonovalue"));
         radioButtonovalue->setGeometry(QRect(10, 20, 82, 17));
+        radioButtonovalue->setChecked(true);
         lineEditovalue = new QLineEdit(groupBox);
         lineEditovalue->setObjectName(QString::fromUtf8("lineEditovalue"));
         lineEditovalue->setGeometry(QRect(30, 40, 171, 20));
@@ -101,9 +102,9 @@ public:
         radioButton_ohighestrange = new QRadioButton(groupBox);
         radioButton_ohighestrange->setObjectName(QString::fromUtf8("radioButton_ohighestrange"));
         radioButton_ohighestrange->setGeometry(QRect(10, 240, 161, 17));
-        lineEdit_5 = new QLineEdit(groupBox);
-        lineEdit_5->setObjectName(QString::fromUtf8("lineEdit_5"));
-        lineEdit_5->setGeometry(QRect(30, 260, 171, 20));
+        lineEdit_ohighestrange = new QLineEdit(groupBox);
+        lineEdit_ohighestrange->setObjectName(QString::fromUtf8("lineEdit_ohighestrange"));
+        lineEdit_ohighestrange->setGeometry(QRect(30, 260, 171, 20));
         radioButton_oother = new QRadioButton(groupBox);
         radioButton_oother->setObjectName(QString::fromUtf8("radioButton_oother"));
         radioButton_oother->setGeometry(QRect(10, 290, 131, 17));
@@ -121,6 +122,7 @@ public:
         radioButton_nvalue = new QRadioButton(groupBox_2);
         radioButton_nvalue->setObjectName(QString::fromUtf8("radioButton_nvalue"));
         radioButton_nvalue->setGeometry(QRect(10, 20, 82, 17));
+        radioButton_nvalue->setChecked(true);
         lineEdit_nvalue = new QLineEdit(groupBox_2);
         lineEdit_nvalue->setObjectName(QString::fromUtf8("lineEdit_nvalue"));
         lineEdit_nvalue->setGeometry(QRect(10, 40, 171, 20));
@@ -152,15 +154,9 @@ public:
         horizontalLayout->addWidget(pushButtonNewVar);
 
         horizontalLayout->setStretch(1, 1);
-        listView = new QListView(RecodeVariable);
-        listView->setObjectName(QString::fromUtf8("listView"));
-        listView->setGeometry(QRect(300, 160, 191, 241));
         pushButtonAdd = new QPushButton(RecodeVariable);
         pushButtonAdd->setObjectName(QString::fromUtf8("pushButtonAdd"));
-        pushButtonAdd->setGeometry(QRect(240, 210, 51, 23));
-        pushButtonChange = new QPushButton(RecodeVariable);
-        pushButtonChange->setObjectName(QString::fromUtf8("pushButtonChange"));
-        pushButtonChange->setGeometry(QRect(240, 240, 51, 23));
+        pushButtonAdd->setGeometry(QRect(240, 240, 51, 23));
         pushButtonRemove = new QPushButton(RecodeVariable);
         pushButtonRemove->setObjectName(QString::fromUtf8("pushButtonRemove"));
         pushButtonRemove->setGeometry(QRect(240, 270, 51, 23));
@@ -168,17 +164,12 @@ public:
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
         buttonBox->setGeometry(QRect(340, 420, 156, 23));
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-        groupBox->raise();
-        label->raise();
-        label_variable->raise();
-        groupBox_2->raise();
-        horizontalLayoutWidget->raise();
-        listView->raise();
-        pushButtonAdd->raise();
-        Result->raise();
-        pushButtonChange->raise();
-        pushButtonRemove->raise();
-        buttonBox->raise();
+        label_4 = new QLabel(RecodeVariable);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(300, 160, 121, 16));
+        listWidget = new QListWidget(RecodeVariable);
+        listWidget->setObjectName(QString::fromUtf8("listWidget"));
+        listWidget->setGeometry(QRect(300, 180, 191, 231));
 
         retranslateUi(RecodeVariable);
 
@@ -205,8 +196,8 @@ public:
         Result->setText(QApplication::translate("RecodeVariable", "Result", 0, QApplication::UnicodeUTF8));
         pushButtonNewVar->setText(QApplication::translate("RecodeVariable", "New Variable", 0, QApplication::UnicodeUTF8));
         pushButtonAdd->setText(QApplication::translate("RecodeVariable", "Add", 0, QApplication::UnicodeUTF8));
-        pushButtonChange->setText(QApplication::translate("RecodeVariable", "Change", 0, QApplication::UnicodeUTF8));
         pushButtonRemove->setText(QApplication::translate("RecodeVariable", "Remove", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("RecodeVariable", "Old Value -> New Value", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -7,6 +7,8 @@ CreateNewVariable::CreateNewVariable( VariableView* vv,QWidget *parent ) :
     vv(vv)
 {
     ui->setupUi(this);
+
+    TEST = false;
 }
 
 CreateNewVariable::~CreateNewVariable()
@@ -19,9 +21,8 @@ void CreateNewVariable::on_buttonBox_accepted()
     QString name = ui->lineEditName->text();
     QString type = ui->comboBoxType->itemText(ui->comboBoxType->currentIndex());
     QString label = ui->lineEditLabel->text();
-
-    vv->createNewVariable(name,type,label);
-    if (m_listwidget->isEnabled()) {
+    vv->createNewVariable(name,type,label);  
+    if (TEST) {
         m_combo->insertItem(0,ui->lineEditName->text());
         m_listwidget->insertItem(0,ui->lineEditName->text());
         m_combo->setCurrentIndex(0);
@@ -30,6 +31,7 @@ void CreateNewVariable::on_buttonBox_accepted()
 }
 
 void CreateNewVariable::updateQCombox(QListWidget* listwidget , QComboBox* combo){
+    TEST = true;
     m_listwidget = listwidget;
     m_combo = combo;
 }

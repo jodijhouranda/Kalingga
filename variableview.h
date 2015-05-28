@@ -8,6 +8,8 @@
 #include <RInside.h>
 #include <QPointer>
 #include <qdbftablemodel.h>
+#include <integerdelegate.h>
+#include <doubledelegate.h>
 class VariableView : public QWidget
 {
 Q_OBJECT
@@ -27,6 +29,7 @@ public:
     void sendDataFrame(RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVariable(QString name, Rcpp::NumericVector vector );
+    void setCharacterVector(QString name, Rcpp::CharacterVector vector );
     void setConstantVariable(QString name, double cons);
     void setIntegerVariable(QString name ,Rcpp::NumericVector vector );
     int getVariableIndex(QString variabel);

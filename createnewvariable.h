@@ -31,7 +31,7 @@ private:
     QComboBox* m_combo;
     Ui::CreateNewVariable *ui;
     VariableView* vv;
-
+    bool TEST;
 };
 
 #endif // CREATENEWVARIABLE_H

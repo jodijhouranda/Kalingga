@@ -50,7 +50,9 @@ void VariableView::getVariabelAttribute(){
         else if (c == 1) {
             for (int c = 0; c < variabelTable->rowCount(); ++c) {
                 QString dataType = checkVariableType(c);
-                variabelTable->setItem(c,1, new QTableWidgetItem(dataType));
+                QTableWidgetItem* item = new QTableWidgetItem(dataType);
+                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+                variabelTable->setItem(c,1,item );
 
             }
         }
@@ -81,7 +83,9 @@ void VariableView::getVariabelAttributeDBF(){
             for (int c = 0; c < variabelTable->rowCount(); ++c) {
 
                 QString dataType = checkVariableTypeDbf(c);
-                variabelTable->setItem(c,1, new QTableWidgetItem(dataType));
+                QTableWidgetItem* item = new QTableWidgetItem(dataType);
+                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+                variabelTable->setItem(c,1,item );
 
             }
         }
@@ -119,7 +123,6 @@ QString VariableView::checkVariableType(int column){
 
     }
     result = 1;
-    qDebug() << lastIndex;
     if (lastIndex+1 != vektor.length()) {
         for (int j = lastIndex; j <  vektor.length(); ++j) {
             QString string = QString::fromUtf8(vektor[0]);
@@ -173,7 +176,6 @@ QString VariableView::checkVariableTypeDbf(int column){
 
     }
     result = 1;
-    qDebug() << lastIndex;
     if (lastIndex+1 != tableModel->rowCount()) {
         for (int j = lastIndex; j < tableModel->rowCount(); ++j) {
             QString string = tableModel->index(j,column).data().toString();
@@ -224,7 +226,8 @@ void VariableView::setupAlignment(){
 //Edit Variable names
 
 void VariableView::changeVariableName(QTableWidgetItem* item){
-    qDebug() << item->row();
+
+
     if (item->column() == 0) {
         table->setHorizontalHeaderItem(item->row(),item);
     }
@@ -236,12 +239,29 @@ void VariableView::createNewVariable(QString name, QString type, QString label){
 
     variabelTable->insertRow(row);
     variabelTable->setItem(row,0, new QTableWidgetItem(name) );
-    variabelTable->setItem(row,1, new QTableWidgetItem(type) );
+    QTableWidgetItem* itemType = new QTableWidgetItem(type);
+    itemType->setFlags(itemType->flags() ^ Qt::ItemIsEditable);
+    variabelTable->setItem(row,1, itemType);
     variabelTable->setItem(row,2, new QTableWidgetItem(label) );
 
     table->insertColumn(row);
     table->setHorizontalHeaderItem(row,new QTableWidgetItem(name) );
     variabelTable->setItem(row,0, new QTableWidgetItem(name) );
+    QTableWidgetItem* item = new QTableWidgetItem();
+    for (int i = 0; i < table->rowCount(); ++i) {
+        if (type == "String") {
+            table->setItem(i,row, item->clone());
+
+        } else if(type == "Real") {
+            table->setItemDelegateForColumn(row,new DoubleDelegate);
+            table->setItem(i,row, item->clone());
+            table->item(i,row)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
+        }else {
+            table->setItemDelegateForColumn(row,new IntegerDelegate);
+            table->setItem(i,row, item->clone());
+            table->item(i,row)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
+        }
+    }
 }
 
 //get All variable in spreadsheet
@@ -294,9 +314,14 @@ Rcpp::NumericVector VariableView::getNumericVector(int idx){
 }
 Rcpp::CharacterVector VariableView::getCharacterVector(int idx){
     Rcpp::CharacterVector vector(table->rowCount());
-    for (int i = 0; i < table->rowCount(); ++i) {
 
-        vector[i] =  table->item(i,idx)->text().toStdString();
+    for (int i = 0; i < table->rowCount(); ++i) {
+        qDebug()<<table->item(i,idx)->text().trimmed().length();
+        if (table->item(i,idx)->text().trimmed().length()<=0) {
+             vector[i] = "";
+        }else {
+            vector[i] =  table->item(i,idx)->text().toStdString();
+        }
     }
 
     return vector;
@@ -343,6 +368,20 @@ void VariableView::setCharacterVariable(QString name, Rcpp::NumericVector vector
         table->setItem(i,idx, new QTableWidgetItem(QString::number(vector[i])));
     }
 }
+//set character vector
+void VariableView::setCharacterVector(QString name, Rcpp::CharacterVector vector){
+    int idx = getVariableIndex(name);
+    for (int i = 0; i < vector.length(); ++i) {
+
+        if (getVariableType(name)!= "String") {
+                table->setItem(i,idx, new QTableWidgetItem(QString::fromUtf8(vector[i])));
+                table->item(i,idx)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
+        }else {
+             table->setItem(i,idx, new QTableWidgetItem(QString::fromUtf8(vector[i])));
+        }
+    }
+}
+
 //set integer variable
 void VariableView::setIntegerVariable(QString name, Rcpp::NumericVector vector){
     int idx = getVariableIndex(name);
@@ -378,7 +417,6 @@ void VariableView::sendDataFrame(RInside& m_r){
             allVarName += variabelTable->item(i,0)->text();
         }
     }
-    qDebug()<<allVarName;
     QString command = QString("dframe <- data.frame(%1)").arg(allVarName);
     m_r.parseEvalQ(command.toStdString());
 

@@ -1,5 +1,7 @@
 #include "spreadsheet.h"
 #include <QDebug>
+#include <integerdelegate.h>
+#include <doubledelegate.h>
 Spreadsheet::Spreadsheet(Rcpp::DataFrame data ):frame(data)
 {
 
@@ -34,20 +36,30 @@ void Spreadsheet::dataFrameIterator(QTableWidget* typeTable){
                 Rcpp::CharacterVector x = frame[header.at(c)];
                 for (int r = 0; r < rows; ++r) {
                     item->setText(QString::fromUtf8(x[r]));
+
                     table->setItem(r,c, item->clone());
 
 
                 }
             }
 
-        else {
+        else if(typeTable->item(c,1)->text() == "Real") {
                 Rcpp::NumericVector x = frame[header.at(c)];
+                table->setItemDelegateForColumn(c ,new DoubleDelegate);
                 for (int r = 0; r < rows; ++r) {
                     item->setText(QString::number(x[r]));
                     table->setItem(r,c, item->clone());
                     table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
                 }
+        }else {
+            Rcpp::NumericVector x = frame[header.at(c)];
+            table->setItemDelegateForColumn(c ,new IntegerDelegate);
+            for (int r = 0; r < rows; ++r) {
+                item->setText(QString::number(x[r]));
+                table->setItem(r,c, item->clone());
+                table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
             }
+        }
 
 
 
@@ -55,14 +67,35 @@ void Spreadsheet::dataFrameIterator(QTableWidget* typeTable){
 }
 
 void Spreadsheet::dbfIterator(QTableWidget* typeTable){
+    QTableWidgetItem* item = new QTableWidgetItem();
     for (int c = 0; c < typeTable->rowCount(); ++c) {
 
-                for (int r = 0; r < rows; ++r) {
-                    QString item = tableModel->index(r,c).data().toString();
-                    table->setItem(r,c,new QTableWidgetItem(item));
+                if (typeTable->item(c,1)->text() == "String") {
+                        for (int r = 0; r < rows; ++r) {
+                            QString str = tableModel->index(r,c).data().toString();
+                            item->setText(str);
+                            table->setItem(r,c, item->clone());
+                        }
+                    }
 
-
+                else if(typeTable->item(c,1)->text() == "Real") {
+                        table->setItemDelegateForColumn(c ,new DoubleDelegate);
+                        for (int r = 0; r < rows; ++r) {
+                            QString str = tableModel->index(r,c).data().toString();
+                            item->setText(str);
+                            table->setItem(r,c, item->clone());
+                            table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
+                        }
+                }else {
+                    table->setItemDelegateForColumn(c ,new IntegerDelegate);
+                    for (int r = 0; r < rows; ++r) {
+                        QString str = tableModel->index(r,c).data().toString();
+                        item->setText(str);
+                        table->setItem(r,c, item->clone());
+                        table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
+                    }
                 }
+
 }
 }
 

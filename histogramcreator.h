@@ -30,6 +30,7 @@ private:
     int type;
     void generateHistogram();
     void generateRecode();
+    void setupUi();
 };
 
 #endif // HISTOGRAMCREATOR_H
