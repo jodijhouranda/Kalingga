@@ -10,7 +10,7 @@ VariableView::VariableView(Rcpp::DataFrame frame,RInside &rconn, QWidget *parent
     getVariabelAttribute();
     ss->dataFrameIterator(variabelTable);
 
-    connect(variabelTable , SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
+    connect(variabelTable , SIGNAL(itemEntered(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
 
 }
 
@@ -48,12 +48,17 @@ void VariableView::getVariabelAttribute(){
             }
         }
         else if (c == 1) {
-            for (int c = 0; c < variabelTable->rowCount(); ++c) {
-                QString dataType = checkVariableType(c);
+            for (int r = 0; r < variabelTable->rowCount(); ++r) {
+                QString dataType = checkVariableType(r);
                 QTableWidgetItem* item = new QTableWidgetItem(dataType);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                variabelTable->setItem(c,1,item );
+                variabelTable->setItem(r,1,item );
 
+            }
+        }
+        else if(c==2) {
+            for (int r = 0; r < table->columnCount(); ++r) {
+                variabelTable->setItem(r,2,new QTableWidgetItem());
             }
         }
 
@@ -87,6 +92,11 @@ void VariableView::getVariabelAttributeDBF(){
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
                 variabelTable->setItem(c,1,item );
 
+            }
+        }
+        else if(c==2) {
+            for (int r = 0; r < table->columnCount(); ++r) {
+                variabelTable->setItem(r,2,new QTableWidgetItem());
             }
         }
 
@@ -234,8 +244,9 @@ void VariableView::changeVariableName(QTableWidgetItem* item){
 }
 
 //Create New Variable
-void VariableView::createNewVariable(QString name, QString type, QString label){
-    int row = variabelTable->rowCount();
+void VariableView::createNewVariable(QString name, QString type, QString label, int before){
+
+    int row = before;
 
     variabelTable->insertRow(row);
     variabelTable->setItem(row,0, new QTableWidgetItem(name) );
@@ -243,10 +254,8 @@ void VariableView::createNewVariable(QString name, QString type, QString label){
     itemType->setFlags(itemType->flags() ^ Qt::ItemIsEditable);
     variabelTable->setItem(row,1, itemType);
     variabelTable->setItem(row,2, new QTableWidgetItem(label) );
-
     table->insertColumn(row);
     table->setHorizontalHeaderItem(row,new QTableWidgetItem(name) );
-    variabelTable->setItem(row,0, new QTableWidgetItem(name) );
     QTableWidgetItem* item = new QTableWidgetItem();
     for (int i = 0; i < table->rowCount(); ++i) {
         if (type == "String") {
@@ -395,7 +404,12 @@ QString VariableView::getVariableType(QString var){
     int idx = getVariableIndex(var);
         return variabelTable->item(idx,1)->text();
     }
+//get variable Label
 
+QString VariableView::getVariableLabel(QString var){
+        int idx = getVariableIndex(var);
+        return variabelTable->item(idx,2)->text();
+    }
 //get Row Count
 int VariableView::getRowCount(){
     return table->rowCount();

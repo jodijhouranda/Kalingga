@@ -25,6 +25,7 @@ private slots:
 
     void on_buttonBox_accepted();
 
+    void on_buttonBox_rejected();
 
 private:
     QListWidget* m_listwidget;
@@ -32,6 +33,8 @@ private:
     Ui::CreateNewVariable *ui;
     VariableView* vv;
     bool TEST;
+    QStringList allVar;
+    bool validate();
 };
 
 #endif // CREATENEWVARIABLE_H

@@ -30,6 +30,7 @@ private slots:
     void openDBFSlot();
     void openCreateNewVariable();
     void openDeleteVariable();
+    void openModifyVariable();
     void openCalculateVariable();
     void openRecodeVariable();
     void openRandomSampleGenerator();
@@ -63,6 +64,7 @@ private:
 
     QAction* createNewVariable;
     QAction* deleteVariable;
+    QAction* modifyVariable;
     QAction* calculateVariable;
     QAction* recodeVariable;
     QAction* openRSGenerator;

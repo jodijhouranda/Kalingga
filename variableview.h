@@ -26,6 +26,7 @@ public:
     Rcpp::NumericVector getNumericVector(int idx);
     Rcpp::CharacterVector getCharacterVector(int idx);
     QString getVariableType(QString var);
+    QString getVariableLabel(QString var);
     void sendDataFrame(RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVariable(QString name, Rcpp::NumericVector vector );
@@ -33,7 +34,7 @@ public:
     void setConstantVariable(QString name, double cons);
     void setIntegerVariable(QString name ,Rcpp::NumericVector vector );
     int getVariableIndex(QString variabel);
-    void createNewVariable(QString name,QString type , QString label);
+    void createNewVariable(QString name,QString type , QString label,int before);
     void deleteVariable(int idx);
     int getRowCount();
 private:

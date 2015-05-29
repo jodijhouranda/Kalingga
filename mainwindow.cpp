@@ -11,6 +11,7 @@
 #include <QPointer>
 #include <parallechart.h>
 #include <QPushButton>
+#include <modifyvariable.h>
 mapview* mview;
 ResultView* MainWindow::result;
 QStackedWidget* MainWindow::centralView;
@@ -62,6 +63,9 @@ void MainWindow::createAction(){
 
     deleteVariable = new QAction (tr("Delete Variable ... "),this);
     connect(deleteVariable , SIGNAL(triggered()),this,SLOT(openDeleteVariable()));
+
+    modifyVariable = new QAction (tr("Modify Variable ... "),this);
+    connect(modifyVariable , SIGNAL(triggered()),this,SLOT(openModifyVariable()));
 
     calculateVariable = new QAction (tr("Calculate Variable ..."),this);
     connect(calculateVariable , SIGNAL(triggered()),this,SLOT(openCalculateVariable()));
@@ -127,6 +131,7 @@ viewMenu->addAction(resultViewAct);
 //data menu child
 attributeMenu->addAction(createNewVariable);
 attributeMenu->addAction(deleteVariable);
+attributeMenu->addAction(modifyVariable);
 attributeMenu->addAction(calculateVariable);
 attributeMenu->addAction(openRSGenerator);
 attributeMenu->addAction(recodeVariable);
@@ -235,7 +240,10 @@ void MainWindow::openDeleteVariable(){
     DeleteVariable* dialog =  new DeleteVariable(vv,this );
      dialog->show();
 }
-
+void MainWindow::openModifyVariable(){
+     ModifyVariable* dialog =  new ModifyVariable(vv,this );
+     dialog->show();
+}
 void MainWindow::openCalculateVariable(){
     ComputeVariable* dialog =  new ComputeVariable(vv,Rcon ,this );
      dialog->show();
