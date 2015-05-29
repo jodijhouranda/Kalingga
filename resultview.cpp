@@ -2,7 +2,7 @@
 #include <QSplitter>
 #include <QDebug>
 #include <QSizePolicy>
-
+#include <QMenu>
 ResultView::ResultView(QWidget* parent)
 {
     QSplitter* splitter = new QSplitter(this);
@@ -18,8 +18,33 @@ ResultView::ResultView(QWidget* parent)
     splitter->addWidget(stackedWidget);
     splitter->setStretchFactor(1,1);
    connect(tree,SIGNAL(itemClicked(QTreeWidgetItem*,int)),this,SLOT(changeStacketWidget(QTreeWidgetItem*,int)));
-
+    tree->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(tree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenuRequested(QPoint)));
 }
+void ResultView::onCustomContextMenuRequested(const QPoint& pos) {
+    QMenu *menu = new QMenu();
+    QAction* closeAction = new QAction(tr("Close"),this);
+    connect(closeAction , SIGNAL(triggered()),this,SLOT(closeWidget()));
+    menu->addAction(closeAction);
+    menu->exec(tree->viewport()->mapToGlobal(pos));
+   }
+
+   void ResultView::closeWidget(){
+       if (tree->indexOfTopLevelItem(tree->currentItem()->parent())==-1) {
+           tree->takeTopLevelItem(tree->currentIndex().row());
+           stackedWidget->removeWidget(stackedWidget->currentWidget());
+       }else {
+           if (tree->currentItem()->parent()->childCount()==1) {
+               stackedWidget->removeWidget(stackedWidget->currentWidget());
+               tree->takeTopLevelItem(tree->indexOfTopLevelItem(tree->currentItem()->parent()));
+           }else {
+               tree->currentItem()->parent()->removeChild(tree->currentItem());
+               stackedWidget->removeWidget(stackedWidget->currentWidget());
+           }
+
+       }
+       reindex();
+   }
 
 ResultView::~ResultView()
 {
@@ -77,3 +102,25 @@ QString ResultView::indexGenerator(int ridx){
     QString idx = QString::number(ridx);
     return idx;
 }
+
+void ResultView::reindex(){
+    map.clear();
+    int idx = 0;
+    for (int i = 0; i < tree->topLevelItemCount(); ++i) {
+
+        int ch = tree->topLevelItem(i)->childCount();
+        if (ch>0) {
+            for (int j = 0; j < ch; ++j) {
+                qDebug()<<indexGenerator(i,j);
+                map.insert(indexGenerator(i,j),stackedWidget->widget(idx));
+                idx++;
+            }
+        }else {
+            map.insert(indexGenerator(i),stackedWidget->widget(idx));
+            qDebug()<<indexGenerator(i);
+            idx++;
+        }
+    }
+
+}
+

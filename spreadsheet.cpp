@@ -9,8 +9,9 @@ Spreadsheet::Spreadsheet(Rcpp::DataFrame data ):frame(data)
     rows = frame.nrows();
     cols = header.size();
     table = new QTableWidget(rows, cols, 0);
-        table->setMaximumSize(1365,595);
+        table->setMaximumSize(1365,620);
         table->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
         for (int c = 0; c < cols; ++c) {
             QString character = QString::fromStdString(header.at(c));
             table->setHorizontalHeaderItem(c, new QTableWidgetItem(character));
