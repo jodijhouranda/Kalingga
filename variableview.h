@@ -28,6 +28,7 @@ public:
     QString getVariableType(QString var);
     QString getVariableLabel(QString var);
     void sendDataFrame(RInside& m_r);
+    void sendDataFrameByVar(QStringList var,RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVector(QString name, Rcpp::CharacterVector vector );

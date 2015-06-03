@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'boxconfig.ui'
 **
-** Created: Wed May 20 09:10:51 2015
+** Created: Wed Jun 3 13:22:03 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -138,7 +138,7 @@ public:
 
         verticalLayoutWidget_3 = new QWidget(groupBox);
         verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(160, 160, 31, 31));
+        verticalLayoutWidget_3->setGeometry(QRect(160, 160, 52, 31));
         verticalLayout_size = new QVBoxLayout(verticalLayoutWidget_3);
         verticalLayout_size->setObjectName(QString::fromUtf8("verticalLayout_size"));
         verticalLayout_size->setContentsMargins(1, 0, 0, 0);

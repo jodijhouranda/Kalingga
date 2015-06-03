@@ -12,6 +12,7 @@
 #include <parallechart.h>
 #include <QPushButton>
 #include <modifyvariable.h>
+#include <descriptivestat.h>
 mapview* mview;
 ResultView* MainWindow::result;
 QStackedWidget* MainWindow::centralView;
@@ -77,6 +78,9 @@ void MainWindow::createAction(){
     connect(openRSGenerator , SIGNAL(triggered()),this,SLOT(openRandomSampleGenerator()));
 
     //explore menu create Action
+    createDescriptive = new QAction(tr("Descriptive"),this);
+    connect(createDescriptive , SIGNAL(triggered()),this,SLOT(openDescriptiveCreator()));
+
     createHistogram = new QAction(tr("Histogram"),this);
     connect(createHistogram , SIGNAL(triggered()),this,SLOT(openHistogramCreator()));
 
@@ -136,6 +140,7 @@ attributeMenu->addAction(calculateVariable);
 attributeMenu->addAction(openRSGenerator);
 attributeMenu->addAction(recodeVariable);
 attributeMenu->addMenu(explore);
+explore->addAction(createDescriptive);
 explore->addAction(createHistogram);
 explore->addAction(createScatter);
 explore->addAction(createBoxplot);
@@ -254,6 +259,10 @@ void MainWindow::openRecodeVariable(){
 }
 
 //inisialisasi slot explore menu
+void MainWindow::openDescriptiveCreator(){
+    DescriptiveStat* dialog =  new DescriptiveStat(vv,Rcon,this );
+     dialog->show();
+}
 void MainWindow::openHistogramCreator(){
     HistogramCreator* dialog =  new HistogramCreator(vv,Rcon,HistogramCreator::HISTOGRAM,this );
      dialog->show();

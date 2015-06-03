@@ -37,7 +37,8 @@ SOURCES += main.cpp \
     parallelchartconfig.cpp \
     integerdelegate.cpp \
     doubledelegate.cpp \
-    modifyvariable.cpp
+    modifyvariable.cpp \
+    descriptivestat.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -65,7 +66,8 @@ HEADERS  += \
     parallelchartconfig.h \
     integerdelegate.h \
     doubledelegate.h \
-    modifyvariable.h
+    modifyvariable.h \
+    descriptivestat.h
 
 
 FORMS    += \
@@ -83,7 +85,8 @@ FORMS    += \
     boxconfig.ui \
     parallechart.ui \
     parallelchartconfig.ui \
-    modifyvariable.ui
+    modifyvariable.ui \
+    descriptivestat.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg

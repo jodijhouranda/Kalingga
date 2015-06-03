@@ -35,6 +35,7 @@ private slots:
     void openRecodeVariable();
     void openRandomSampleGenerator();
     //slot explore menu
+    void openDescriptiveCreator();
     void openHistogramCreator();
     void openScatterCreator();
     void openBoxplotCreator();
@@ -70,6 +71,7 @@ private:
     QAction* openRSGenerator;
 
     //explore menu action
+    QAction* createDescriptive;
     QAction* createHistogram;
     QAction* createScatter;
     QAction* createBoxplot;

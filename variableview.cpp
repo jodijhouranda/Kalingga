@@ -435,4 +435,27 @@ void VariableView::sendDataFrame(RInside& m_r){
     m_r.parseEvalQ(command.toStdString());
 
 }
+void VariableView::sendDataFrameByVar(QStringList var,RInside& m_r){
+    QString allVarName;
 
+    for (int i = 0; i < var.length(); ++i) {
+
+            if (var.at(i) == "String") {
+                m_r[var.at(i).toStdString()] = getCharacterVector(getVariableIndex(var.at(i)));
+            }else{
+                m_r[var.at(i).toStdString()] = getNumericVector(getVariableIndex(var.at(i)));
+
+            }
+            if (i!= var.length()-1) {
+
+                allVarName += var.at(i) +",";
+            } else {
+                allVarName += var.at(i);
+            }
+
+    }
+    QString command = QString("dframe <- data.frame(%1)").arg(allVarName);
+    qDebug()<<command;
+    m_r.parseEvalQ(command.toStdString());
+
+}
