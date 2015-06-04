@@ -416,23 +416,7 @@ int VariableView::getRowCount(){
 }
 
 void VariableView::sendDataFrame(RInside& m_r){
-    QString allVarName;
-    for (int i = 0; i < variabelTable->rowCount(); ++i) {
-        if (variabelTable->item(i,1)->text() == "String") {
-            m_r[variabelTable->item(i,0)->text().toStdString()] = getCharacterVector(i);
-        }else{
-            m_r[variabelTable->item(i,0)->text().toStdString()] = getNumericVector(i);
-
-        }
-        if (i!= variabelTable->rowCount()-1) {
-
-            allVarName += variabelTable->item(i,0)->text() +",";
-        } else {
-            allVarName += variabelTable->item(i,0)->text();
-        }
-    }
-    QString command = QString("dframe <- data.frame(%1)").arg(allVarName);
-    m_r.parseEvalQ(command.toStdString());
+    sendDataFrameByVar(getAllVariableNames(),m_r);
 
 }
 void VariableView::sendDataFrameByVar(QStringList var,RInside& m_r){
@@ -455,7 +439,9 @@ void VariableView::sendDataFrameByVar(QStringList var,RInside& m_r){
 
     }
     QString command = QString("dframe <- data.frame(%1)").arg(allVarName);
-    qDebug()<<command;
+
     m_r.parseEvalQ(command.toStdString());
+    qDebug()<<command;
+    qDebug()<<(double)m_r.parseEval("nrow(dframe)");
 
 }

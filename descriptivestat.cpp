@@ -67,7 +67,7 @@ void DescriptiveStat::on_buttonBox_accepted()
     QStringList stringList;
     foreach( QListWidgetItem *item, ui->listWidget->selectedItems() )
         stringList << item->text();
-    vv->sendDataFrameByVar(stringList,rconn);
+    vv->sendDataFrame(rconn);
     variables = stringList;
     showResult();
 }
