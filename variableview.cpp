@@ -410,11 +410,19 @@ QString VariableView::getVariableLabel(QString var){
         int idx = getVariableIndex(var);
         return variabelTable->item(idx,2)->text();
     }
+//get variable Label
+
+QString VariableView::getVariableName(int idx){
+        return variabelTable->item(idx,0)->text();
+    }
+
 //get Row Count
 int VariableView::getRowCount(){
     return table->rowCount();
 }
-
+int VariableView::getColumnCount(){
+    return table->columnCount();
+}
 void VariableView::sendDataFrame(RInside& m_r){
     sendDataFrameByVar(getAllVariableNames(),m_r);
 
@@ -444,4 +452,8 @@ void VariableView::sendDataFrameByVar(QStringList var,RInside& m_r){
     qDebug()<<command;
     qDebug()<<(double)m_r.parseEval("nrow(dframe)");
 
+}
+void VariableView::changeVarName(int idx, QString name){
+    table->setHorizontalHeaderItem(idx,new QTableWidgetItem(name));
+    variabelTable->setItem(idx,0,new QTableWidgetItem(name));
 }

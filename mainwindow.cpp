@@ -13,6 +13,7 @@
 #include <QPushButton>
 #include <modifyvariable.h>
 #include <descriptivestat.h>
+#include <mergedatatable.h>
 mapview* mview;
 ResultView* MainWindow::result;
 QStackedWidget* MainWindow::centralView;
@@ -58,6 +59,9 @@ void MainWindow::createAction(){
 
     openDBF = new QAction(tr("dBase Database File (*.dbf)"),this);
     connect(openDBF, SIGNAL(triggered()),this,SLOT(openDBFSlot()));
+
+    mergeTable = new QAction (tr("Merge"),this);
+    connect(mergeTable, SIGNAL(triggered()),this,SLOT(openMergeTable()));
 
     createNewVariable = new QAction (tr("Add Variable"),this);
     connect(createNewVariable , SIGNAL(triggered()),this,SLOT(openCreateNewVariable()));
@@ -133,6 +137,7 @@ resultViewAct = new QAction(tr("Result View"),this);
 connect(resultViewAct, SIGNAL(triggered()),this,SLOT(openResultView()));
 viewMenu->addAction(resultViewAct);
 //data menu child
+attributeMenu->addAction(mergeTable);
 attributeMenu->addAction(createNewVariable);
 attributeMenu->addAction(deleteVariable);
 attributeMenu->addAction(modifyVariable);
@@ -235,6 +240,11 @@ void MainWindow::openDBFSlot(){
 
 //inisialisasi slot data menu
 //slot buka windows create new Variable
+void MainWindow::openMergeTable(){
+   MergeDataTable* dialog =  new MergeDataTable(vv,Rcon,this );
+    dialog->show();
+}
+
 void MainWindow::openCreateNewVariable(){
    CreateNewVariable* dialog =  new CreateNewVariable(vv,this );
     dialog->show();

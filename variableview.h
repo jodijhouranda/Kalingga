@@ -27,6 +27,7 @@ public:
     Rcpp::CharacterVector getCharacterVector(int idx);
     QString getVariableType(QString var);
     QString getVariableLabel(QString var);
+    QString getVariableName(int idx);
     void sendDataFrame(RInside& m_r);
     void sendDataFrameByVar(QStringList var,RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
@@ -37,7 +38,9 @@ public:
     int getVariableIndex(QString variabel);
     void createNewVariable(QString name,QString type , QString label,int before);
     void deleteVariable(int idx);
+    void changeVarName(int idx,QString name);
     int getRowCount();
+    int getColumnCount();
 private:
     Spreadsheet* ss ;
     Rcpp::DataFrame frame;

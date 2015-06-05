@@ -28,6 +28,7 @@ private slots:
     void openCSVSlot();
     void openSHPSlot();
     void openDBFSlot();
+    void openMergeTable();
     void openCreateNewVariable();
     void openDeleteVariable();
     void openModifyVariable();
@@ -62,7 +63,7 @@ private:
     QAction* openSHP;
     QAction* openDBF;
     //data menu action
-
+    QAction* mergeTable;
     QAction* createNewVariable;
     QAction* deleteVariable;
     QAction* modifyVariable;
