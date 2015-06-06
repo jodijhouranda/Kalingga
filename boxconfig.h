@@ -60,6 +60,7 @@ private slots:
     void on_checkBox_flip_clicked();
     void on_checkBox_notch_clicked();
     void on_lineEditSize_2_editingFinished();
+    void on_pushButtonExport_clicked();
 };
 
 #endif // BOXCONFIG_H

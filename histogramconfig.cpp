@@ -339,3 +339,9 @@ void HistogramConfig::on_comboBox_activated(int index)
         break;
     }
 }
+
+void HistogramConfig::on_pushButtonExport_clicked()
+{
+drawPlot();
+exportPlot(parentWidget(),rconn);
+}

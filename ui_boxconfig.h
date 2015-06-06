@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'boxconfig.ui'
 **
-** Created: Wed Jun 3 13:22:03 2015
+** Created: Sat Jun 6 20:51:22 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -21,6 +21,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 #include <QtGui/QSlider>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
@@ -66,12 +67,13 @@ public:
     QLabel *label_11;
     QLabel *label_12;
     QLineEdit *lineEditSize_2;
+    QPushButton *pushButtonExport;
 
     void setupUi(QWidget *BoxConfig)
     {
         if (BoxConfig->objectName().isEmpty())
             BoxConfig->setObjectName(QString::fromUtf8("BoxConfig"));
-        BoxConfig->resize(223, 404);
+        BoxConfig->resize(211, 407);
         groupBox = new QGroupBox(BoxConfig);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(0, 10, 201, 271));
@@ -197,6 +199,9 @@ public:
         lineEditSize_2 = new QLineEdit(groupBox_2);
         lineEditSize_2->setObjectName(QString::fromUtf8("lineEditSize_2"));
         lineEditSize_2->setGeometry(QRect(70, 50, 29, 20));
+        pushButtonExport = new QPushButton(BoxConfig);
+        pushButtonExport->setObjectName(QString::fromUtf8("pushButtonExport"));
+        pushButtonExport->setGeometry(QRect(120, 380, 81, 23));
 
         retranslateUi(BoxConfig);
 
@@ -223,6 +228,7 @@ public:
         label_11->setText(QApplication::translate("BoxConfig", "Color", 0, QApplication::UnicodeUTF8));
         label_12->setText(QApplication::translate("BoxConfig", "Size", 0, QApplication::UnicodeUTF8));
         lineEditSize_2->setText(QApplication::translate("BoxConfig", "2", 0, QApplication::UnicodeUTF8));
+        pushButtonExport->setText(QApplication::translate("BoxConfig", "Export Plot...", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

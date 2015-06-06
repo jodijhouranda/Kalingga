@@ -149,3 +149,9 @@ void ParallelChartConfig::on_checkBox_3_clicked()
     }
     drawPlot();
 }
+
+void ParallelChartConfig::on_pushButtonExport_clicked()
+{
+    drawPlot();
+    exportPlot(parentWidget(),rconn);
+}

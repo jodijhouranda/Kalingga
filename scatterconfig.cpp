@@ -320,3 +320,9 @@ void ScatterConfig::on_lineEditSize_2_editingFinished()
     sizes = "size = "+ui->lineEditSize_2->text();
     drawPlot();
 }
+
+void ScatterConfig::on_pushButtonExport_clicked()
+{
+    drawPlot();
+    exportPlot(parentWidget(),rconn);
+}

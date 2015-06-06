@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'histogramconfig.ui'
 **
-** Created: Wed May 20 08:19:35 2015
+** Created: Sat Jun 6 20:45:51 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -20,6 +20,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 #include <QtGui/QSlider>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
@@ -69,48 +70,49 @@ public:
     QLabel *label_22;
     QWidget *horizontalLayoutWidget_5;
     QHBoxLayout *horizontalLayout_5;
-    QComboBox *comboBox_colorDens;
     QWidget *verticalLayoutWidget_6;
     QVBoxLayout *verticalLayout_cpd;
     QWidget *horizontalLayoutWidget_6;
     QHBoxLayout *horizontalLayout_6;
-    QComboBox *comboBox_fillDens;
     QComboBox *comboBox_kernel;
     QLabel *label_23;
+    QComboBox *comboBox_fillDens;
+    QComboBox *comboBox_colorDens;
     QWidget *horizontalLayoutWidget_3;
     QHBoxLayout *horizontalLayout_3;
     QLabel *label;
     QComboBox *comboBox;
+    QPushButton *pushButtonExport;
 
     void setupUi(QWidget *HistogramConfig)
     {
         if (HistogramConfig->objectName().isEmpty())
             HistogramConfig->setObjectName(QString::fromUtf8("HistogramConfig"));
-        HistogramConfig->resize(211, 647);
+        HistogramConfig->resize(205, 611);
         groupBox = new QGroupBox(HistogramConfig);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(0, 40, 201, 271));
+        groupBox->setGeometry(QRect(0, 40, 201, 251));
         label_2 = new QLabel(groupBox);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(10, 30, 47, 13));
+        label_2->setGeometry(QRect(10, 20, 47, 13));
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(10, 70, 47, 13));
+        label_3->setGeometry(QRect(10, 60, 47, 13));
         label_4 = new QLabel(groupBox);
         label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setGeometry(QRect(10, 110, 47, 13));
+        label_4->setGeometry(QRect(10, 100, 47, 13));
         verticalLayoutWidget_2 = new QWidget(groupBox);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(160, 100, 31, 31));
+        verticalLayoutWidget_2->setGeometry(QRect(160, 90, 31, 31));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(1, 0, 0, 0);
         lineEdit = new QLineEdit(groupBox);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
-        lineEdit->setGeometry(QRect(70, 30, 91, 20));
+        lineEdit->setGeometry(QRect(70, 20, 91, 20));
         horizontalSlider = new QSlider(groupBox);
         horizontalSlider->setObjectName(QString::fromUtf8("horizontalSlider"));
-        horizontalSlider->setGeometry(QRect(70, 140, 91, 20));
+        horizontalSlider->setGeometry(QRect(70, 130, 91, 20));
         horizontalSlider->setMaximum(10);
         horizontalSlider->setSingleStep(1);
         horizontalSlider->setPageStep(1);
@@ -119,28 +121,28 @@ public:
         horizontalSlider->setTickInterval(1);
         label_5 = new QLabel(groupBox);
         label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(10, 140, 47, 13));
+        label_5->setGeometry(QRect(10, 130, 47, 13));
         label_6 = new QLabel(groupBox);
         label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setGeometry(QRect(10, 180, 47, 13));
+        label_6->setGeometry(QRect(10, 160, 47, 13));
         comboBox_2 = new QComboBox(groupBox);
         comboBox_2->setObjectName(QString::fromUtf8("comboBox_2"));
-        comboBox_2->setGeometry(QRect(70, 170, 91, 22));
+        comboBox_2->setGeometry(QRect(70, 160, 91, 22));
         comboBox_linetype = new QComboBox(groupBox);
         comboBox_linetype->setObjectName(QString::fromUtf8("comboBox_linetype"));
-        comboBox_linetype->setGeometry(QRect(70, 200, 91, 22));
+        comboBox_linetype->setGeometry(QRect(70, 190, 91, 22));
         label_7 = new QLabel(groupBox);
         label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(10, 210, 47, 13));
+        label_7->setGeometry(QRect(10, 190, 47, 13));
         lineEdit_Size = new QLineEdit(groupBox);
         lineEdit_Size->setObjectName(QString::fromUtf8("lineEdit_Size"));
-        lineEdit_Size->setGeometry(QRect(70, 230, 91, 20));
+        lineEdit_Size->setGeometry(QRect(70, 220, 91, 20));
         label_8 = new QLabel(groupBox);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(10, 230, 47, 13));
+        label_8->setGeometry(QRect(10, 220, 47, 13));
         horizontalLayoutWidget = new QWidget(groupBox);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(70, 60, 91, 31));
+        horizontalLayoutWidget->setGeometry(QRect(70, 50, 91, 31));
         horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -151,13 +153,13 @@ public:
 
         verticalLayoutWidget = new QWidget(groupBox);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(160, 60, 31, 31));
+        verticalLayoutWidget->setGeometry(QRect(160, 50, 31, 31));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(1, 0, 0, 0);
         horizontalLayoutWidget_2 = new QWidget(groupBox);
         horizontalLayoutWidget_2->setObjectName(QString::fromUtf8("horizontalLayoutWidget_2"));
-        horizontalLayoutWidget_2->setGeometry(QRect(70, 100, 91, 31));
+        horizontalLayoutWidget_2->setGeometry(QRect(70, 90, 91, 31));
         horizontalLayout_2 = new QHBoxLayout(horizontalLayoutWidget_2);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -168,28 +170,28 @@ public:
 
         groupBox_2 = new QGroupBox(HistogramConfig);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(0, 320, 201, 291));
+        groupBox_2->setGeometry(QRect(0, 290, 201, 281));
         label_16 = new QLabel(groupBox_2);
         label_16->setObjectName(QString::fromUtf8("label_16"));
-        label_16->setGeometry(QRect(10, 60, 47, 13));
+        label_16->setGeometry(QRect(10, 50, 47, 13));
         label_17 = new QLabel(groupBox_2);
         label_17->setObjectName(QString::fromUtf8("label_17"));
-        label_17->setGeometry(QRect(10, 100, 47, 13));
+        label_17->setGeometry(QRect(10, 90, 47, 13));
         label_18 = new QLabel(groupBox_2);
         label_18->setObjectName(QString::fromUtf8("label_18"));
-        label_18->setGeometry(QRect(10, 140, 47, 13));
+        label_18->setGeometry(QRect(10, 130, 47, 13));
         verticalLayoutWidget_5 = new QWidget(groupBox_2);
         verticalLayoutWidget_5->setObjectName(QString::fromUtf8("verticalLayoutWidget_5"));
-        verticalLayoutWidget_5->setGeometry(QRect(160, 130, 31, 31));
+        verticalLayoutWidget_5->setGeometry(QRect(160, 120, 31, 31));
         verticalLayout_cpdfill = new QVBoxLayout(verticalLayoutWidget_5);
         verticalLayout_cpdfill->setObjectName(QString::fromUtf8("verticalLayout_cpdfill"));
         verticalLayout_cpdfill->setContentsMargins(1, 0, 0, 0);
         lineEdit_adjust = new QLineEdit(groupBox_2);
         lineEdit_adjust->setObjectName(QString::fromUtf8("lineEdit_adjust"));
-        lineEdit_adjust->setGeometry(QRect(70, 60, 91, 20));
+        lineEdit_adjust->setGeometry(QRect(70, 50, 91, 20));
         horizontalSlider_Dens = new QSlider(groupBox_2);
         horizontalSlider_Dens->setObjectName(QString::fromUtf8("horizontalSlider_Dens"));
-        horizontalSlider_Dens->setGeometry(QRect(70, 170, 91, 20));
+        horizontalSlider_Dens->setGeometry(QRect(70, 160, 91, 20));
         horizontalSlider_Dens->setMaximum(10);
         horizontalSlider_Dens->setSingleStep(1);
         horizontalSlider_Dens->setPageStep(1);
@@ -198,59 +200,55 @@ public:
         horizontalSlider_Dens->setTickInterval(1);
         label_19 = new QLabel(groupBox_2);
         label_19->setObjectName(QString::fromUtf8("label_19"));
-        label_19->setGeometry(QRect(10, 170, 47, 13));
+        label_19->setGeometry(QRect(10, 160, 47, 13));
         label_20 = new QLabel(groupBox_2);
         label_20->setObjectName(QString::fromUtf8("label_20"));
-        label_20->setGeometry(QRect(10, 210, 47, 13));
+        label_20->setGeometry(QRect(10, 190, 47, 13));
         comboBox_WeightDens = new QComboBox(groupBox_2);
         comboBox_WeightDens->setObjectName(QString::fromUtf8("comboBox_WeightDens"));
-        comboBox_WeightDens->setGeometry(QRect(70, 200, 91, 22));
+        comboBox_WeightDens->setGeometry(QRect(70, 190, 91, 22));
         comboBox_linetype_Dens = new QComboBox(groupBox_2);
         comboBox_linetype_Dens->setObjectName(QString::fromUtf8("comboBox_linetype_Dens"));
-        comboBox_linetype_Dens->setGeometry(QRect(70, 230, 91, 22));
+        comboBox_linetype_Dens->setGeometry(QRect(70, 220, 91, 22));
         label_21 = new QLabel(groupBox_2);
         label_21->setObjectName(QString::fromUtf8("label_21"));
-        label_21->setGeometry(QRect(10, 240, 47, 13));
+        label_21->setGeometry(QRect(10, 220, 47, 13));
         lineEdit_Size_Dens = new QLineEdit(groupBox_2);
         lineEdit_Size_Dens->setObjectName(QString::fromUtf8("lineEdit_Size_Dens"));
-        lineEdit_Size_Dens->setGeometry(QRect(70, 260, 91, 20));
+        lineEdit_Size_Dens->setGeometry(QRect(70, 250, 91, 20));
         label_22 = new QLabel(groupBox_2);
         label_22->setObjectName(QString::fromUtf8("label_22"));
-        label_22->setGeometry(QRect(10, 260, 47, 13));
+        label_22->setGeometry(QRect(10, 250, 47, 13));
         horizontalLayoutWidget_5 = new QWidget(groupBox_2);
         horizontalLayoutWidget_5->setObjectName(QString::fromUtf8("horizontalLayoutWidget_5"));
-        horizontalLayoutWidget_5->setGeometry(QRect(70, 90, 91, 31));
+        horizontalLayoutWidget_5->setGeometry(QRect(70, 80, 91, 31));
         horizontalLayout_5 = new QHBoxLayout(horizontalLayoutWidget_5);
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
         horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
-        comboBox_colorDens = new QComboBox(horizontalLayoutWidget_5);
-        comboBox_colorDens->setObjectName(QString::fromUtf8("comboBox_colorDens"));
-
-        horizontalLayout_5->addWidget(comboBox_colorDens);
-
         verticalLayoutWidget_6 = new QWidget(groupBox_2);
         verticalLayoutWidget_6->setObjectName(QString::fromUtf8("verticalLayoutWidget_6"));
-        verticalLayoutWidget_6->setGeometry(QRect(160, 90, 31, 31));
+        verticalLayoutWidget_6->setGeometry(QRect(160, 80, 31, 31));
         verticalLayout_cpd = new QVBoxLayout(verticalLayoutWidget_6);
         verticalLayout_cpd->setObjectName(QString::fromUtf8("verticalLayout_cpd"));
         verticalLayout_cpd->setContentsMargins(1, 0, 0, 0);
         horizontalLayoutWidget_6 = new QWidget(groupBox_2);
         horizontalLayoutWidget_6->setObjectName(QString::fromUtf8("horizontalLayoutWidget_6"));
-        horizontalLayoutWidget_6->setGeometry(QRect(70, 130, 91, 31));
+        horizontalLayoutWidget_6->setGeometry(QRect(70, 120, 91, 31));
         horizontalLayout_6 = new QHBoxLayout(horizontalLayoutWidget_6);
         horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
         horizontalLayout_6->setContentsMargins(0, 0, 0, 0);
-        comboBox_fillDens = new QComboBox(horizontalLayoutWidget_6);
-        comboBox_fillDens->setObjectName(QString::fromUtf8("comboBox_fillDens"));
-
-        horizontalLayout_6->addWidget(comboBox_fillDens);
-
         comboBox_kernel = new QComboBox(groupBox_2);
         comboBox_kernel->setObjectName(QString::fromUtf8("comboBox_kernel"));
-        comboBox_kernel->setGeometry(QRect(70, 30, 91, 22));
+        comboBox_kernel->setGeometry(QRect(70, 20, 91, 22));
         label_23 = new QLabel(groupBox_2);
         label_23->setObjectName(QString::fromUtf8("label_23"));
-        label_23->setGeometry(QRect(10, 30, 47, 13));
+        label_23->setGeometry(QRect(10, 20, 47, 13));
+        comboBox_fillDens = new QComboBox(groupBox_2);
+        comboBox_fillDens->setObjectName(QString::fromUtf8("comboBox_fillDens"));
+        comboBox_fillDens->setGeometry(QRect(71, 125, 89, 20));
+        comboBox_colorDens = new QComboBox(groupBox_2);
+        comboBox_colorDens->setObjectName(QString::fromUtf8("comboBox_colorDens"));
+        comboBox_colorDens->setGeometry(QRect(71, 85, 89, 20));
         horizontalLayoutWidget_3 = new QWidget(HistogramConfig);
         horizontalLayoutWidget_3->setObjectName(QString::fromUtf8("horizontalLayoutWidget_3"));
         horizontalLayoutWidget_3->setGeometry(QRect(0, 10, 181, 22));
@@ -267,6 +265,9 @@ public:
 
         horizontalLayout_3->addWidget(comboBox);
 
+        pushButtonExport = new QPushButton(HistogramConfig);
+        pushButtonExport->setObjectName(QString::fromUtf8("pushButtonExport"));
+        pushButtonExport->setGeometry(QRect(120, 580, 81, 23));
 
         retranslateUi(HistogramConfig);
 
@@ -301,6 +302,7 @@ public:
          << QApplication::translate("HistogramConfig", "Density", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("HistogramConfig", "Histogram & Density", 0, QApplication::UnicodeUTF8)
         );
+        pushButtonExport->setText(QApplication::translate("HistogramConfig", "Export Plot...", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

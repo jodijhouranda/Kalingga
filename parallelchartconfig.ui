@@ -19,7 +19,7 @@
      <x>10</x>
      <y>20</y>
      <width>191</width>
-     <height>301</height>
+     <height>291</height>
     </rect>
    </property>
    <property name="title">
@@ -262,6 +262,19 @@
      <string>Background</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButtonExport">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>320</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Export Plot...</string>
+   </property>
   </widget>
  </widget>
  <resources/>

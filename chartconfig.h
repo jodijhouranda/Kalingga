@@ -34,6 +34,7 @@ public:
     QStringList parAes;
     QStringList par2;
     QStringList parAes2;
+    void exportPlot(QWidget* parent,RInside &rconn);
 private:
   QString baseCommand;
   QString command;

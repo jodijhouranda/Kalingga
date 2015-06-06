@@ -75,6 +75,7 @@ private slots:
     void on_comboBox_linetype_s_activated(const QString &arg1);
     void on_comboBox_sizes_activated(const QString &arg1);
     void on_lineEditSize_2_editingFinished();
+    void on_pushButtonExport_clicked();
 };
 
 #endif // SCATTERCONFIG_H

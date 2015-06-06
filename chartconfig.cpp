@@ -1,5 +1,6 @@
 #include "chartconfig.h"
-
+#include <QFileDialog>
+#include <QDebug>
 
 ChartConfig::ChartConfig()
 {
@@ -150,3 +151,21 @@ void ChartConfig::setComboLineContent(QComboBox *combo,VariableView* vv){
            << "longdash"<<"twodash";
     combo->addItems(content);
 }
+
+void ChartConfig::exportPlot(QWidget* parent,RInside &rconn){
+    QString fn = QFileDialog::getSaveFileName(parent, QObject::tr("Save as..."), QString(), QObject::tr("Portable Network Graphics (*.png);;All Files (*)"));
+       if (fn.isEmpty())
+           return;
+       if (! (fn.endsWith(".png", Qt::CaseInsensitive) ) )
+           fn += ".png";
+       qDebug() << fn;
+
+
+               QString cmd = QString("ggsave(file = %1 )").arg("\""+fn+"\"");
+
+               rconn.parseEvalQ(cmd.toStdString());
+                 rconn.parseEvalQ("graphics.off()");
+
+
+}
+

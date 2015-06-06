@@ -196,3 +196,9 @@ void BoxConfig::on_lineEditSize_2_editingFinished()
     outliersize = "outlier.size = "+ui->lineEditSize_2->text();
     drawPlot();
 }
+
+void BoxConfig::on_pushButtonExport_clicked()
+{
+    drawPlot();
+    exportPlot(parentWidget(),rconn);
+}

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'scatterconfig.ui'
 **
-** Created: Wed May 20 08:19:35 2015
+** Created: Sat Jun 6 20:51:22 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -21,6 +21,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 #include <QtGui/QSlider>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
@@ -86,12 +87,13 @@ public:
     QHBoxLayout *horizontalLayout_8;
     QLabel *label;
     QComboBox *comboBox;
+    QPushButton *pushButtonExport;
 
     void setupUi(QWidget *ScatterConfig)
     {
         if (ScatterConfig->objectName().isEmpty())
             ScatterConfig->setObjectName(QString::fromUtf8("ScatterConfig"));
-        ScatterConfig->resize(221, 502);
+        ScatterConfig->resize(221, 537);
         groupBox = new QGroupBox(ScatterConfig);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(0, 40, 201, 201));
@@ -158,7 +160,7 @@ public:
 
         verticalLayoutWidget_3 = new QWidget(groupBox);
         verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(160, 160, 31, 31));
+        verticalLayoutWidget_3->setGeometry(QRect(160, 160, 52, 31));
         verticalLayout_size = new QVBoxLayout(verticalLayoutWidget_3);
         verticalLayout_size->setObjectName(QString::fromUtf8("verticalLayout_size"));
         verticalLayout_size->setContentsMargins(1, 0, 0, 0);
@@ -260,7 +262,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(groupBox_2);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(160, 210, 31, 31));
+        verticalLayoutWidget_4->setGeometry(QRect(160, 210, 52, 31));
         verticalLayout_size_2 = new QVBoxLayout(verticalLayoutWidget_4);
         verticalLayout_size_2->setObjectName(QString::fromUtf8("verticalLayout_size_2"));
         verticalLayout_size_2->setContentsMargins(1, 0, 0, 0);
@@ -276,25 +278,6 @@ public:
         comboBox_colors = new QComboBox(groupBox_2);
         comboBox_colors->setObjectName(QString::fromUtf8("comboBox_colors"));
         comboBox_colors->setGeometry(QRect(71, 75, 89, 20));
-        label_16->raise();
-        label_17->raise();
-        label_18->raise();
-        verticalLayoutWidget_5->raise();
-        horizontalSlider_smot->raise();
-        label_19->raise();
-        comboBox_linetype_s->raise();
-        label_21->raise();
-        label_22->raise();
-        horizontalLayoutWidget_5->raise();
-        verticalLayoutWidget_6->raise();
-        horizontalLayoutWidget_6->raise();
-        comboBox_method->raise();
-        label_23->raise();
-        horizontalLayoutWidget_4->raise();
-        verticalLayoutWidget_4->raise();
-        checkBox->raise();
-        comboBox_sizes->raise();
-        comboBox_colors->raise();
         horizontalLayoutWidget_7 = new QWidget(ScatterConfig);
         horizontalLayoutWidget_7->setObjectName(QString::fromUtf8("horizontalLayoutWidget_7"));
         horizontalLayoutWidget_7->setGeometry(QRect(10, 10, 181, 22));
@@ -311,6 +294,9 @@ public:
 
         horizontalLayout_8->addWidget(comboBox);
 
+        pushButtonExport = new QPushButton(ScatterConfig);
+        pushButtonExport->setObjectName(QString::fromUtf8("pushButtonExport"));
+        pushButtonExport->setGeometry(QRect(120, 510, 81, 23));
 
         retranslateUi(ScatterConfig);
 
@@ -344,6 +330,7 @@ public:
          << QApplication::translate("ScatterConfig", "Smooth", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("ScatterConfig", "Scatter and Smooth", 0, QApplication::UnicodeUTF8)
         );
+        pushButtonExport->setText(QApplication::translate("ScatterConfig", "Export Plot...", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

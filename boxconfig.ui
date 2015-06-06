@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>223</width>
-    <height>404</height>
+    <width>211</width>
+    <height>407</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -379,6 +379,19 @@
      <string>2</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButtonExport">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>380</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Export Plot...</string>
+   </property>
   </widget>
  </widget>
  <resources/>

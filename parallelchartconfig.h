@@ -39,6 +39,8 @@ private slots:
 
     void on_checkBox_3_clicked();
 
+    void on_pushButtonExport_clicked();
+
 private:
     Ui::ParallelChartConfig *ui;
     void drawPlot();

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'parallelchartconfig.ui'
 **
-** Created: Wed May 20 22:10:39 2015
+** Created: Sat Jun 6 20:51:22 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -20,6 +20,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 #include <QtGui/QSlider>
 #include <QtGui/QWidget>
 
@@ -47,6 +48,7 @@ public:
     QLineEdit *lineEdit;
     QCheckBox *checkBox_3;
     QLabel *label_9;
+    QPushButton *pushButtonExport;
 
     void setupUi(QWidget *ParallelChartConfig)
     {
@@ -55,7 +57,7 @@ public:
         ParallelChartConfig->resize(213, 512);
         groupBox = new QGroupBox(ParallelChartConfig);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 20, 191, 301));
+        groupBox->setGeometry(QRect(10, 20, 191, 291));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 50, 71, 16));
@@ -117,6 +119,9 @@ public:
         label_9 = new QLabel(groupBox);
         label_9->setObjectName(QString::fromUtf8("label_9"));
         label_9->setGeometry(QRect(10, 260, 61, 16));
+        pushButtonExport = new QPushButton(ParallelChartConfig);
+        pushButtonExport->setObjectName(QString::fromUtf8("pushButtonExport"));
+        pushButtonExport->setGeometry(QRect(120, 320, 81, 23));
 
         retranslateUi(ParallelChartConfig);
 
@@ -139,6 +144,7 @@ public:
         label_8->setText(QApplication::translate("ParallelChartConfig", "Tittle", 0, QApplication::UnicodeUTF8));
         checkBox_3->setText(QString());
         label_9->setText(QApplication::translate("ParallelChartConfig", "Background", 0, QApplication::UnicodeUTF8));
+        pushButtonExport->setText(QApplication::translate("ParallelChartConfig", "Export Plot...", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

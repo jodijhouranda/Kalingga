@@ -80,6 +80,7 @@ private slots:
     void on_comboBox_linetype_Dens_activated(const QString &arg1);
     void on_lineEdit_Size_Dens_editingFinished();
     void on_comboBox_activated(int index);
+    void on_pushButtonExport_clicked();
 };
 
 #endif // HISTOGRAMCONFIG_H

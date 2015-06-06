@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>221</width>
-    <height>502</height>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -193,7 +193,7 @@
      <rect>
       <x>160</x>
       <y>160</y>
-      <width>31</width>
+      <width>52</width>
       <height>31</height>
      </rect>
     </property>
@@ -456,7 +456,7 @@
      <rect>
       <x>160</x>
       <y>210</y>
-      <width>31</width>
+      <width>52</width>
       <height>31</height>
      </rect>
     </property>
@@ -499,25 +499,6 @@
      </rect>
     </property>
    </widget>
-   <zorder>label_16</zorder>
-   <zorder>label_17</zorder>
-   <zorder>label_18</zorder>
-   <zorder>verticalLayoutWidget_5</zorder>
-   <zorder>horizontalSlider_smot</zorder>
-   <zorder>label_19</zorder>
-   <zorder>comboBox_linetype_s</zorder>
-   <zorder>label_21</zorder>
-   <zorder>label_22</zorder>
-   <zorder>horizontalLayoutWidget_5</zorder>
-   <zorder>verticalLayoutWidget_6</zorder>
-   <zorder>horizontalLayoutWidget_6</zorder>
-   <zorder>comboBox_method</zorder>
-   <zorder>label_23</zorder>
-   <zorder>horizontalLayoutWidget_4</zorder>
-   <zorder>verticalLayoutWidget_4</zorder>
-   <zorder>checkBox</zorder>
-   <zorder>comboBox_sizes</zorder>
-   <zorder>comboBox_colors</zorder>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_7">
    <property name="geometry">
@@ -556,6 +537,19 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QPushButton" name="pushButtonExport">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>510</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Export Plot...</string>
+   </property>
   </widget>
  </widget>
  <resources/>
