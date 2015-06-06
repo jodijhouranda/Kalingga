@@ -45,7 +45,7 @@ void MainWindow::setupWindowsSetting(){
     mview->disableToolBar();
     centralView->addWidget(mview);
     setCentralWidget(centralView);
-
+    Rcon.parseEvalQ("library(foreign)");
 }
 
 void MainWindow::createAction(){
@@ -59,6 +59,17 @@ void MainWindow::createAction(){
 
     openDBF = new QAction(tr("dBase Database File (*.dbf)"),this);
     connect(openDBF, SIGNAL(triggered()),this,SLOT(openDBFSlot()));
+
+    saveData = new QAction(tr("&Save"),this);
+    connect(saveData, SIGNAL(triggered()),this,SLOT(saveDataSlot()));
+    saveData->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+
+    saveDataAs = new QAction(tr("Save as"),this);
+    connect(saveDataAs, SIGNAL(triggered()),this,SLOT(saveDataAsSlot()));
+
+
+    exit = new QAction(tr("Exit"),this);
+    connect(exit, SIGNAL(triggered()),this,SLOT(exitSlot()));
 
     mergeTable = new QAction (tr("Merge"),this);
     connect(mergeTable, SIGNAL(triggered()),this,SLOT(openMergeTable()));
@@ -117,6 +128,9 @@ QMenu *openMenu = fileMenu->addMenu(tr("Open File"));
 openMenu->addAction(openSHP);
 openMenu->addAction(openDBF);
 openMenu->addAction(openCSV);
+fileMenu->addAction(saveData);
+fileMenu->addAction(saveDataAs);
+fileMenu->addAction(exit);
 //view menu child
 
 
@@ -189,6 +203,7 @@ void MainWindow::openCSVSlot(){
     std::string cmd = cmd0 + csvPath.toStdString() + cmd1 ;
     Rcpp::DataFrame data = Rcon.parseEval(cmd);
     vv = new VariableView(data,Rcon);
+    vv->setDataPath(csvPath);
     centralView->addWidget(vv->getSpreadsheetTable());
     centralView->addWidget(vv->getVariabelViewTable());
     centralView->addWidget(result);
@@ -209,6 +224,8 @@ void MainWindow::openSHPSlot(){
 
    tableModel->open(dbfPath);
     vv = new VariableView(tableModel,Rcon);
+    vv->setDataPath(dbfPath);
+    vv->setShapePath(shpPath);
     centralView->addWidget(vv->getSpreadsheetTable());
     centralView->addWidget(vv->getVariabelViewTable());
     mview->openShapeFile(shpPath);
@@ -228,14 +245,57 @@ void MainWindow::openDBFSlot(){
         return;
     }
 
-   QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
-   tableModel->open(dbfPath);
+    QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
+    tableModel->open(dbfPath);
     vv = new VariableView(tableModel,Rcon);
+    qDebug() <<  tableModel->index(4,3).data().toString();
+    vv->setDataPath(dbfPath);
     centralView->addWidget(vv->getSpreadsheetTable());
     centralView->addWidget(vv->getVariabelViewTable());
     centralView->addWidget(result);
     updateViewMenuDataOnly();
     openDataView();
+}
+
+void MainWindow::saveDataSlot(){
+QFile file(vv->getDataPath());
+if (!file.exists()) {
+    saveDataAsSlot();
+}else{
+     QString fn = vv->getDataPath();
+     vv->sendDataFrame(Rcon);
+     if (fn.endsWith(".dbf", Qt::CaseInsensitive)) {
+     QString format = QString("write.dbf(dataframe = dframe,file =\""+fn+"\")");
+     Rcon.parseEvalQ(format.toStdString());
+     }else if (fn.endsWith(".csv", Qt::CaseInsensitive)){
+         QString format = QString("write.csv(dframe, \""+ fn +"\" , row.names = FALSE)");
+         Rcon.parseEvalQ(format.toStdString());
+     }
+    // QMessageBox::information(this,"File saved","Your file saved");
+}
+
+}
+
+void MainWindow::saveDataAsSlot(){
+    QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."),
+                                                 QString(), tr("dBase Database File (*.dbf);;Separate Comma Value (*.csv);;All Files (*)"));
+       if (fn.isEmpty())
+           return;
+       if (! (fn.endsWith(".dbf", Qt::CaseInsensitive) || fn.endsWith(".csv", Qt::CaseInsensitive)) )
+           fn += ".dbf";
+       qDebug() << fn;
+       vv->sendDataFrame(Rcon);
+       if (fn.endsWith(".dbf", Qt::CaseInsensitive)) {
+       QString format = QString("write.dbf(dataframe = dframe,file =\""+fn+"\")");
+       Rcon.parseEvalQ(format.toStdString());
+       }else if (fn.endsWith(".csv", Qt::CaseInsensitive)){
+           QString format = QString("write.csv(dframe, \""+ fn +"\" , row.names = FALSE)");
+           Rcon.parseEvalQ(format.toStdString());
+       }
+}
+
+void MainWindow::exitSlot(){
+    close();
 }
 
 //inisialisasi slot data menu
@@ -316,6 +376,9 @@ void MainWindow::setMenubarVisible(bool x){
         toolsMenu->menuAction()->setVisible(true);
         analysisMenu->menuAction()->setVisible(true);
         pluginMenu->menuAction()->setVisible(true);
+        saveData->setEnabled(true);
+        saveDataAs->setEnabled(true);
+        closer= true;
     } else {
         viewMenu->menuAction()->setVisible(false);
         attributeMenu->menuAction()->setVisible(false);
@@ -323,5 +386,36 @@ void MainWindow::setMenubarVisible(bool x){
         toolsMenu->menuAction()->setVisible(false);
         analysisMenu->menuAction()->setVisible(false);
         pluginMenu->menuAction()->setVisible(false);
+        saveData->setEnabled(false);
+        saveDataAs->setEnabled(false);
+        closer = false;
+    }
+}
+void MainWindow::closeEvent(QCloseEvent *event) {
+     // do some data saves or something else
+    if (closer) {
+
+        QMessageBox msgBox;
+        msgBox.setText("Do you want to save your data?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret) {
+          case QMessageBox::Save:
+              saveDataSlot();
+              event->accept();
+              break;
+          case QMessageBox::Discard:
+               event->accept();
+              break;
+          case QMessageBox::Cancel:
+             event->ignore();
+              return;
+              break;
+          default:
+              // should never be reached
+              break;
+        }
+
     }
 }

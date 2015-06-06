@@ -13,6 +13,7 @@
 #include <resultview.h>
 #include <resultviewitem.h>
 #include <twovariablepicker.h>
+#include <QCloseEvent>
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -24,10 +25,14 @@ static ResultView* result;
 
 static void enableResultView();
 private slots:
-    //slot data menu
+    //slot file menu
     void openCSVSlot();
     void openSHPSlot();
     void openDBFSlot();
+    void saveDataAsSlot();
+    void saveDataSlot();
+    void exitSlot();
+    //slot file menu
     void openMergeTable();
     void openCreateNewVariable();
     void openDeleteVariable();
@@ -48,6 +53,8 @@ private slots:
     void openMapView();
     void openResultView();
 private:
+    bool closer;
+    void closeEvent(QCloseEvent *event);
     void setupWindowsSetting();
     void setupMenuBar();
     void createAction();
@@ -62,6 +69,9 @@ private:
     QAction* openCSV;
     QAction* openSHP;
     QAction* openDBF;
+    QAction* saveDataAs;
+    QAction* saveData;
+    QAction* exit;
     //data menu action
     QAction* mergeTable;
     QAction* createNewVariable;
@@ -91,6 +101,7 @@ private:
     QAction* variableViewAct;
     static QStackedWidget* centralView;
     static QAction* resultViewAct;
+
 };
 
 #endif // MAINWINDOW_H

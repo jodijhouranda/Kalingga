@@ -10,7 +10,7 @@ HistogramCreator::HistogramCreator(VariableView* vv ,RInside &rconn,int type,QWi
     type(type)
 {
     ui->setupUi(this);
-setupUi();
+    setupUi();
 
 
 

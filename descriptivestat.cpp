@@ -219,7 +219,7 @@ void DescriptiveStat::summaryVariable(){
     orderTableFormat.setCellSpacing(0);
     orderTableFormat.setBorderBrush(QBrush(Qt::SolidPattern));
     QWidget* summary= new QWidget();
-    QTextEdit* summaryText= new QTextEdit(summary);
+    QTextBrowser* summaryText= new QTextBrowser(summary);
     summaryText->setAlignment(Qt::AlignHorizontal_Mask);
     QTextCursor cursor(summaryText->textCursor());
     cursor.movePosition(QTextCursor::Start);
@@ -307,7 +307,7 @@ void DescriptiveStat::fivenumVariable(){
     orderTableFormat.setCellSpacing(0);
     orderTableFormat.setBorderBrush(QBrush(Qt::SolidPattern));
     QWidget* summary= new QWidget();
-    QTextEdit* summaryText= new QTextEdit(summary);
+    QTextBrowser* summaryText= new QTextBrowser(summary);
     summaryText->setAlignment(Qt::AlignHorizontal_Mask);
     QTextCursor cursor(summaryText->textCursor());
     cursor.movePosition(QTextCursor::Start);

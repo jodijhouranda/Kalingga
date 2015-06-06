@@ -315,8 +315,7 @@ void VariableView::deleteVariable(int idx){
 Rcpp::NumericVector VariableView::getNumericVector(int idx){
     Rcpp::NumericVector vector(table->rowCount());
     for (int i = 0; i < table->rowCount(); ++i) {
-
-        vector(i) = table->item(i,idx)->text().toDouble();
+        vector(i) = table->item(i,idx)->text().trimmed().toDouble();
     }
 
     return vector;
@@ -325,7 +324,7 @@ Rcpp::CharacterVector VariableView::getCharacterVector(int idx){
     Rcpp::CharacterVector vector(table->rowCount());
 
     for (int i = 0; i < table->rowCount(); ++i) {
-        qDebug()<<table->item(i,idx)->text().trimmed().length();
+
         if (table->item(i,idx)->text().trimmed().length()<=0) {
              vector[i] = "";
         }else {
@@ -432,7 +431,7 @@ void VariableView::sendDataFrameByVar(QStringList var,RInside& m_r){
 
     for (int i = 0; i < var.length(); ++i) {
 
-            if (var.at(i) == "String") {
+            if (getVariableType(var.at(i)) == "String") {
                 m_r[var.at(i).toStdString()] = getCharacterVector(getVariableIndex(var.at(i)));
             }else{
                 m_r[var.at(i).toStdString()] = getNumericVector(getVariableIndex(var.at(i)));
@@ -450,10 +449,24 @@ void VariableView::sendDataFrameByVar(QStringList var,RInside& m_r){
 
     m_r.parseEvalQ(command.toStdString());
     qDebug()<<command;
-    qDebug()<<(double)m_r.parseEval("nrow(dframe)");
 
 }
 void VariableView::changeVarName(int idx, QString name){
     table->setHorizontalHeaderItem(idx,new QTableWidgetItem(name));
     variabelTable->setItem(idx,0,new QTableWidgetItem(name));
+}
+
+void VariableView::setShapePath(QString path){
+    shapePath = path;
+}
+
+void VariableView::setDataPath(QString path){
+    dataPath = path;
+}
+
+QString VariableView::getShapePath(){
+    return shapePath;
+}
+QString VariableView::getDataPath(){
+    return dataPath;
 }

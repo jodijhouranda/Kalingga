@@ -28,6 +28,10 @@ public:
     QString getVariableType(QString var);
     QString getVariableLabel(QString var);
     QString getVariableName(int idx);
+    void setShapePath(QString path);
+    void setDataPath(QString path);
+    QString getShapePath();
+    QString getDataPath();
     void sendDataFrame(RInside& m_r);
     void sendDataFrameByVar(QStringList var,RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
@@ -53,6 +57,10 @@ private:
     QString checkVariableType(int column);
     QString checkVariableTypeDbf(int column);
     void setupAlignment();
+
+    QString shapePath;
+    QString dataPath;
+
 private slots:
     void changeVariableName(QTableWidgetItem* item);
 };

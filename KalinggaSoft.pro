@@ -38,7 +38,9 @@ SOURCES += main.cpp \
     integerdelegate.cpp \
     doubledelegate.cpp \
     modifyvariable.cpp \
-    descriptivestat.cpp
+    descriptivestat.cpp \
+    mergedatatable.cpp \
+    duplicatevariablledialog.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -67,7 +69,9 @@ HEADERS  += \
     integerdelegate.h \
     doubledelegate.h \
     modifyvariable.h \
-    descriptivestat.h
+    descriptivestat.h \
+    mergedatatable.h \
+    duplicatevariablledialog.h
 
 
 FORMS    += \
@@ -86,7 +90,9 @@ FORMS    += \
     parallechart.ui \
     parallelchartconfig.ui \
     modifyvariable.ui \
-    descriptivestat.ui
+    descriptivestat.ui \
+    mergedatatable.ui \
+    duplicatevariablledialog.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg

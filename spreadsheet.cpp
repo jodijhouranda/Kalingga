@@ -82,7 +82,9 @@ void Spreadsheet::dbfIterator(QTableWidget* typeTable){
                 else if(typeTable->item(c,1)->text() == "Real") {
                         table->setItemDelegateForColumn(c ,new DoubleDelegate);
                         for (int r = 0; r < rows; ++r) {
+
                             QString str = tableModel->index(r,c).data().toString();
+
                             item->setText(str);
                             table->setItem(r,c, item->clone());
                             table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
