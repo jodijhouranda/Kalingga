@@ -156,8 +156,8 @@ attributeMenu->addAction(createNewVariable);
 attributeMenu->addAction(deleteVariable);
 attributeMenu->addAction(modifyVariable);
 attributeMenu->addAction(calculateVariable);
-attributeMenu->addAction(openRSGenerator);
 attributeMenu->addAction(recodeVariable);
+attributeMenu->addAction(openRSGenerator);
 attributeMenu->addMenu(explore);
 explore->addAction(createDescriptive);
 explore->addAction(createHistogram);
@@ -220,10 +220,11 @@ void MainWindow::openSHPSlot(){
         return;
     }
 
-   QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
-
-   tableModel->open(dbfPath);
-    vv = new VariableView(tableModel,Rcon);
+   //QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
+  // tableModel->open(dbfPath);
+    QString cmd = QString("read.dbf(\"%1\")").arg(dbfPath);
+    Rcpp::DataFrame data = Rcon.parseEval(cmd.toStdString());
+    vv = new VariableView(data,Rcon);
     vv->setDataPath(dbfPath);
     vv->setShapePath(shpPath);
     centralView->addWidget(vv->getSpreadsheetTable());
@@ -245,10 +246,12 @@ void MainWindow::openDBFSlot(){
         return;
     }
 
-    QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
-    tableModel->open(dbfPath);
-    vv = new VariableView(tableModel,Rcon);
-    qDebug() <<  tableModel->index(4,3).data().toString();
+   // QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
+   // tableModel->open(dbfPath);
+    QString cmd = QString("read.dbf(\"%1\")").arg(dbfPath);
+    Rcpp::DataFrame data = Rcon.parseEval(cmd.toStdString());
+    vv = new VariableView(data,Rcon);
+   //vv = new VariableView(tableModel,Rcon);
     vv->setDataPath(dbfPath);
     centralView->addWidget(vv->getSpreadsheetTable());
     centralView->addWidget(vv->getVariabelViewTable());
@@ -268,10 +271,10 @@ if (!file.exists()) {
      QString format = QString("write.dbf(dataframe = dframe,file =\""+fn+"\")");
      Rcon.parseEvalQ(format.toStdString());
      }else if (fn.endsWith(".csv", Qt::CaseInsensitive)){
-         QString format = QString("write.csv(dframe, \""+ fn +"\" , row.names = FALSE)");
+         QString format = QString("write.csv(dframe, \""+ fn +"\" , row.names = FALSE,na = \"\")");
          Rcon.parseEvalQ(format.toStdString());
      }
-    // QMessageBox::information(this,"File saved","Your file saved");
+    QMessageBox::information(this,"File saved","Your file saved");
 }
 
 }
@@ -284,14 +287,16 @@ void MainWindow::saveDataAsSlot(){
        if (! (fn.endsWith(".dbf", Qt::CaseInsensitive) || fn.endsWith(".csv", Qt::CaseInsensitive)) )
            fn += ".dbf";
        qDebug() << fn;
-       vv->sendDataFrame(Rcon);
+        vv->sendDataFrame(Rcon);
        if (fn.endsWith(".dbf", Qt::CaseInsensitive)) {
        QString format = QString("write.dbf(dataframe = dframe,file =\""+fn+"\")");
        Rcon.parseEvalQ(format.toStdString());
        }else if (fn.endsWith(".csv", Qt::CaseInsensitive)){
-           QString format = QString("write.csv(dframe, \""+ fn +"\" , row.names = FALSE)");
+
+           QString format = QString("write.csv(dframe, \""+ fn +"\" , row.names = FALSE,na = \"\")");
            Rcon.parseEvalQ(format.toStdString());
        }
+       vv->setDataPath(fn);
 }
 
 void MainWindow::exitSlot(){

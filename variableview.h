@@ -25,6 +25,8 @@ public:
     QList<QString> getRealVariableNames();
     Rcpp::NumericVector getNumericVector(int idx);
     Rcpp::CharacterVector getCharacterVector(int idx);
+    Rcpp::NumericVector getNumericVectorIgnoreNa(int idx);
+    Rcpp::CharacterVector getCharacterVectorIgnoreNa(int idx);
     QString getVariableType(QString var);
     QString getVariableLabel(QString var);
     QString getVariableName(int idx);
@@ -34,6 +36,8 @@ public:
     QString getDataPath();
     void sendDataFrame(RInside& m_r);
     void sendDataFrameByVar(QStringList var,RInside& m_r);
+    void sendDataFrameIgnoreNA(RInside& m_r);
+    void sendDataFrameByVarIgnoreNA(QStringList var,RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVariable(QString name, Rcpp::NumericVector vector );
     void setCharacterVector(QString name, Rcpp::CharacterVector vector );

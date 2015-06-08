@@ -179,14 +179,14 @@ void ComputeVariable::on_pushButtonApply_clicked()
     QList<QString> var = getChoosenAttribute();
     if (var.count()>0) {
         for (int i = 0; i <  var.count(); ++i) {
-            rconn[var.at(i).toStdString()] = vv->getNumericVector(vv->getVariableIndex(var.at(i)));
+            rconn[var.at(i).toStdString()] = vv->getNumericVectorIgnoreNa(vv->getVariableIndex(var.at(i)));
         }
     }
 
         try {
-
+        Rcpp::NumericVector compu = rconn.parseEval(ui->formulaText->toPlainText().replace(" ","").toStdString());
             if (typeChoosen == "String") {
-                if (var.count()==0) {
+                if (var.count()==0 || compu.length()==1) {
                     double computed = rconn.parseEval(ui->formulaText->toPlainText().replace(" ","").toStdString());
                     vv->setConstantVariable(ui->comboBoxVariables->itemText(ui->comboBoxVariables->currentIndex()),computed);
                 }else {
@@ -195,7 +195,7 @@ void ComputeVariable::on_pushButtonApply_clicked()
                 }
 
 
-            }else if (var.count()==0) {
+            }else if (var.count()==0 || compu.length()==1) {
 
                 double computed = rconn.parseEval(ui->formulaText->toPlainText().replace(" ","").toStdString());
                 vv->setConstantVariable(ui->comboBoxVariables->itemText(ui->comboBoxVariables->currentIndex()),computed);

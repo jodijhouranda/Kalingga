@@ -14,19 +14,19 @@ DescriptiveStat::DescriptiveStat(VariableView* vv ,RInside &rconn,QWidget *paren
 {
     ui->setupUi(this);
     ui->listWidget->addItems(vv->getNumericVariableNames());
-    functionMean = QString("mean(%1)");
-    functionMedian = QString("median(%1)");
-    functionSum = QString("sum(%1)");
+    functionMean = QString("mean(%1 ,na.rm = TRUE)");
+    functionMedian = QString("median(%1 ,na.rm = TRUE)");
+    functionSum = QString("sum(%1 ,na.rm = TRUE)");
 
-    functionStdev = QString("sqrt(var(%1))");
-    functionVariance = QString("var(%1)");
-    functionRange = QString("max(%1)-min(%1)");
-    functionMaximum = QString("max(%1)");
-    functionMinimum = QString("min(%1)");
-    functionSEMean = QString("std.error(%1)");
+    functionStdev = QString("sqrt(var(%1,na.rm = TRUE))");
+    functionVariance = QString("var(%1,na.rm = TRUE)");
+    functionRange = QString("max(%1,na.rm = TRUE)-min(%1,na.rm = TRUE)");
+    functionMaximum = QString("max(%1,na.rm = TRUE)");
+    functionMinimum = QString("min(%1,na.rm = TRUE)");
+    functionSEMean = QString("std.error(%1,na.rm = TRUE)");
 
-    functionSkewness = QString("skewness(%1)");
-    functionKurtosis = QString("kurtosis(%1)");
+    functionSkewness = QString("skewness(%1,na.rm = TRUE)");
+    functionKurtosis = QString("kurtosis(%1,na.rm = TRUE)");
 
     tittle = "Desciptive Statistics";
     rconn.parseEvalQ("library(e1071)");
@@ -199,7 +199,7 @@ void DescriptiveStat::showResult(){
 }
 void DescriptiveStat::countVariable(QString function,QStringList result,int col){
     for (int i = 0; i < variables.count(); ++i) {
-    Rcpp::NumericVector vec = vv->getNumericVector(vv->getVariableIndex(variables.at(i)));
+    Rcpp::NumericVector vec = vv->getNumericVectorIgnoreNa(vv->getVariableIndex(variables.at(i)));
     rconn["vector"] = vec;
     double res  = rconn.parseEval(function.arg("vector").toStdString());
     result << QString::number(res);
@@ -224,7 +224,7 @@ void DescriptiveStat::summaryVariable(){
     QTextCursor cursor(summaryText->textCursor());
     cursor.movePosition(QTextCursor::Start);
     QStringList attr;
-    attr << "Min." << "1St.Quantile" << "Median" << "Mean" << "3Rd.Quantile" << "Max";
+    attr << "Min." << "1St.titile" << "Median" << "Mean" << "3Rd.Quantile" << "Max";
     QHBoxLayout* layout = new QHBoxLayout();
     layout->addWidget(summaryText);
     layout->setMargin(0);
@@ -264,7 +264,7 @@ void DescriptiveStat::summaryVariable(){
         format.setVerticalAlignment(QTextCharFormat::AlignBottom );
         baru->mergeCells(0,0,1,2);
 
-        Rcpp::NumericVector vec = vv->getNumericVector(vv->getVariableIndex(variables.at(i)));
+        Rcpp::NumericVector vec = vv->getNumericVectorIgnoreNa(vv->getVariableIndex(variables.at(i)));
         rconn["vector"] = vec;
         qDebug()<<"samoai";
         cursor = baru->cellAt(0, 0).firstCursorPosition();
@@ -274,22 +274,22 @@ void DescriptiveStat::summaryVariable(){
                 cursor.insertText(attr.at(col));
         }
         cursor = baru->cellAt(1, 1).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("min(vector)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("min(vector,na.rm = TRUE)")));
 
         cursor = baru->cellAt(2, 1).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.25)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.25,na.rm = TRUE)")));
 
         cursor = baru->cellAt(3, 1).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("median(vector)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("median(vector,na.rm = TRUE)")));
 
         cursor = baru->cellAt(4, 1).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("mean(vector)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("mean(vector,na.rm = TRUE)")));
 
         cursor = baru->cellAt(5, 1).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.75)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.75,na.rm = TRUE)")));
 
         cursor = baru->cellAt(6, 1).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("max(vector)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("max(vector,na.rm = TRUE)")));
 
         k++;
     }
@@ -350,26 +350,26 @@ void DescriptiveStat::fivenumVariable(){
         format.setVerticalAlignment(QTextCharFormat::AlignBottom );
 
 
-        Rcpp::NumericVector vec = vv->getNumericVector(vv->getVariableIndex(variables.at(i)));
+        Rcpp::NumericVector vec = vv->getNumericVectorIgnoreNa(vv->getVariableIndex(variables.at(i)));
         rconn["vector"] = vec;
         qDebug()<<"samoai";
         cursor = baru->cellAt(0, 0).firstCursorPosition();
         cursor.insertText(variables.at(i),format);
 
         cursor = baru->cellAt(1, 0).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("min(vector)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("min(vector,na.rm = TRUE)")));
 
         cursor = baru->cellAt(2, 0).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.25)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.25,na.rm = TRUE)")));
 
         cursor = baru->cellAt(3, 0).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("median(vector)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("median(vector,na.rm = TRUE)")));
 
         cursor = baru->cellAt(4, 0).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.75)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("quantile(vector , probs=0.75,na.rm = TRUE)")));
 
         cursor = baru->cellAt(5, 0).firstCursorPosition();
-        cursor.insertText(QString::number((double)rconn.parseEval("max(vector)")));
+        cursor.insertText(QString::number((double)rconn.parseEval("max(vector,na.rm = TRUE)")));
 
         k++;
     }

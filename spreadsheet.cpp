@@ -36,28 +36,51 @@ void Spreadsheet::dataFrameIterator(QTableWidget* typeTable){
         if (typeTable->item(c,1)->text() == "String") {
                 Rcpp::CharacterVector x = frame[header.at(c)];
                 for (int r = 0; r < rows; ++r) {
-                    item->setText(QString::fromUtf8(x[r]));
+                    if (x[r] == NA_STRING) {
 
-                    table->setItem(r,c, item->clone());
+                        item->setText("");
+                        table->setItem(r,c, item->clone());
 
+                    }else {
+
+                        item->setText(QString::fromUtf8(x[r]));
+                        table->setItem(r,c, item->clone());
+
+                    }
 
                 }
             }
 
         else if(typeTable->item(c,1)->text() == "Real") {
-                Rcpp::NumericVector x = frame[header.at(c)];
-                table->setItemDelegateForColumn(c ,new DoubleDelegate);
-                for (int r = 0; r < rows; ++r) {
-                    item->setText(QString::number(x[r]));
+            Rcpp::CharacterVector x = frame[header.at(c)];
+            for (int r = 0; r < rows; ++r) {
+                if (x[r] == NA_STRING) {
+
+                    item->setText("");
                     table->setItem(r,c, item->clone());
-                    table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
+
+                }else {
+
+                    item->setText(QString::fromUtf8(x[r]));
+                    table->setItem(r,c, item->clone());
+
+                }
+                       table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
                 }
         }else {
-            Rcpp::NumericVector x = frame[header.at(c)];
-            table->setItemDelegateForColumn(c ,new IntegerDelegate);
+            Rcpp::CharacterVector x = frame[header.at(c)];
             for (int r = 0; r < rows; ++r) {
-                item->setText(QString::number(x[r]));
-                table->setItem(r,c, item->clone());
+                if (x[r] == NA_STRING) {
+
+                    item->setText("");
+                    table->setItem(r,c, item->clone());
+
+                }else {
+
+                    item->setText(QString::fromUtf8(x[r]));
+                    table->setItem(r,c, item->clone());
+
+                }
                 table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
             }
         }
@@ -74,27 +97,45 @@ void Spreadsheet::dbfIterator(QTableWidget* typeTable){
                 if (typeTable->item(c,1)->text() == "String") {
                         for (int r = 0; r < rows; ++r) {
                             QString str = tableModel->index(r,c).data().toString();
-                            item->setText(str);
-                            table->setItem(r,c, item->clone());
-                        }
+                            if (str.trimmed().length()==0) {
+
+                                item->setText("");
+                                table->setItem(r,c, item->clone());
+
+                            }else {
+                                item->setText(str);
+                                table->setItem(r,c, item->clone());
+                            }                     }
                     }
 
                 else if(typeTable->item(c,1)->text() == "Real") {
                         table->setItemDelegateForColumn(c ,new DoubleDelegate);
                         for (int r = 0; r < rows; ++r) {
-
                             QString str = tableModel->index(r,c).data().toString();
+                            if (str.trimmed().length()==0) {
 
-                            item->setText(str);
-                            table->setItem(r,c, item->clone());
+                                item->setText("");
+                                table->setItem(r,c, item->clone());
+
+                            }else {
+                                item->setText(str);
+                                table->setItem(r,c, item->clone());
+                            }
                             table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
                         }
                 }else {
                     table->setItemDelegateForColumn(c ,new IntegerDelegate);
                     for (int r = 0; r < rows; ++r) {
                         QString str = tableModel->index(r,c).data().toString();
-                        item->setText(str);
-                        table->setItem(r,c, item->clone());
+                        if (str.trimmed().length()==0) {
+
+                            item->setText("");
+                            table->setItem(r,c, item->clone());
+
+                        }else {
+                            item->setText(str);
+                            table->setItem(r,c, item->clone());
+                        }
                         table->item(r,c)->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
                     }
                 }

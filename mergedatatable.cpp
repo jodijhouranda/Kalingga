@@ -152,9 +152,9 @@ void MergeDataTable::on_pushButton_2_clicked()
                 QString var = varToImport.at(j);
                 vv->createNewVariable(var,vvImport->getVariableType(var),"",vv->getColumnCount());
                 if (vv->getVariableType(var) != "String") {
-                vv->setNumericVariable(var,vvImport->getNumericVector(vvImport->getVariableIndex(var)));
+                vv->setNumericVariable(var,Rcpp::na_omit(vvImport->getNumericVector(vvImport->getVariableIndex(var))));
                 }else {
-                   vv->setCharacterVector(var,vvImport->getCharacterVector(vvImport->getVariableIndex(var)));
+                   vv->setCharacterVector(var,Rcpp::na_omit(vvImport->getCharacterVector(vvImport->getVariableIndex(var))));
                 }
             }
         }

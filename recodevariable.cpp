@@ -265,10 +265,28 @@ void RecodeVariable::insertRecodeVariable(){
 
         QStringList oldValueSplitted = oldvalue.split( QRegExp("(\\TO)"));
         if (oldValueSplitted.length() == 1) {
-            qDebug()<<oldvalue.trimmed();
             if (oldvalue.trimmed() == MISSING) {
+                if (newvalue.trimmed() == MISSING) {
+                    for (int i = 0; i < result.length(); ++i) {
+                        if (source[i]==NA_STRING) {
+                            result[i]="";
+                        }
+                    }
+                }else if (newvalue == OLD_VALUE) {
 
-                oneVariableCode("",newvalue);
+                    for (int i = 0; i < result.length(); ++i) {
+                        if (source[i]==NA_STRING) {
+                            result[i]=source[i];
+                        }
+                    }
+                }
+                else {
+                        for (int i = 0; i < result.length(); ++i) {
+                            if (source[i]==NA_STRING) {
+                                result[i]=newvalue.toStdString();
+                            }
+                        }
+                    }
             }else if (oldvalue.trimmed() == OTHER_VALUES) {
                 if (i!=ui->listWidget->count()-1) {
                     ui->listWidget->insertItem(ui->listWidget->count()-1,ui->listWidget->takeItem(i));
@@ -297,7 +315,7 @@ void RecodeVariable::insertRecodeVariable(){
     vv->setCharacterVector(ui->comboBoxVariables->currentText(),result);
 }
 void RecodeVariable::oneVariableCode(QString value, QString code){
-    if (code == MISSING) {
+    if (code.trimmed() == MISSING) {
         for (int i = 0; i < result.length(); ++i) {
             if (QString::fromUtf8(source[i])==value) {
                 result[i]="";
@@ -319,8 +337,9 @@ void RecodeVariable::oneVariableCode(QString value, QString code){
             }
         }
 }
+
 void RecodeVariable::oneVariableCodeOther(QString code){
-    if (code == MISSING) {
+    if (code.trimmed() == MISSING) {
         for (int i = 0; i < result.length(); ++i) {
             if (result[i]==NA_STRING) {
                 result[i]="";

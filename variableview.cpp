@@ -111,7 +111,7 @@ QString VariableView::checkVariableType(int column){
     Rcpp::CharacterVector vektor = frame[column];
     QString string =QString::fromUtf8(vektor[0]);
 
-    if (!re.exactMatch(string))
+    if (!re.exactMatch(string) && string.trimmed().length()>0 && vektor[0] != NA_STRING)
         return "String";
 
     bool validate;
@@ -120,6 +120,7 @@ QString VariableView::checkVariableType(int column){
     for (int i = 0; i < vektor.length(); ++i) {
         lastIndex = i;
         QString string = QString::fromUtf8(vektor[i]);
+        if (!string.trimmed().length()>0 || vektor[i] == NA_STRING) continue;
         string.toInt(&validate);
 
         if(validate == false){
@@ -131,11 +132,12 @@ QString VariableView::checkVariableType(int column){
         }
 
 
+        result = 1;
     }
-    result = 1;
     if (lastIndex+1 != vektor.length()) {
         for (int j = lastIndex; j <  vektor.length(); ++j) {
             QString string = QString::fromUtf8(vektor[0]);
+            if (!string.trimmed().length()>0 || vektor[j] == NA_STRING) continue;
             string.toDouble(&validate);
             if(validate == false){
 
@@ -150,7 +152,9 @@ QString VariableView::checkVariableType(int column){
     }
 
     switch (result) {
-
+case 0:
+        return "String";
+        break;
 case 1:
     return "Integer";
     break;
@@ -159,12 +163,11 @@ case 2:
     break;
 }
 
-
 }
 QString VariableView::checkVariableTypeDbf(int column){
       //check if string real
     QRegExp re("[+-]?\\d*\\.?\\d+");
-    if (!re.exactMatch(tableModel->index(0,column).data().toString()))
+    if (!re.exactMatch(tableModel->index(0,column).data().toString()) && tableModel->index(0,column).data().toString().trimmed().length()>0)
         return "String";
 
     bool validate;
@@ -173,6 +176,7 @@ QString VariableView::checkVariableTypeDbf(int column){
     for (int i = 0; i < tableModel->rowCount(); ++i) {
         lastIndex = i;
         QString string = tableModel->index(i,column).data().toString();
+        if (string.trimmed().length()<=0) continue;
         string.toInt(&validate);
 
         if(validate == false){
@@ -184,11 +188,12 @@ QString VariableView::checkVariableTypeDbf(int column){
         }
 
 
+        result = 1;
     }
-    result = 1;
     if (lastIndex+1 != tableModel->rowCount()) {
         for (int j = lastIndex; j < tableModel->rowCount(); ++j) {
             QString string = tableModel->index(j,column).data().toString();
+            if (string.trimmed().length()<=0) continue;
             string.toDouble(&validate);
             if(validate == false){
 
@@ -204,15 +209,19 @@ QString VariableView::checkVariableTypeDbf(int column){
 
     switch (result) {
 
-case 1:
-    return "Integer";
-    break;
-case 2:
-    return "Real";
-    break;
+    case 0:
+            return "String";
+            break;
+    case 1:
+        return "Integer";
+        break;
+    case 2:
+        return "Real";
+        break;
 }
 
 
+    return "String";
 }
 QTableWidget* VariableView::getVariabelViewTable(){
     return variabelTable;
@@ -315,7 +324,13 @@ void VariableView::deleteVariable(int idx){
 Rcpp::NumericVector VariableView::getNumericVector(int idx){
     Rcpp::NumericVector vector(table->rowCount());
     for (int i = 0; i < table->rowCount(); ++i) {
-        vector(i) = table->item(i,idx)->text().trimmed().toDouble();
+        if (table->item(i,idx)->text().trimmed() =="") {
+
+            vector(i) = NA_REAL;
+        }else{
+
+            vector(i) = table->item(i,idx)->text().trimmed().toDouble();
+        }
     }
 
     return vector;
@@ -326,9 +341,37 @@ Rcpp::CharacterVector VariableView::getCharacterVector(int idx){
     for (int i = 0; i < table->rowCount(); ++i) {
 
         if (table->item(i,idx)->text().trimmed().length()<=0) {
-             vector[i] = "";
+            vector[i] = NA_STRING;
         }else {
             vector[i] =  table->item(i,idx)->text().toStdString();
+        }
+    }
+
+    return vector;
+}
+Rcpp::NumericVector VariableView::getNumericVectorIgnoreNa(int idx){
+    Rcpp::NumericVector vector(table->rowCount());
+    for (int i = 0; i < table->rowCount(); ++i) {
+        if (table->item(i,idx)->text().trimmed() =="") {
+
+            vector(i) = 0;
+        }else{
+
+            vector(i) = table->item(i,idx)->text().trimmed().toDouble();
+        }
+    }
+
+    return vector;
+}
+Rcpp::CharacterVector VariableView::getCharacterVectorIgnoreNa(int idx){
+    Rcpp::CharacterVector vector(table->rowCount());
+
+    for (int i = 0; i < table->rowCount(); ++i) {
+
+        if (table->item(i,idx)->text().trimmed().length()<=0) {
+             vector[i] = "";
+        }else {
+             vector[i] =  table->item(i,idx)->text().toStdString();
         }
     }
 
@@ -424,6 +467,35 @@ int VariableView::getColumnCount(){
 }
 void VariableView::sendDataFrame(RInside& m_r){
     sendDataFrameByVar(getAllVariableNames(),m_r);
+
+}
+void VariableView::sendDataFrameIgnoreNA(RInside& m_r){
+    sendDataFrameByVarIgnoreNA(getAllVariableNames(),m_r);
+
+}
+void VariableView::sendDataFrameByVarIgnoreNA(QStringList var,RInside& m_r){
+    QString allVarName;
+
+    for (int i = 0; i < var.length(); ++i) {
+
+            if (getVariableType(var.at(i)) == "String") {
+                m_r[var.at(i).toStdString()] = getCharacterVectorIgnoreNa(getVariableIndex(var.at(i)));
+            }else{
+                m_r[var.at(i).toStdString()] = getNumericVectorIgnoreNa(getVariableIndex(var.at(i)));
+
+            }
+            if (i!= var.length()-1) {
+
+                allVarName += var.at(i) +",";
+            } else {
+                allVarName += var.at(i);
+            }
+
+    }
+    QString command = QString("dframe <- data.frame(%1)").arg(allVarName);
+
+    m_r.parseEvalQ(command.toStdString());
+    qDebug()<<command;
 
 }
 void VariableView::sendDataFrameByVar(QStringList var,RInside& m_r){
