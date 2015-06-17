@@ -21,8 +21,12 @@ public:
     RInside& getRObject();
     //setter getter method
     QList<QString> getAllVariableNames();
+    QList<QString> getAllSeriesVariableNames();
     QList<QString> getNumericVariableNames();
+    QList<QString> getNumericSeriesVariableNames();
     QList<QString> getRealVariableNames();
+    QList<QString> getRealSeriesVariableNames();
+    QList<QString> getAllTimesByVariableName(QString name);
     Rcpp::NumericVector getNumericVector(int idx);
     Rcpp::CharacterVector getCharacterVector(int idx);
     Rcpp::NumericVector getNumericVectorIgnoreNa(int idx);
@@ -36,6 +40,7 @@ public:
     QString getDataPath();
     void sendDataFrame(RInside& m_r);
     void sendDataFrameByVar(QStringList var,RInside& m_r);
+    void sendDataFrameSeries(QString varName,QStringList timeList ,RInside& m_r);
     void sendDataFrameIgnoreNA(RInside& m_r);
     void sendDataFrameByVarIgnoreNA(QStringList var,RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );

@@ -283,7 +283,6 @@ void VariableView::createNewVariable(QString name, QString type, QString label, 
 }
 
 //get All variable in spreadsheet
-
 QList<QString> VariableView::getAllVariableNames(){
     QList<QString> allVar;
     for (int i = 0; i < variabelTable->rowCount(); ++i) {
@@ -291,6 +290,27 @@ QList<QString> VariableView::getAllVariableNames(){
     }
     return allVar;
 }
+QList<QString> VariableView::getAllSeriesVariableNames(){
+    QList<QString> allVar;
+    for (int i = 0; i < variabelTable->rowCount(); ++i) {
+        QString varName = variabelTable->item(i,0)->text().split("_").at(0);
+        if (allVar.length()==0) {
+            allVar << varName;
+        }else {
+            for (int n = 0; n < allVar.length(); ++n) {
+                if (n == allVar.length()-1 && varName != allVar.at(allVar.length()-1)) {
+                   allVar << varName;
+                }
+                if (allVar.at(n) == varName) {
+                   break;
+                }
+            }
+        }
+
+    }
+    return allVar;
+}
+
 //get All numeric variable in spreadsheet
 QList<QString> VariableView::getNumericVariableNames(){
     QList<QString> allVar;
@@ -302,6 +322,73 @@ QList<QString> VariableView::getNumericVariableNames(){
     }
     return allVar;
 }
+QList<QString> VariableView::getNumericSeriesVariableNames(){
+    QList<QString> allVar;
+    for (int i = 0; i < variabelTable->rowCount(); ++i) {
+        if (variabelTable->item(i,1)->text() != "String") {
+            QString varName = variabelTable->item(i,0)->text().split("_").at(0);
+            if (allVar.length()==0) {
+                allVar << varName;
+            }else {
+                for (int n = 0; n < allVar.length(); ++n) {
+                    if (n == allVar.length()-1 && varName != allVar.at(allVar.length()-1)) {
+                       allVar << varName;
+                    }
+                    if (allVar.at(n) == varName) {
+                       break;
+                    }
+                }
+            }
+
+        }
+
+    }
+    return allVar;
+}
+//get All numeric variable in spreadsheet
+QList<QString> VariableView::getRealSeriesVariableNames(){
+    QList<QString> allVar;
+    for (int i = 0; i < variabelTable->rowCount(); ++i) {
+        if (variabelTable->item(i,1)->text() == "Real") {
+            QString varName = variabelTable->item(i,0)->text().split("_").at(0);
+            if (allVar.length()==0) {
+                allVar << varName;
+            }else {
+                for (int n = 0; n < allVar.length(); ++n) {
+                    if (n == allVar.length()-1 && varName != allVar.at(allVar.length()-1)) {
+                       allVar << varName;
+                    }
+                    if (allVar.at(n) == varName) {
+                       break;
+                    }
+                }
+            }
+
+        }
+
+    }
+    return allVar;
+}
+QList<QString> VariableView::getAllTimesByVariableName(QString name){
+    QList<QString> allVar;
+    for (int i = 0; i < variabelTable->rowCount(); ++i) {
+        QString varName = variabelTable->item(i,0)->text().split("_").at(0);
+        if (varName == name) {
+            allVar << variabelTable->item(i,0)->text().split("_").at(1);
+        }
+
+    }
+    return allVar;
+}
+
+void VariableView::sendDataFrameSeries(QString varName, QStringList timeList, RInside &m_r){
+    QStringList varTimeJoin;
+    for (int i = 0; i < timeList.length(); ++i) {
+        varTimeJoin << varName +"_"+timeList.at(i);
+    }
+    sendDataFrameByVar(varTimeJoin,m_r);
+}
+
 
 //get All numeric variable in spreadsheet
 QList<QString> VariableView::getRealVariableNames(){

@@ -14,13 +14,21 @@
 #include <modifyvariable.h>
 #include <descriptivestat.h>
 #include <mergedatatable.h>
+#include <timeseriespicker.h>
+#include <plugindialog.h>
 mapview* mview;
 ResultView* MainWindow::result;
+QMenu* MainWindow::analysisMenu;
 QStackedWidget* MainWindow::centralView;
 QAction* MainWindow::resultViewAct;
 void MainWindow::enableResultView(){
     centralView->setCurrentIndex(3);
     resultViewAct->setVisible(true);
+}
+
+void MainWindow::addAnalysisMenu(QString tittle){
+static QAction* action = new QAction(tittle,analysisMenu);
+analysisMenu->addAction(action);
 }
 
 MainWindow::MainWindow(RInside & R , QWidget *parent ) : QMainWindow(parent) ,Rcon(R)
@@ -108,6 +116,12 @@ void MainWindow::createAction(){
     createParallel = new QAction(tr("Parallel Coordinates Plot"),this);
     connect(createParallel , SIGNAL(triggered()),this,SLOT(openParallelCreator()));
 
+    createTimeSeries = new QAction(tr("Time Series Plot"),this);
+    connect(createTimeSeries , SIGNAL(triggered()),this,SLOT(openTimeSeriesCreator()));
+    //plugin menu create Action
+    createPluginDialog = new QAction(tr("Add Plugin..."),this);
+    connect(createPluginDialog , SIGNAL(triggered()),this,SLOT(openPluginDialog()));
+
 }
 
 //setup menubar for mainwindow
@@ -164,6 +178,9 @@ explore->addAction(createHistogram);
 explore->addAction(createScatter);
 explore->addAction(createBoxplot);
 explore->addAction(createParallel);
+explore->addAction(createTimeSeries);
+//plugin menu definition
+pluginMenu->addAction(createPluginDialog);
 }
 
 
@@ -354,10 +371,20 @@ void MainWindow::openParallelCreator(){
     ParalleChart* dialog = new ParalleChart(vv,Rcon,this);
     dialog->show();
 }
+void MainWindow::openTimeSeriesCreator(){
+    TimeSeriesPicker* dialog = new TimeSeriesPicker(vv,Rcon,0,this);
+    dialog->show();
+}
 //open random sample generator dialog
 void MainWindow::openRandomSampleGenerator(){
 RandomSampleGenarator* dialog = new RandomSampleGenarator(vv,Rcon,this);
 dialog->show();
+}
+
+
+void MainWindow::openPluginDialog(){
+    PluginDialog* dialog = new PluginDialog(this);
+    dialog->show();
 }
 
 void MainWindow::updateViewMenu(){

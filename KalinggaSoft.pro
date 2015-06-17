@@ -40,7 +40,9 @@ SOURCES += main.cpp \
     modifyvariable.cpp \
     descriptivestat.cpp \
     mergedatatable.cpp \
-    duplicatevariablledialog.cpp
+    duplicatevariablledialog.cpp \
+    plugindialog.cpp \
+    timeseriespicker.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -71,7 +73,10 @@ HEADERS  += \
     modifyvariable.h \
     descriptivestat.h \
     mergedatatable.h \
-    duplicatevariablledialog.h
+    duplicatevariablledialog.h \
+    plugininterfaces.h \
+    plugindialog.h \
+    timeseriespicker.h
 
 
 FORMS    += \
@@ -92,7 +97,9 @@ FORMS    += \
     modifyvariable.ui \
     descriptivestat.ui \
     mergedatatable.ui \
-    duplicatevariablledialog.ui
+    duplicatevariablledialog.ui \
+    plugindialog.ui \
+    timeseriespicker.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg

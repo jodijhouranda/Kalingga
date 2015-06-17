@@ -24,6 +24,7 @@ static ResultView* result;
 
 
 static void enableResultView();
+static void addAnalysisMenu(QString tittle);
 private slots:
     //slot file menu
     void openCSVSlot();
@@ -46,6 +47,9 @@ private slots:
     void openScatterCreator();
     void openBoxplotCreator();
     void openParallelCreator();
+    void openTimeSeriesCreator();
+    //slot plugin menu
+    void openPluginDialog();
     //slot window menu
 
     void openDataView();
@@ -87,12 +91,15 @@ private:
     QAction* createScatter;
     QAction* createBoxplot;
     QAction* createParallel;
+    QAction* createTimeSeries;
+    QAction* createPluginDialog;
+    //plugin dialog
     QMenu* fileMenu;
     QMenu *viewMenu;
     QMenu *attributeMenu;
     QMenu *mapMenu;
     QMenu *toolsMenu;
-    QMenu *analysisMenu;
+    static QMenu *analysisMenu;
     QMenu *pluginMenu;
     QMenu *aboutMenu;
 //view menu action

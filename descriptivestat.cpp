@@ -378,3 +378,5 @@ void DescriptiveStat::fivenumVariable(){
     resultWidget << summary;
 
 }
+
+
