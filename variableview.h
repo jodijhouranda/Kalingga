@@ -41,6 +41,7 @@ public:
     void sendDataFrame(RInside& m_r);
     void sendDataFrameByVar(QStringList var,RInside& m_r);
     void sendDataFrameSeries(QString varName,QStringList timeList ,RInside& m_r);
+    void sendDataFrameSeriesFormatted(QString varName,QString id, QStringList timeList, RInside &m_r);
     void sendDataFrameIgnoreNA(RInside& m_r);
     void sendDataFrameByVarIgnoreNA(QStringList var,RInside& m_r);
     void setNumericVariable(QString name, Rcpp::NumericVector vector );

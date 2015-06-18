@@ -20,6 +20,7 @@ public:
     void filterSVGFile();
     void setTempFile(RInside& rconn);
     void printGraph(RInside& rconn);
+    void printGraph(RInside& rconn,int width,int height);
     QSvgWidget* graph;
 
 private:

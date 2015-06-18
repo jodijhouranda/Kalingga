@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QSizePolicy>
 #include <QMenu>
+#include <QScrollArea>
 ResultView::ResultView(QWidget* parent)
 {
     QSplitter* splitter = new QSplitter(this);
@@ -72,6 +73,7 @@ void ResultView::setResultViewItem(ResultViewItem* item){
     if(item->getTreeList().count()==1){
         int r = tree->indexOfTopLevelItem(root);
         map.insert(indexGenerator(r),item->getResultWidgets().at(0));
+
         stackedWidget->addWidget(item->getResultWidgets().at(0));
     }else {
         iterateTreeItems(item->getTreeList(),item->getResultWidgets(),root);
@@ -89,7 +91,9 @@ void ResultView::iterateTreeItems(QStringList listItem, QList<QWidget*> listWidg
         int r = tree->indexOfTopLevelItem(root);
         int c = root->indexOfChild(child);
         map.insert(indexGenerator(r,c) , listWidget.at(i));
+
         stackedWidget->addWidget(listWidget.at(i));
+
     }
 }
 

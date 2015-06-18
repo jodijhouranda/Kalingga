@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <histogramconfig.h>
 #include <QDebug>
+#include <QScrollArea>
 Chart::Chart()
 {
 }
@@ -36,9 +37,11 @@ void Chart::filterSVGFile(){
 
 void Chart::setupChartView(QString chartName ,QString variable ,QWidget* configWidget){
     QWidget* widget = new QWidget();
-
     graph = new QSvgWidget(widget);
+
+
     QHBoxLayout* layout = new QHBoxLayout();
+
     QWidget* cWidget = configWidget;
     cWidget->setParent(widget);
     layout->addWidget(graph);
@@ -75,4 +78,11 @@ void Chart::printGraph(RInside& rconn){
     filterSVGFile();
     graph->load(m_svgfile);
 }
+void Chart::printGraph(RInside& rconn,int width,int height){
+    rconn.parseEvalQ(QString("svg(width= %2,height= %3,pointsize=10,filename= %1);").arg(tfile,QString::number(width),QString::number(height)).toStdString());
+    rconn.parseEvalQ("print(gr);dev.off();");
+    filterSVGFile();
+    graph->setFixedSize(width*100,600);
+    graph->load(m_svgfile);
 
+}
