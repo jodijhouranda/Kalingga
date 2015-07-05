@@ -28,8 +28,12 @@
 #include "layer.h"
 
 #include "maptranslator.h"
+#include "mapgraphicspolygonitem.h"
+#include "mapgraphicslineitem.h"
+#include "mapgraphicspointitem.h"
 
 #include <QDebug>
+#include "polygonfeature.h"
 
 
 Layer::Layer(QObject *parent) :
@@ -128,6 +132,16 @@ void Layer::SetExtent(const QSimpleSpatial::Extent &extent)
     p_extent = extent;
 }
 
+QString Layer::getSource() const
+{
+    return p_source;
+}
+
+void Layer::setSource(const QString &source)
+{
+    p_source = source;
+}
+
 QSimpleSpatial::Extent Layer::GetExtent()
 {
     return p_extent;
@@ -179,7 +193,7 @@ void Layer::SetMaxZoomFilter(double (*max_zoom_filter_func)(Feature *))
     setMaxZoomForFeatures();
 }
 
-void Layer::Draw(MapTranslator *renderer, QPainter *painter)
+void Layer::DrawItemRegion(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsPolygonItem*> *itemRegion)
 {
     double currentZoom = renderer->getZoom();
     if(p_maxZoom != (-1) && p_maxZoom < currentZoom)
@@ -188,20 +202,87 @@ void Layer::Draw(MapTranslator *renderer, QPainter *painter)
         return;
     for(int i = 0;i < p_list.count();i ++) {
         Feature *feature = p_list[i];
+        qDebug() << "scheme";
         QSimpleSpatial::Extent extent = feature->GetExtent();
+        qDebug() << QString("%1,%2 - %3,%4").arg(extent.p1().X).arg(extent.p1().Y).arg(extent.p2().X).arg(extent.p2().Y);
+        qDebug() << QString("%1,%2 - %3,%4").arg(renderer->getViewport().p1().X).arg(renderer->getViewport().p1().Y).arg(renderer->getViewport().p2().X).arg(renderer->getViewport().p2().Y);
+        qDebug() << QString("%1,%2 - %3,%4")
+                    .arg(renderer->getCurrentExtent().p1().X)
+                    .arg(renderer->getCurrentExtent().p1().Y)
+                    .arg(renderer->getCurrentExtent().p2().X)
+                    .arg(renderer->getCurrentExtent().p2().Y);
+        qDebug() << QString("%1").arg(renderer->getScaleFactor());
+
+        if(renderer->getViewport().IsIntersect(extent)) {
+            qDebug() << "scheme2";
+            if(feature->getMaxZoom() != (-1) && feature->getMaxZoom() < currentZoom)
+                continue;
+            if(feature->getMinZoom() != (-1) && feature->getMinZoom() > currentZoom)
+                continue;
+            PaintScheme *scheme = feature->getScheme();
+            if(scheme){
+                qDebug() << "before scheme3";
+                scheme->setItemRegion(itemRegion);
+                scheme->Draw(renderer,feature,painter,i+1);
+                qDebug() << "scheme3";
+            }
+        }
+    }
+}
+
+void Layer::DrawItemLine(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsLineItem *> *itemLine)
+{
+    double currentZoom = renderer->getZoom();
+    if(p_maxZoom != (-1) && p_maxZoom < currentZoom)
+        return;
+    if(p_minZoom != (-1) && p_minZoom > currentZoom)
+        return;
+    for(int i = 0;i < p_list.count();i ++) {
+
+        Feature *feature = p_list[i];
+        QSimpleSpatial::Extent extent = feature->GetExtent();
+
         if(renderer->getViewport().IsIntersect(extent)) {
             if(feature->getMaxZoom() != (-1) && feature->getMaxZoom() < currentZoom)
                 continue;
             if(feature->getMinZoom() != (-1) && feature->getMinZoom() > currentZoom)
                 continue;
             PaintScheme *scheme = feature->getScheme();
-            if(scheme)
-                scheme->Draw(renderer,feature,painter);
+            if(scheme){
+                scheme->setItemLine(itemLine);
+                scheme->Draw(renderer,feature,painter,i);
+            }
         }
     }
 }
 
-void Layer::DrawLabel(MapTranslator *renderer, QPainter *painter)
+void Layer::DrawItemPoint(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsPointItem *> *itemPoint)
+{
+    double currentZoom = renderer->getZoom();
+    if(p_maxZoom != (-1) && p_maxZoom < currentZoom)
+        return;
+    if(p_minZoom != (-1) && p_minZoom > currentZoom)
+        return;
+    for(int i = 0;i < p_list.count();i ++) {
+
+        Feature *feature = p_list[i];
+        QSimpleSpatial::Extent extent = feature->GetExtent();
+
+        if(renderer->getViewport().IsIntersect(extent)) {
+            if(feature->getMaxZoom() != (-1) && feature->getMaxZoom() < currentZoom)
+                continue;
+            if(feature->getMinZoom() != (-1) && feature->getMinZoom() > currentZoom)
+                continue;
+            PaintScheme *scheme = feature->getScheme();
+            if(scheme){
+                scheme->setItemPoint(itemPoint);
+                scheme->Draw(renderer,feature,painter,i);
+            }
+        }
+    }
+}
+
+void Layer::DrawLabel(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsLabelItem*> *itemLabel)
 {
     double currentZoom = renderer->getZoom();
     if(p_maxZoom != (-1) && p_maxZoom < currentZoom)
@@ -217,11 +298,15 @@ void Layer::DrawLabel(MapTranslator *renderer, QPainter *painter)
             if(feature->getMinZoom() != (-1) && feature->getMinZoom() > currentZoom)
                 continue;
             LabelScheme *scheme = feature->getLabelScheme();
-            if(scheme)
-                scheme->Draw(renderer,feature,painter);
+            if(scheme){
+                scheme->setItemLabel(itemLabel);
+                scheme->Draw(renderer,feature,painter); //change to itemLabel
+
+            }
         }
     }
 }
+
 
 void Layer::setMaxZoomForFeatures()
 {

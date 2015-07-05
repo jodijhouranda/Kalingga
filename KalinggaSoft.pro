@@ -21,7 +21,6 @@ SOURCES += main.cpp \
     histogramcreator.cpp \
     variableview.cpp \
     computevariable.cpp \
-    layerproperties.cpp \
     randomsamplegenarator.cpp \
     recodevariable.cpp \
     resultview.cpp \
@@ -42,7 +41,38 @@ SOURCES += main.cpp \
     mergedatatable.cpp \
     duplicatevariablledialog.cpp \
     plugindialog.cpp \
-    timeseriespicker.cpp
+    timeseriespicker.cpp \
+    labelscheme.cpp \
+    mapcolorreader.cpp \
+    mapcontrol.cpp \
+    mapfitureinfo.cpp \
+    mapgraphicslabelitem.cpp \
+    mapgraphicslineitem.cpp \
+    mapgraphicspointitem.cpp \
+    mapgraphicspolygonitem.cpp \
+    mapgraphicsview.cpp \
+    mapitemcolor.cpp \
+    mapitemcolorgraphicsview.cpp \
+    mapoption.cpp \
+    mapoptiondefault.cpp \
+    mapoptiongeneral.cpp \
+    mapoptionlabel.cpp \
+    mapoptionstyle.cpp \
+    maptematik.cpp \
+    maptematikboxmap.cpp \
+    maptematikconfig.cpp \
+    maptematikequalintervals.cpp \
+    maptematiknaturalbreaks.cpp \
+    maptematikpercentil.cpp \
+    maptematikquantile.cpp \
+    maptematikstandarddeviation.cpp \
+    maptematikuniquevalue.cpp \
+    mapvariablechooser.cpp \
+    mapvariabletypechooser.cpp \
+    paintscheme.cpp \
+    paintschemepoint.cpp \
+    paintschemepolygon.cpp \
+    paintschemepolyline.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -54,7 +84,6 @@ HEADERS  += \
     histogramcreator.h \
     variableview.h \
     computevariable.h \
-    layerproperties.h \
     randomsamplegenarator.h \
     recodevariable.h \
     resultview.h \
@@ -76,7 +105,46 @@ HEADERS  += \
     duplicatevariablledialog.h \
     plugininterfaces.h \
     plugindialog.h \
-    timeseriespicker.h
+    timeseriespicker.h \
+    labelscheme.h \
+    mapcolorreader.h \
+    mapcontrol.h \
+    mapfitureinfo.h \
+    mapgraphicslabelitem.h \
+    mapgraphicslineitem.h \
+    mapgraphicspointitem.h \
+    mapgraphicspolygonitem.h \
+    mapgraphicsview.h \
+    mapitemcolor.h \
+    mapitemcolorgraphicsview.h \
+    mapoption.h \
+    mapoptiondefault.h \
+    mapoptiongeneral.h \
+    mapoptionlabel.h \
+    mapoptionstyle.h \
+    maptematik.h \
+    maptematikboxmap.h \
+    maptematikconfig.h \
+    maptematikequalintervals.h \
+    maptematiknaturalbreaks.h \
+    maptematikpercentil.h \
+    maptematikquantile.h \
+    maptematikstandarddeviation.h \
+    maptematikuniquevalue.h \
+    mapvariablechooser.h \
+    mapvariabletypechooser.h \
+    paintscheme.h \
+    paintschemepoint.h \
+    paintschemepolygon.h \
+    paintschemepolyline.h \
+    ui_mapoption.h \
+    ui_mapoptiondefault.h \
+    ui_mapoptiongeneral.h \
+    ui_mapoptionlabel.h \
+    ui_mapoptionstyle.h \
+    ui_maptematikconfig.h \
+    ui_mapvariablechooser.h \
+    ui_mapvariabletypechooser.h
 
 
 FORMS    += \
@@ -85,7 +153,6 @@ FORMS    += \
     dialog.ui \
     histogramcreator.ui \
     computevariable.ui \
-    layerproperties.ui \
     randomsamplegenarator.ui \
     recodevariable.ui \
     histogramconfig.ui \
@@ -99,7 +166,15 @@ FORMS    += \
     mergedatatable.ui \
     duplicatevariablledialog.ui \
     plugindialog.ui \
-    timeseriespicker.ui
+    timeseriespicker.ui \
+    mapoption.ui \
+    mapoptiondefault.ui \
+    mapoptiongeneral.ui \
+    mapoptionlabel.ui \
+    mapoptionstyle.ui \
+    maptematikconfig.ui \
+    mapvariablechooser.ui \
+    mapvariabletypechooser.ui
 
 ## beyond the default configuration, also use SVG graphics
 QT += 			svg
@@ -115,7 +190,8 @@ DISTFILES += \
     images/zoom.png \
     images/zoomin.png \
     images/zoomout.png \
-    images/arrow.png
+    images/arrow.png \
+    color-breawer.csv
 
 DESTDIR = $$PWD
 
@@ -158,4 +234,4 @@ QMAKE_LIBS +=           $$RLDFLAGS $$RBLAS $$RLAPACK $$RINSIDELIBS $$RCPPLIBS
 QMAKE_CLEAN +=		mainwindow.cpp Makefile
 
 RESOURCES += \
-    icon.qrc
+    myfiles.qrc

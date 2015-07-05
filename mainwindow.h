@@ -5,6 +5,7 @@
 #include <RInside.h>
 #include <spreadsheet.h>
 #include <variableview.h>
+#include <mapview.h>
 #include <createnewvariable.h>
 #include <deletevariable.h>
 #include <histogramcreator.h>
@@ -51,11 +52,20 @@ private slots:
     //slot plugin menu
     void openPluginDialog();
     //slot window menu
-
     void openDataView();
     void openVariableView();
     void openMapView();
     void openResultView();
+    //slot map menu
+    void openQuantileMapCreator();
+    void openPercentilMapCreator();
+    void openBoxMapCreator();
+    void openStandarDeviationMapCreator();
+    void openUniqueValueMapCreator();
+    void openNaturalBreaksMapCreator();
+    void openEqualIntervalsCreator();
+    void openOptionChooser();
+
 private:
     bool closer;
     void closeEvent(QCloseEvent *event);
@@ -68,7 +78,7 @@ private:
     void setMenubarVisible(bool x);
     VariableView* vv;
     QTabWidget *tabView;
-
+    MapView* mview;
 
     QAction* openCSV;
     QAction* openSHP;
@@ -93,6 +103,19 @@ private:
     QAction* createParallel;
     QAction* createTimeSeries;
     QAction* createPluginDialog;
+
+    //map menu action
+    QAction* chooseOption;
+    //tematik menu action
+    QAction* createStandardMap;
+    QAction* createQuantileMap;
+    QAction* createPercentilMap;
+    QAction* createBoxMap;
+    QAction* createStandarDeviationMap;
+    QAction* createUniqueValueMap;
+    QAction* createNaturalBreaksMap;
+    QAction* createEqualIntervalsMap;
+
     //plugin dialog
     QMenu* fileMenu;
     QMenu *viewMenu;

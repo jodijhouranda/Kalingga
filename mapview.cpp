@@ -1,608 +1,619 @@
 #include "mapview.h"
-#include "layerproperties.h"
+#include "mapgraphicsview.h"
+#include "mapgraphicspolygonitem.h"
+#include "mapgraphicslineitem.h"
+#include "mapgraphicspointitem.h"
+#include "mapgraphicslabelitem.h"
+#include "variableview.h"
+#include "mapcontrol.h"
+#include "mapoption.h"
 
-#include "mapframe.h"
-#include "shapemapreader.h"
 #include "maptranslator.h"
-#include "feature.h"
-#include "pointfeature.h"
-#include "polylinefeature.h"
-#include "polygonfeature.h"
 #include "layer.h"
-#include "paintschemepoint.h"
-#include "paintschemepolygon.h"
-#include "paintschemepolyline.h"
-#include "labelscheme.h"
-#include "projection_wgs84_sphericalmercator.h"
+#include "projection.h"
 #include "projection_wgs84_worldmercator.h"
 
-#include <QMouseEvent>
-#include <QMenu>
-#include <QFile>
-#include <QMessageBox>
-#include <QFileDialog>
+#include <QtGui>
+#include <qmath.h>
+#include "qdebug.h"
 
 
-class LayerListItem : public QListWidgetItem
+MapView::MapView(QWidget *parent)
+    : QWidget(parent), p_renderer(new MapTranslator)
 {
-public:
-    LayerListItem(QListWidget *parent = 0) :
-        QListWidgetItem(parent),
-        p_layer(NULL)
-    {}
-    Layer *getLayer()
-    {
-        return p_layer;
-    }
+    setupUi();
+    connect(settingButton, SIGNAL(clicked()), this, SLOT(SettingMapOriginal()));
+}
 
-    void setLayer(Layer *layer)
-    {
-        p_layer = layer;
-    }
-
-protected:
-    Layer *p_layer;
-};
-
-
-mapview::mapview(MainWindow *mw, QTabWidget *tabView ,QWidget* parent)
+MapView &MapView::operator=(const MapView &other)
 {
-    if (this->objectName().isEmpty())
-        this->setObjectName(QString::fromUtf8("MapView"));
+    if (this == &other)
+        return *this;
 
-    splitter = new QSplitter(this);
-    splitter->setObjectName(QString::fromUtf8("splitter"));
-    splitter->setGeometry(QRect(0, 0, 1365,620));
-    splitter->setOrientation(Qt::Horizontal);
-    splitter->setHandleWidth(3);
+    graphicsView = other.graphicsView;
+    scene = other.scene;
+    mapControl = other.mapControl;
+    vv = other.vv;
 
-    layerList = new QListWidget(splitter);
-    layerList->setObjectName(QString::fromUtf8("layerList"));
-    QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    sizePolicy.setHorizontalStretch(0);
-    sizePolicy.setVerticalStretch(0);
-    sizePolicy.setHeightForWidth(layerList->sizePolicy().hasHeightForWidth());
-    layerList->setSizePolicy(sizePolicy);
-    splitter->addWidget(layerList);
+    p_background = other.p_background;
+    p_renderer = other.p_renderer;
+    p_projection = other.p_projection;
+    path = other.path;
+    configMap = other.configMap;
 
-    mapFrame = new QFrame();
-    mapFrame->setObjectName(QString::fromUtf8("mapFrame"));
-    QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    sizePolicy1.setHorizontalStretch(2);
-    sizePolicy1.setVerticalStretch(0);
-    sizePolicy1.setHeightForWidth(mapFrame->sizePolicy().hasHeightForWidth());
-    mapFrame->setSizePolicy(sizePolicy1);
-    mapFrame->setFrameShape(QFrame::StyledPanel);
-    mapFrame->setFrameShadow(QFrame::Raised);
+    itemRegion = other.itemRegion;
+    itemLine = other.itemLine;
+    itemPoint = other.itemPoint;
+    itemLabel = other.itemLabel;
 
-    actionAddPoint = new QAction(mw);
-    actionAddPoint->setObjectName(QString::fromUtf8("actionAddPoint"));
-    actionAddPoint->setCheckable(true);
-    actionAddPoint->setEnabled(false);
-    QIcon icon;
-    icon.addFile(QString::fromUtf8("./images/addpoint.png"), QSize(), QIcon::Normal, QIcon::Off);
-    actionAddPoint->setIcon(icon);
-    actionAddPoint->setToolTip("Add a point to current layer");
+    antialiasingCheckBox = other.antialiasingCheckBox;
+    label = other.label;
+    label2 = other.label2;
+    rotateLabel = other.rotateLabel;
+    coordinateLabel = other.coordinateLabel;
+    scaleLabel = other.scaleLabel;
+    coordinateLineEdit = other.coordinateLineEdit;
+    scaleLineEdit = other.scaleLineEdit;
+    selectModeButton = other.selectModeButton;
+    dragModeButton = other.dragModeButton;
+    antialiasButton = other.antialiasButton;
+    infoButton = other.infoButton;
+    printButton = other.printButton;
+    exportButton = other.exportButton;
+    settingButton = other.settingButton;
+    resetButton = other.resetButton;
+    zoomInButton = other.zoomInButton;
+    zoomOutButton = other.zoomOutButton;
+    rotateSpinBox = other.rotateSpinBox;
 
-    actionZoom = new QAction(mw);
-    actionZoom->setObjectName(QString::fromUtf8("actionZoom"));
-    QIcon icon1;
-    icon1.addFile(QString::fromUtf8("./images/zoom.png"), QSize(), QIcon::Normal, QIcon::Off);
-    actionZoom->setIcon(icon1);
-    actionZoom->setToolTip("Zoom to layer extent");
+    return *this;
+}
 
-    actionZoomIn = new QAction(mw);
-    actionZoomIn->setObjectName(QString::fromUtf8("actionZoomIn"));
+
+void MapView::setupUi()
+{
+    graphicsView = new MapGraphicsView(this);
+    graphicsView->setRenderHint(QPainter::Antialiasing, true);
+    graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+    graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
+    graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+
+    p_renderer->setFrameSize(graphicsView->width(),graphicsView->height());
+    p_renderer->updateSize();
+    qDebug() << QString("width %1 heigh %2").arg(graphicsView->width()).arg(graphicsView->height());
+    qDebug() << QString("%1,%2 - %3,%4")
+                .arg(p_renderer->getViewport().p1().X)
+                .arg(p_renderer->getViewport().p1().Y)
+                .arg(p_renderer->getViewport().p2().X)
+                .arg(p_renderer->getViewport().p2().Y);
+    qDebug() << QString("%1,%2 - %3,%4")
+                .arg(p_renderer->getBaseExtent().p1().X)
+                .arg(p_renderer->getBaseExtent().p1().Y)
+                .arg(p_renderer->getBaseExtent().p2().X)
+                .arg(p_renderer->getBaseExtent().p2().Y);
+
+    scene = new QGraphicsScene();
+    Projection_WGS84_WorldMercator *proj = new Projection_WGS84_WorldMercator;
+    setProjection(proj);
+    graphicsView->setScene(scene);
+    mapControl = new MapControl(this, scene, &itemRegion, &itemLine, &itemPoint, &itemLabel);
+
+
+
+    QPainterPath reg = drawPainterPath(0.0,0.0,60.0,40.0);
+    QPainterPath reg2 = drawPainterPath(60,0,120,40);
+    QPainterPath reg3 = drawPainterPath(60,40,120,80);
+    QPainterPath reg4 = drawPainterPath(0,40,60,80);
+    QPainterPath reg5 = drawPainterPath(0,80,120,120);
+    QPainterPath elip;
+    elip.addEllipse(120,120,30,40);
+
+//        itemRegion.push_back(new MapGraphicsPolygonItem(reg,0, new QPen(), new QBrush));
+//        itemRegion.push_back(new MapGraphicsPolygonItem(reg2,1, new QPen(), new QBrush));
+//        itemRegion.push_back(new MapGraphicsPolygonItem(reg3,2, new QPen(), new QBrush));
+//        itemRegion.push_back(new MapGraphicsPolygonItem(reg4,3, new QPen(), new QBrush));
+//        itemRegion.push_back(new MapGraphicsPolygonItem(reg5,4, new QPen(), new QBrush));
+//        itemRegion.push_back(new MapGraphicsPolygonItem(elip,5, new QPen(), new QBrush));
+
+
+
+//        //QGraphicsItemGroup * cliGroup = scene->createItemGroup(itemRegion);
+//        //cliGroup->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+//        //scene->addItem(reg);
+//        //scene->addItem(reg2);
+//        //scene->addItem(reg3);
+//        //scene->addItem(reg4);
+//        //scene->addItem(reg5);
+
+//        QGraphicsItemGroup *group = new QGraphicsItemGroup;
+
+//        for(QList<MapGraphicsPolygonItem*>::iterator it = itemRegion.begin(); it != itemRegion.end(); it++)
+//            group->addToGroup((*it));
+
+//        group->setHandlesChildEvents(false);
+//        scene-> addItem(group);
+
+
+//        int a = 0;
+//        int b = 3;
+//        int c = 5;
+//        QList<int> listRegion;
+//        listRegion.append(a);
+//        listRegion.append(b);
+//        listRegion.append(c);
+//        filterItem(listRegion, QColor(Qt::blue));
+
+
+    //int size = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
+    //QSize iconSize(size, size);
+
+    zoomInButton = new QPushButton;
     QIcon icon2;
     icon2.addFile(QString::fromUtf8("./images/zoomin.png"), QSize(), QIcon::Normal, QIcon::Off);
-    actionZoomIn->setIcon(icon2);
-    actionZoomIn->setToolTip("Zoom in");
+    zoomInButton->setIcon(icon2);
+    zoomInButton->setToolTip("Zoom In");
 
-    actionZoomOut = new QAction(mw);
-    actionZoomOut->setObjectName(QString::fromUtf8("actionZoomOut"));
+    resetButton = new QPushButton;
+    resetButton->setEnabled(false);
+    QIcon icon1;
+    icon1.addFile(QString::fromUtf8("./images/zoom.png"), QSize(), QIcon::Normal, QIcon::Off);
+    resetButton->setIcon(icon1);
+    resetButton->setToolTip("Zoom to layer extent");
+
+    zoomOutButton = new QPushButton;
     QIcon icon3;
     icon3.addFile(QString::fromUtf8("./images/zoomout.png"), QSize(), QIcon::Normal, QIcon::Off);
-    actionZoomOut->setIcon(icon3);
-    actionZoomOut->setToolTip("Zoom out");
+    zoomOutButton->setIcon(icon3);
+    zoomOutButton->setToolTip("Zoom out");
 
-    actionAddLayer = new QAction(mw);
-    actionAddLayer->setObjectName(QString::fromUtf8("actionAddLayer"));
+    label = new QLabel();
+
+    coordinateLineEdit = new QLineEdit;
+    coordinateLineEdit->setEnabled(false);
+    coordinateLabel = new QLabel(tr("&Coordinate :"));
+    coordinateLabel->setBuddy(coordinateLineEdit);
+
+    scaleLabel = new QLabel;
+    scaleLabel->setText(tr("Scale :"));
+    scaleLineEdit = new QLineEdit;
+    coordinateLineEdit->setEnabled(false);
+
+    antialiasingCheckBox = new QCheckBox;
+    antialiasingCheckBox->setText(tr("Antialiasing"));
+    antialiasingCheckBox->setChecked(true);
+
+    rotateSpinBox = new QSpinBox;
+    rotateSpinBox->setRange(-180, 180);
+    rotateSpinBox->setSingleStep(5);
+    rotateSpinBox->setWrapping(true);
+    rotateSpinBox->setSuffix("\xB0");
+    rotateLabel = new QLabel(tr("&Rotation :"));
+    rotateLabel->setBuddy(rotateSpinBox);
+
+    // Navigation layout
+    QHBoxLayout *navigationLayout = new QHBoxLayout;
+    navigationLayout->addWidget(label);
+    navigationLayout->addStretch();
+    navigationLayout->addWidget(coordinateLabel);
+    navigationLayout->addWidget(coordinateLineEdit);
+    navigationLayout->addWidget(scaleLabel);
+    navigationLayout->addWidget(scaleLineEdit);
+    navigationLayout->addWidget(antialiasingCheckBox);
+    navigationLayout->addWidget(rotateLabel);
+    navigationLayout->addWidget(rotateSpinBox);
+
+    // Label layout
+    QHBoxLayout *labelLayout = new QHBoxLayout;
+    selectModeButton = new QToolButton;
+    selectModeButton->setText(tr("Select"));
+    selectModeButton->setCheckable(true);
+    selectModeButton->setChecked(true);
     QIcon icon4;
-    icon4.addFile(QString::fromUtf8("./images/addlayer.png"), QSize(), QIcon::Normal, QIcon::Off);
-    actionAddLayer->setIcon(icon4);
-    actionAddLayer->setToolTip("MainWindow");
+    icon4.addFile(QString::fromUtf8("./images/selectcursor"), QSize(), QIcon::Normal, QIcon::Off);
+    selectModeButton->setIcon(icon4);
+    selectModeButton->setToolTip("Select Feature");
 
-    actionSaveMap = new QAction(mw);
-    actionSaveMap->setObjectName(QString::fromUtf8("actionSaveMap"));
-    actionSaveMap->setEnabled(false);
+    dragModeButton = new QToolButton;
+    dragModeButton->setText(tr("Drag"));
+    dragModeButton->setCheckable(true);
+    dragModeButton->setChecked(false);
     QIcon icon5;
-    icon5.addFile(QString::fromUtf8("./images/savemap.png"), QSize(), QIcon::Normal, QIcon::Off);
-    actionSaveMap->setIcon(icon5);
-    actionSaveMap->setToolTip("Save current layer");
+    icon5.addFile(QString::fromUtf8("./images/movecursor"), QSize(), QIcon::Normal, QIcon::Off);
+    dragModeButton->setIcon(icon5);
+    dragModeButton->setToolTip("Move Feature");
 
-    actionShapeInfo = new QAction(mw);
-    actionShapeInfo->setObjectName(QString::fromUtf8("actionShapeInfo"));
-    actionShapeInfo->setCheckable(true);
+    infoButton= new QPushButton;
+    infoButton->setCheckable(true);
+    infoButton->setChecked(false);
     QIcon icon6;
     icon6.addFile(QString::fromUtf8("./images/mapinfo.png"), QSize(), QIcon::Normal, QIcon::Off);
-    actionShapeInfo->setIcon(icon6);
-    actionShapeInfo->setToolTip("Shape Info");
+    infoButton->setIcon(icon6);
+    infoButton->setToolTip("Shape Info");
 
+    printButton = new QPushButton;
+    QIcon icon7;
+    icon7.addFile(QString::fromUtf8("./images/fileprint.png"), QSize(), QIcon::Normal, QIcon::Off);
+    printButton->setIcon(icon7);
+    printButton->setToolTip("Print Shape Layer");
 
+    exportButton = new QPushButton;
+    QIcon icon8;
+    icon8.addFile(QString::fromUtf8("./images/export.png"), QSize(), QIcon::Normal, QIcon::Off);
+    exportButton->setIcon(icon8);
+    exportButton->setToolTip("Export Layer to Image");
 
-    toolBar = new QToolBar(mw);
-    toolBar->setObjectName(QString::fromUtf8("toolBar"));
+    settingButton =  new QPushButton;
+    QIcon icon9;
+    icon9.addFile(QString::fromUtf8("./images/setting.png"), QSize(), QIcon::Normal, QIcon::Off);
+    settingButton->setIcon(icon9);
+    settingButton->setToolTip("Setting Map View");
 
-    mw->addToolBar(Qt::TopToolBarArea, toolBar);
+    QButtonGroup *pointerModeGroup = new QButtonGroup;
+    pointerModeGroup->setExclusive(true);
+    pointerModeGroup->addButton(selectModeButton);
+    pointerModeGroup->addButton(dragModeButton);
 
-    toolBar->addAction(actionAddLayer);
-    toolBar->addAction(actionAddPoint);
-    toolBar->addAction(actionSaveMap);
-    toolBar->addSeparator();
-    toolBar->addAction(actionZoom);
-    toolBar->addAction(actionZoomIn);
-    toolBar->addAction(actionZoomOut);
-    toolBar->addAction(actionShapeInfo);
-    toolBar->setEnabled(false);
+    labelLayout->addWidget(selectModeButton);
+    labelLayout->addWidget(dragModeButton);
+    labelLayout->addStretch();
+    labelLayout->addWidget(zoomInButton);
+    labelLayout->addWidget(resetButton);
+    labelLayout->addWidget(zoomOutButton);
+    labelLayout->addStretch();
+    labelLayout->addWidget(infoButton);
+    labelLayout->addWidget(printButton);
+    labelLayout->addWidget(exportButton);
+    labelLayout->addWidget(settingButton);
 
-    statRotation = new QLabel(mw);
-    statRotation->setText("Rotation:");
-    spinRotation = new QSpinBox(mw);
+    QGridLayout *topLayout = new QGridLayout;
+    topLayout->addLayout(labelLayout, 0, 0);
+    topLayout->addWidget(graphicsView, 1, 0);
+    topLayout->addLayout(navigationLayout, 2, 0);
+    setLayout(topLayout);
 
-    checkRender = new QCheckBox(mw);
-    checkRender->setText("Render");
-    checkRender->setChecked(true);\
+    connect(resetButton, SIGNAL(clicked()), this, SLOT(resetView()));
+    connect(rotateSpinBox, SIGNAL(valueChanged(int)), this, SLOT(setupMatrix()));
+    connect(graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(setResetButtonEnabled()));
+    connect(graphicsView->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(setResetButtonEnabled()));
+    connect(selectModeButton, SIGNAL(toggled(bool)), this, SLOT(togglePointerMode()));
+    connect(dragModeButton, SIGNAL(toggled(bool)), this, SLOT(togglePointerMode()));
+    connect(antialiasingCheckBox, SIGNAL(toggled(bool)), this, SLOT(toggleAntialiasing()));
+    connect(zoomInButton, SIGNAL(clicked()), this, SLOT(zoomIn()));
+    connect(zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomOut()));
+    connect(printButton, SIGNAL(clicked()), this, SLOT(print()));
+    connect(exportButton, SIGNAL(clicked()), this, SLOT(exportMap()));
 
-    checkScale = new QCheckBox(mw);
-    checkScale->setText("Scale");
-    checkScale->setChecked(false);
-    lineScale = new QLineEdit(mw);
-    lineScale->setFixedWidth(100);
-    lineScale->setEnabled(false);
-    QPalette palette = lineScale->palette();
-    palette.setColor(QPalette::Base, Qt::white);
-    lineScale->setPalette(palette);
-
-    statCoordinate = new QLabel(mw);
-    statCoordinate->setText("Coordinates:");
-    lineCoordinate = new QLineEdit(mw);
-    lineCoordinate->setFixedWidth(120);
-    lineCoordinate->setEnabled(false);
-    lineCoordinate->setPalette(palette);
-
-    statusBar = new QStatusBar(mw);
-    statusBar->setObjectName(QString::fromUtf8("statusBar"));
-    statusBar->addPermanentWidget(statCoordinate);
-    statusBar->addPermanentWidget(lineCoordinate);
-    statusBar->addPermanentWidget(checkScale);
-    statusBar->addPermanentWidget(lineScale);
-    statusBar->addPermanentWidget(checkRender);
-    statusBar->addPermanentWidget(statRotation);
-    statusBar->addPermanentWidget(spinRotation);
-    statusBar->hide();
-    mw->setStatusBar(statusBar);
-
-
-    QObject::connect(actionAddLayer, SIGNAL(triggered()), this, SLOT(addShapeFile()));
-    QObject::connect(actionAddPoint, SIGNAL(triggered(bool)), this, SLOT(addPointTriggered(bool)));
-    QObject::connect(actionZoom, SIGNAL(triggered()), this, SLOT(zoom()));
-    QObject::connect(actionZoomIn, SIGNAL(triggered()), this, SLOT(zoomIn()));
-    QObject::connect(actionZoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
-    QObject::connect(actionSaveMap, SIGNAL(triggered()), this, SLOT(saveLayer()));
-    QObject::connect(actionShapeInfo, SIGNAL(triggered()), this, SLOT(shapeInfo()));
-    QObject::connect(layerList, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(layerListChanged(QListWidgetItem*)));
-    QObject::connect(layerList, SIGNAL(itemSelectionChanged()), this, SLOT(layerListSelected()));
-    QObject::connect(layerList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(layerPropertiesChanged(QListWidgetItem*)));
-
-
-    mf = new MapFrame();
-
-
-    connect(mf,SIGNAL(paint(QPainter&)),this,SLOT(paint(QPainter&)));
-    connect(mf,SIGNAL(clicked(QMouseEvent*)),this,SLOT(mapClicked(QMouseEvent*)));
-    connect(mf,SIGNAL(released(QMouseEvent*)),this,SLOT(mapReleased(QMouseEvent*)));
-    connect(mf,SIGNAL(moved(QMouseEvent*)),this,SLOT(mapMoved(QMouseEvent*)));
-
-    splitter->addWidget(mf);
-    splitter->setStretchFactor(1,1);
-
-    //Projection_WGS84_SphericalMercator *proj = new Projection_WGS84_SphericalMercator;
-    Projection_WGS84_WorldMercator *proj = new Projection_WGS84_WorldMercator;
-    mf->setProjection(proj);
-
+    scale = 1.0;
+    setupMatrix();
 }
 
-mapview::~mapview()
-{
 
+QGraphicsView *MapView::view() const
+{
+    return static_cast<QGraphicsView *>(graphicsView);
 }
 
-void mapview::keyPressEvent(QKeyEvent *event)
+QGraphicsScene *MapView::getScene() const
 {
-    if(event->key() == Qt::Key_Return && (mf->getState() & MapFrame::MapStateEdit)) {
-        LayerListItem *item = static_cast<LayerListItem *>(this->layerList->currentItem());
-        QSimpleSpatial::ShapeTypes type =  item->getLayer()->GetShapeType();
-        {
-            if(type == QSimpleSpatial::PolyLine ||type == QSimpleSpatial::Polygon) {
-                Points *points = new Points;
-                points->count = p_points.count();
-                points->x = new double[points->count];
-                points->y = new double[points->count];
-                for(int i = 0;i < p_points.count(); i ++) {
-                    QSimpleSpatial::SimplePoint &point = p_points[i];
-                    point = mf->GetTranslator()->Screen2Coord(point);
-                    points->x[i] = point.X;
-                    points->y[i] = point.Y;
-                }
-                p_points.clear();
+    return static_cast<QGraphicsScene *>(scene);
+}
 
-                if(type == QSimpleSpatial::PolyLine) {
-                    PolylineFeature *feature = new PolylineFeature(item->getLayer());
-                    feature->AddField("name","Test line");
-                    feature->AddPoints(points);
-                    item->getLayer()->AddFeature(feature);
-                } else {
-                    PolygonFeature *feature = new PolygonFeature(item->getLayer());
-                    feature->AddField("name","Test polygon");
-                    feature->AddPoints(points);
-                    item->getLayer()->AddFeature(feature);
+const QList<Layer *> &MapView::GetLayers()
+{
+    return mapControl->GetLayers();
+}
+
+MapTranslator *MapView::GetTranslator()
+{
+    return p_renderer;
+}
+
+Projection *MapView::getProjection() const
+{
+    return p_projection;
+}
+
+void MapView::setProjection(Projection *projection)
+{
+    p_projection = projection;
+}
+
+void MapView::openShapeFile(QString shpPath, VariableView *vv)
+{
+    setShapePath(shpPath);
+    mapControl->openShapeFile(shpPath, vv);
+
+//        drawRelation("DESA", "MENTENG", "CIKINI");
+//        drawRelation("DESA", "MENTENG", "GONDANGDIA");
+//        drawRelation("DESA", "KEBON SIRIH", "GONDANGDIA");
+
+//            int a = 0;
+//            int b = 3;
+//            int c = 5;
+//            QList<int> listRegion;
+//            listRegion.append(a);
+//            listRegion.append(b);
+//            listRegion.append(c);
+//            filterItem(listRegion, QColor(Qt::red));
+}
+
+void MapView::addPolygonLayer(Layer *layer)
+{
+    mapControl->addPolygonLayer(layer);
+}
+
+void MapView::addPolylineLayer(Layer *layer)
+{
+    mapControl->addPolylineLayer(layer);
+}
+
+void MapView::addPointLayer(Layer *layer)
+{
+    mapControl->addPointLayer(layer);
+}
+
+QList<MapGraphicsPolygonItem *> *MapView::getItemRegion()
+{
+    return &itemRegion;
+}
+
+void MapView::filterItem(QList<int> listFeature, QColor color)
+{
+    for(QList<MapGraphicsPolygonItem*>::iterator it = itemRegion.begin(); it != itemRegion.end(); it++){
+        for(int i = 0; i < listFeature.size(); ++i){
+        //for(QList<int>::iterator reg = listRegion.begin(); reg != listRegion.end(); reg++){
+            if(listFeature.at(i) == (*it)->getIdFeatureRegion()){
+            //if(*reg == (*it)->getNumberRegion()){
+                (*it)->setFillColor(color);
+            }
+        }
+    }
+}
+
+void MapView::drawRelation(QString field, QString region1, QString region2)
+{
+    int size =5;
+    QPoint pointRegion1;
+    QPoint pointRegion2;
+    QSimpleSpatial::SimplePoint mapPointReg1;
+    QSimpleSpatial::SimplePoint mapPointReg2;
+
+    int idRegion1 = getId(field, region1);
+    int idRegion2 = getId(field, region2);
+
+    foreach(Layer *layer, this->GetLayers()) {
+        if(layer->isVisible()) {
+            foreach(Feature *feature, layer->getFeatures()) {
+                //QString &type = feature->GetFieldValue(field);
+                //    if(type == "town")
+                int idFeature = feature->getIdFeature();
+                if(idFeature == idRegion1) {
+                    mapPointReg1 = this->GetTranslator()->Coord2Screen(feature->getCenter());
+                    pointRegion1.setX(mapPointReg1.X);
+                    pointRegion1.setY(mapPointReg1.Y);
+                }else if(idFeature == idRegion2){
+                    mapPointReg2 = this->GetTranslator()->Coord2Screen(feature->getCenter());
+                    pointRegion2.setX(mapPointReg2.X);
+                    pointRegion2.setY(mapPointReg2.Y);
                 }
             }
         }
-        mf->setDirty();
-        mf->setState(MapFrame::MapStateMove);
-        actionAddPoint->setChecked(false);
-        mf->update();
     }
+    scene->addEllipse(pointRegion1.x()-size,pointRegion1.y()-size,2*size,2*size,QPen(Qt::black),QBrush(Qt::red));
+    scene->addEllipse(pointRegion2.x()-size,pointRegion2.y()-size,2*size,2*size,QPen(Qt::black),QBrush(Qt::red));\
+    scene->addLine(pointRegion1.x(),pointRegion1.y(),pointRegion2.x(),pointRegion2.y(),QPen(Qt::green));
 }
 
-Layer *mapview::addLayer(const QString &fileName, ShapeMapReader *smr, Projection *proj,QSimpleSpatial::ShapeTypes shapeType)
+QTableWidget *MapView::getTableLatLon()
 {
-    Layer *layer;
-    if(QFile::exists(fileName))
-        layer = smr->ReadFile(fileName,proj);
-    else {
-        layer = new Layer(shapeType,this);
-        layer->setName(fileName);
+    QTableWidget *tablewidget = vv->getSpreadsheetTable();
+    Projection_WGS84_WorldMercator *p = new Projection_WGS84_WorldMercator;
+    QTableWidget *tableLatLong = new QTableWidget(vv->getRowCount(), 3);
+    QSimpleSpatial::SimplePoint centroid;
+    QSimpleSpatial::SimplePoint latlonCoor;
+
+    foreach(Layer *layer, this->GetLayers()) {
+        if(layer->isVisible()) {
+            int i=0;
+            foreach(Feature *feature, layer->getFeatures()) {
+
+                centroid = feature->getCenter();
+                latlonCoor = p->toGeodetic(centroid.X,centroid.Y);
+
+                QTableWidgetItem *idFeature = new QTableWidgetItem(QString("%0").arg(tablewidget->verticalHeaderItem(i)->text()));
+                tableLatLong->setItem(i,0,idFeature);
+
+                QTableWidgetItem *latitude = new QTableWidgetItem(QString("%0").arg(latlonCoor.X));
+                tableLatLong->setItem(i,1,latitude);
+
+                QTableWidgetItem *longitude = new QTableWidgetItem(QString("%0").arg(latlonCoor.Y));
+                tableLatLong->setItem(i,2,longitude);
+                i++;
+
+            }
+        }
+
     }
-    QIcon icon;
-    switch(layer->GetShapeType())
-    {
-        case QSimpleSpatial::Point:
-            icon.addPixmap(QPixmap("./images/point.png"));
-            break;
-        case QSimpleSpatial::PolyLine:
-            icon.addPixmap(QPixmap("./images/polyline.png"));
-            break;
-        case QSimpleSpatial::Polygon:
-            icon.addPixmap(QPixmap("./images/polygon.png"));
-            break;
-        default:
-            break;
-    }
-    LayerListItem *item = new LayerListItem(this->layerList);
-    QString name = fileName.mid(fileName.lastIndexOf("/")+1,fileName.size()-fileName.lastIndexOf(".")-1);
-    item->setCheckState(Qt::Checked);
-    item->setIcon(icon);
-    item->setText(name);
-    item->setLayer(layer);
-    layerList->addItem(item);
-    return layer;
+
+    QStringList label;
+    label << "ID" << "Latitude" << "Longitude";
+    tableLatLong->setHorizontalHeaderLabels(label);
+
+    return tableLatLong;
 }
 
-void mapview::paint(QPainter &painter)
-{
-    MapFrame *mf = dynamic_cast<MapFrame *>(sender());
-    mf->setBackground(Qt::white);
 
-    double factor = 1.0 / mf->GetTranslator()->getScaleFactor();
-    factor /= 10.0;
-    QString postfix;
-    if(factor < 2.0)
-    {
-        postfix = "m";
-        factor *= 1000.0;
+void MapView::resetView()
+{
+    rotateSpinBox->setValue(0);
+    scale = 1.0;
+    this->GetTranslator()->ZoomTo(1.0);
+    setupMatrix();
+    graphicsView->ensureVisible(QRectF(0, 0, 0, 0));
+
+    resetButton->setEnabled(false);
+}
+
+void MapView::setResetButtonEnabled()
+{
+    resetButton->setEnabled(true);
+}
+
+QString MapView::getShapePath()
+{
+    return path;
+}
+
+void MapView::setSettingMap(QWidget *mapConfig)
+{
+    this->configMap = mapConfig;
+    this->configMap->hide();
+    disconnect(settingButton, SIGNAL(clicked()), 0, 0);
+    this->settingButton->setCheckable(true);
+    this->settingButton->setChecked(false);
+    connect(settingButton, SIGNAL(clicked(bool)), this, SLOT(SettingMapResult(bool)));
+}
+
+void MapView::setShapePath(QString path)
+{
+    this->path = path;
+    label->setText(path);
+    label->setToolTip(path);
+}
+
+void MapView::setVariableView(VariableView *vv)
+{
+    this->vv = vv;
+}
+
+int MapView::getId(QString field, QString itemName)
+{
+    int idx = vv->getVariableIndex(field);
+    int row = vv->getRowCount();
+    QTableWidget *tablewidget = vv->getSpreadsheetTable();
+    int id;
+    QString item;
+    for(int i=0; i<row; i++){
+        item = tablewidget->item(i,idx)->text();
+        if(item == itemName){
+            id = tablewidget->verticalHeaderItem(i)->text().toInt();
+        }
     }
+    return id;
+}
+
+VariableView *MapView::getVariableView()
+{
+    return this->vv;
+}
+
+void MapView::setupMatrix()
+{
+    QMatrix matrix;
+    matrix.scale(1 * scale, 1 * scale);
+    matrix.rotate(rotateSpinBox->value());
+
+    graphicsView->setMatrix(matrix);
+    setResetButtonEnabled();
+}
+
+void MapView::togglePointerMode()
+{
+    graphicsView->setDragMode(selectModeButton->isChecked()
+                              ? QGraphicsView::RubberBandDrag
+                              : QGraphicsView::ScrollHandDrag);
+    graphicsView->setInteractive(selectModeButton->isChecked());
+}
+
+
+void MapView::toggleAntialiasing()
+{
+    graphicsView->setRenderHint(QPainter::Antialiasing, antialiasingCheckBox->isChecked());
+}
+
+void MapView::print()
+{
+#ifndef QT_NO_PRINTER
+    QPrinter printer;
+    QPrintDialog dialog(&printer, this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QPainter painter(&printer);
+        graphicsView->render(&painter);
+    }
+#endif
+}
+
+void MapView::exportMap()
+{
+    QString fileName= QFileDialog::getSaveFileName(this, "Save image", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
+
+    if (fileName.isNull())
+        return;
+
+    if (! (fileName.endsWith(".png", Qt::CaseInsensitive) ) )
+
+    scene->clearSelection();                                                  // Selections would also render to the file
+    scene->setSceneRect(scene->itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
+    QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);  // Create the image with the exact size of the shrunk scene
+    image.fill(Qt::transparent);                                              // Start all pixels transparent
+
+    QPainter painter(&image);
+    painter.setRenderHint(QPainter::Antialiasing);
+    scene->render(&painter);
+    image.save(fileName);
+}
+
+void MapView::SettingMapOriginal()
+{
+    MapOption* dialog = new MapOption(this, vv);
+    dialog->show();
+}
+
+void MapView::SettingMapResult(bool value)
+{
+    if(value)
+        configMap->show();
     else
-    {
-        postfix = "km";
-    }
-    double zoom = mf->GetTranslator()->getZoom();
-    lineScale->setText(QString("%1 : %2%3").arg(zoom).arg(QString::number(factor,'f',2)).arg(postfix));
-
-    if(checkScale->isChecked()){
-        QBrush bg(QPixmap("./images/cell.png"));
-        mf->setBackground(bg);
-        painter.setPen(Qt::black);
-        double X = mf->width() - 110;
-        double Y = mf->height() - 50;
-        painter.drawLine(X,Y,X + 100,Y);
-        painter.drawLine(X + 50,Y,X + 50,Y + 10);
-        for(double xx = X;xx <= X + 100;xx += 10)
-        {
-            painter.drawLine(xx,Y,xx,Y - 5);
-        }
-
-        painter.drawText(QRectF(X,Y - 30,100,25),
-                         Qt::AlignCenter,
-                         QString("%1 %2").arg(QString::number(factor,'f',2)).arg(postfix));
-
-        painter.drawText(QRectF(X,Y + 5,50,25),
-                         Qt::AlignLeft,
-                         QString::number(zoom,'f',5));
-
-        if(p_points.count() > 0) {
-            painter.setPen(Qt::blue);
-            for(int i = 1;i < p_points.count();i ++) {
-                painter.drawLine(p_points[i - 1].X,p_points[i - 1].Y,p_points[i].X,p_points[i].Y);
-            }
-            painter.setPen(Qt::green);
-            for(int i = 0;i < p_points.count();i ++) {
-                painter.drawEllipse(p_points[i].X - 5,p_points[i].Y - 5,10,10);
-            }
-        }
-    }
+        configMap->hide();
 }
 
-void mapview::mapClicked(QMouseEvent *event)
+void MapView::zoomIn(int level)
 {
-    if(actionShapeInfo->isChecked()) {
-        QPoint clickPoint = event->pos();
-        QSimpleSpatial::SimplePoint mapPointTopLeft = mf->GetTranslator()->Screen2Coord(clickPoint.x() - 10, clickPoint.y() - 10);
-        QSimpleSpatial::SimplePoint mapPointBottomRight = mf->GetTranslator()->Screen2Coord(clickPoint.x() + 10, clickPoint.y() + 10);
-        QSimpleSpatial::Extent extent(mapPointTopLeft,mapPointBottomRight);
-        QString output;
-        foreach(Layer *layer, mf->GetLayers()) {
-            if(layer->isVisible()) {
-                foreach(Feature *feature, layer->getFeatures()) {
-                    if(extent.IsIntersect(feature->GetExtent())) {
-                        DataFields data = feature->GetDataFields();
-                        QMapIterator<QString, QString> i(data);
-                        output += QString("%1\n==============\n").arg(layer->getName());
-                        while (i.hasNext()) {
-                            i.next();
-                            output +=  QString("%1:%2; ").arg(i.key()).arg(i.value());
-
-                        }
-                        output += QString("\ncenter: %1,%2 \ncentroid: %3,%4 \n%5, \n%6, \n%7, \n%8").arg(feature->getCenter().X).arg(feature->getCenter().Y)
-                                .arg(feature->getCentroid().X).arg(feature->getCentroid().Y)
-                                .arg(feature->getLabelScheme()->getFieldName()).arg(feature->getMaxZoom()).arg(feature->getMinZoom());
-
-                        output += QString("\n------------------\n");
-
-                    }
-                }
-            }
-        }
-        QMessageBox::information(this,"Found shapes",output);
-    }
+    scale*=2;
+    this->GetTranslator()->ZoomIn();
+    this->setupMatrix();
 }
 
-void mapview::mapReleased(QMouseEvent *event)
+void MapView::zoomOut(int level)
 {
-    Q_UNUSED(event)
-    if(mf->getState() & MapFrame::MapStateEdit)
-    {
-        LayerListItem *item = static_cast<LayerListItem *>(this->layerList->currentItem());
-        if(item && item->getLayer()) {
-            double x = event->x();
-            double y = event->y();
-            QSimpleSpatial::SimplePoint point;
-            switch(item->getLayer()->GetShapeType())
-            {
-                case QSimpleSpatial::Point:
-                {
-                    PointFeature *feature = new PointFeature(item->getLayer(),mf->GetTranslator()->Screen2Coord(x,y));
-                    feature->AddField("name","Test point");
-                    item->getLayer()->AddFeature(feature);
-                }
-                    break;
-                case QSimpleSpatial::PolyLine:
-                case QSimpleSpatial::Polygon:
-                    point.X = x;
-                    point.Y = y;
-                    p_points.append(point);
-                    mf->update();
-                    break;
-                default:
-                    break;
-            }
-            if(item->getLayer()->GetShapeType() == QSimpleSpatial::Point) {
-                actionAddPoint->setChecked(false);
-                mf->setState(MapFrame::MapStateMove);
-            }
-            mf->update();
-        }
-    }
+    scale/=2;
+    this->GetTranslator()->ZoomOut();
+    this->setupMatrix();
 }
 
-
-void mapview::mapMoved(QMouseEvent *event )
+void MapView::setCoordinateLineEdit(QString output)
 {
-    QSimpleSpatial::SimplePoint coord = mf->GetTranslator()->Screen2Coord(event->pos().x(), event->pos().y());
-    QString output;
-    output =  QString("%1 , %2 ").arg(static_cast<int>(coord.X)).arg(static_cast<int>(coord.Y));
-    lineCoordinate->setText(output);\
+    coordinateLineEdit->setText(output);
 }
 
-void mapview::addShapeFile()
+void MapView::setScaleLineEdit(QString output)
 {
-    QString filename = QFileDialog::getOpenFileName(
-                this,
-                tr("Open Shapefile"),
-                "",
-                "ShapeFile (*.shp)"
-                );
-    if(!filename.isEmpty()){
-        ShapeMapReader * smr = new ShapeMapReader(this);
-        Layer *layer = addLayer(filename,
-                                smr,
-                                mf->getProjection());
-
-        switch(layer->GetShapeType()){
-        case 1:
-            addPointLayer(layer);
-            break;
-        case 3:
-            addPolylineLayer(layer);
-            break;
-        case 5:
-            addPolygonLayer(layer);
-            break;
-        default:
-            QMessageBox::information(this,"ShapeFile Type unidentified","Shapefile type unidentified");
-        }
-    }
+    scaleLineEdit->setText(output);
 }
 
-void mapview::openShapeFile(QString shpPath)
+bool MapView::isCheckedToggleInfo()
 {
-    QString filename = shpPath;
-    if(!filename.isEmpty()){
-        ShapeMapReader * smr = new ShapeMapReader(this);
-        Layer *layer = addLayer(filename,
-                                smr,
-                                mf->getProjection());
-
-        switch(layer->GetShapeType()){
-        case 1:
-            addPointLayer(layer);
-            break;
-        case 3:
-            addPolylineLayer(layer);
-            break;
-        case 5:
-            addPolygonLayer(layer);
-            break;
-        default:
-            QMessageBox::information(this,"ShapeFile Type unidentified","Shapefile type unidentified");
-        }
-    }
+    return infoButton->isChecked();
 }
 
-void mapview::addPointLayer(Layer *layer)
+QPainterPath MapView::drawPainterPath(double a, double b, double c, double d)
 {
-        PaintSchemePoint *schemeCustom = new PaintSchemePoint(QPen(Qt::black),QBrush(Qt::red),5);
-        layer->AddScheme(schemeCustom);
-        LabelScheme *labelScheme = new LabelScheme("name",QFont("Tahoma",8),QPen(Qt::darkGray));
-        QSimpleSpatial::SimplePoint offset;
-        offset.X = 0;
-        offset.Y = 20;
-        labelScheme->setLabelOffset(offset);
-        layer->AddLabelScheme(labelScheme);
-        mf->AddLayer(layer);
-        zoom();
-}
-
-void mapview::addPolylineLayer(Layer *layer)
-{
-        PaintSchemePolyline *schemeCustom = new PaintSchemePolyline(QPen(qRgb(255,128,0)),QBrush(Qt::yellow),5);
-        layer->AddScheme(schemeCustom);
-        LabelScheme *labelScheme = new LabelScheme("name",QFont("Tahoma",9),QPen(Qt::magenta));
-        layer->AddLabelScheme(labelScheme);
-        mf->AddLayer(layer);
-        zoom();
-}
-
-void mapview::addPolygonLayer(Layer *layer)
-{
-
-        PaintSchemePolygon *schemeCustom = new PaintSchemePolygon();
-        layer->AddScheme(schemeCustom);
-        LabelScheme * labelScheme = new LabelScheme("name",QFont("Tahoma",9),QPen(Qt::darkGreen));
-        layer->AddLabelScheme(labelScheme);
-        mf->AddLayer(layer);
-        zoom();
-}
-
-
-void mapview::addPointTriggered(bool checked)
-{
-    if(checked)
-        mf->setState(MapFrame::MapStateEdit);
-    else
-        mf->setState(MapFrame::MapStateMove);
-}
-
-void mapview::saveLayer()
-{
-
-}
-
-void mapview::zoom()
-{
-    mf->GetTranslator()->ZoomTo(1.0);
-    mf->updateMap();
-}
-
-void mapview::zoomIn()
-{
-    mf->GetTranslator()->ZoomIn();
-    mf->updateMap();
-}
-
-void mapview::zoomOut()
-{
-    mf->GetTranslator()->ZoomOut();
-    mf->updateMap();
-}
-
-void mapview::layerListChanged(QListWidgetItem *item)
-{
-    LayerListItem *listItem = static_cast<LayerListItem *>(item);
-    if(listItem) {
-        if(listItem->checkState() == Qt::Unchecked && listItem->getLayer() && listItem->getLayer()->isVisible()) {
-            listItem->getLayer()->setVisible(false);
-            mf->updateMap();
-        }
-        else if(listItem->checkState() == Qt::Checked && listItem->getLayer() && !listItem->getLayer()->isVisible()) {
-            listItem->getLayer()->setVisible(true);
-            mf->updateMap();
-        }
-    }
-}
-
-void mapview::layerListSelected()
-{
-    if(this->layerList->currentItem())
-    {
-        actionAddPoint->setEnabled(true);
-    }
-}
-
-void mapview::shapeInfo()
-{
-    if(!actionShapeInfo->isChecked()) {
-        mf->setState(MapFrame::MapStateMove);
-        mf->setCursor(Qt::ArrowCursor);
-    } else {
-        mf->setState(MapFrame::MapStateFixed);
-        mf->setCursor(Qt::WhatsThisCursor);
-    }
-}
-
-void mapview::enableToolBar()
-{
-        toolBar->setEnabled(true);
-        statusBar->show();
-        statusBar->setEnabled(true);
-}
-void mapview::disableToolBar()
-{
-        toolBar->setEnabled(false);
-        statusBar->show();
-        statusBar->setEnabled(false);
-
-}
-
-void mapview::layerPropertiesChanged(QListWidgetItem *item)
-{
-
-    LayerListItem *listItem = static_cast<LayerListItem *>(item);
-
-    if(listItem) {
-        LayerProperties *properties = new LayerProperties();
-        properties->show();
-    }
-
+    QPainterPath rectPath;
+        rectPath.moveTo(a, b);
+        rectPath.lineTo(c, b);
+        rectPath.lineTo(c, d);
+        rectPath.lineTo(a, d);
+        rectPath.closeSubpath();
+    return rectPath;
 }

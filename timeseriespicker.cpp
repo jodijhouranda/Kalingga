@@ -1,6 +1,7 @@
 #include "timeseriespicker.h"
 #include "ui_timeseriespicker.h"
 #include <QDebug>
+#include <QMessageBox>
 TimeSeriesPicker::TimeSeriesPicker(VariableView* vv ,RInside &rconn,int type,QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TimeSeriesPicker),
@@ -21,6 +22,20 @@ TimeSeriesPicker::~TimeSeriesPicker()
 
 void TimeSeriesPicker::on_buttonBox_accepted()
 {
+    QStringList id;
+    Rcpp::CharacterVector vec = vv->getCharacterVector(vv->getVariableIndex(ui->comboBoxVariableID->currentText()));
+    for (int i = 0; i < vec.length(); ++i) {
+        id << QString::fromUtf8(vec[i]);
+    }
+    id.removeDuplicates();
+    if (id.length() != vec.length()) {
+        QMessageBox::information(this,"Non ID Variable Selected","Please Choose unique variable for ID");
+        return;
+    }
+    if (ui->listWidgetTimes->selectedItems().length() < 2) {
+        QMessageBox::information(this,"No Selected time","Please Choose at least two time");
+        return;
+    }
     QStringList timeList;
     for (int i = 0; i < ui->listWidgetTimes->count(); ++i) {
         if (ui->listWidgetTimes->item(i)->isSelected()) {

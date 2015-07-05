@@ -45,6 +45,16 @@ QSimpleSpatial::ShapeTypes Feature::ShapeType()
     return p_shapeType;
 }
 
+void Feature::setIdFeature(int id)
+{
+    idFeature = id;
+}
+
+int Feature::getIdFeature()
+{
+    return idFeature;
+}
+
 void Feature::AddField(const QString &name, const QString &value)
 {
     p_fields[name] = value;

@@ -8,7 +8,7 @@ ResultView::ResultView(QWidget* parent)
 {
     QSplitter* splitter = new QSplitter(this);
     splitter->setObjectName(QString::fromUtf8("splitter"));
-    splitter->setGeometry(QRect(0, 0, 1365,620));
+    splitter->setGeometry(QRect(0, 0, 1365,685));
     splitter->setOrientation(Qt::Horizontal);
     splitter->setHandleWidth(3);
     tree  = new QTreeWidget(this);

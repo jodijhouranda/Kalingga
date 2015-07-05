@@ -31,14 +31,16 @@
 #include "mapreader.h"
 #include "shapeglobal.h"
 
+class VariableView;
 
 class ShapeMapReader : public MapReader
 {
     Q_OBJECT
 public:
-    explicit ShapeMapReader(QObject *parent = 0);
+    explicit ShapeMapReader(VariableView *vv, QObject *parent = 0);
     Layer *ReadFile(QString path, Projection *projection);
     ShapeFileHeader fileHeader;
+    VariableView *vv;
 signals:
     
 public slots:

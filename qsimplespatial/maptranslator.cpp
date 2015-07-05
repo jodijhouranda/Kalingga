@@ -27,6 +27,8 @@
 
 #include "maptranslator.h"
 
+#include <QDebug>
+
 MapTranslator::MapTranslator()
 {
     border = 20.0;
@@ -124,7 +126,7 @@ double MapTranslator::YPixel2MapCoord(double Y)
 
 void MapTranslator::ZoomIn()
 {
-    p_currentExtent.Decrease(zoomFactor);
+    p_currentExtent.Decrease(zoomFactor); //fungsi ini untuk memperkecil jarak x 2 kalinya
     p_zoom = (p_currentExtent.GetWidth()) / (p_baseExtent.GetWidth());
     p_labelRegion = QRegion();
     updateSize();
@@ -132,7 +134,7 @@ void MapTranslator::ZoomIn()
 
 void MapTranslator::ZoomOut()
 {
-    p_currentExtent.Increase(zoomFactor);
+    p_currentExtent.Increase(zoomFactor); //fungsi ini untuk memperbesar jarak x 2 kalinya
     p_zoom = (p_currentExtent.GetWidth()) / (p_baseExtent.GetWidth());
     p_labelRegion = QRegion();
     updateSize();
@@ -158,8 +160,8 @@ void MapTranslator::ZoomTo(double zoom)
     this->p_zoom = zoom;
     p_labelRegion = QRegion();
     updateSize();
-}
 
+}
 void MapTranslator::updateSize()
 {
 
@@ -180,6 +182,13 @@ void MapTranslator::updateSize()
     p_frameCenter.Y = frameHeight / 2;
     p_viewport = QSimpleSpatial::Extent(Screen2Coord(0,frameHeight),
                                       Screen2Coord(frameWidth,0));
+    qDebug() << QString("mapwidth %1").arg(mapWidth);
+    qDebug() << QString("mapheigh %1").arg(mapHeight);
+    qDebug() << QString("map_center.x %1").arg(p_mapCenter.X);
+    qDebug() << QString("map_center.y %1").arg(p_mapCenter.Y);
+    qDebug() << QString("framecenter.x %1").arg(p_frameCenter.X);
+    qDebug() << QString("framecenter.y %1").arg(p_frameCenter.Y);
+    qDebug() << QString("factor %1").arg(factor);
 }
 
 void MapTranslator::moveBy(double X, double Y)

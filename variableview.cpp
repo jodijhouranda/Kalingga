@@ -1,6 +1,5 @@
 #include "variableview.h"
 #include <QDebug>
-
 VariableView::VariableView(Rcpp::DataFrame frame,RInside &rconn, QWidget *parent):
     frame(frame),
     rconn(rconn)
@@ -9,29 +8,28 @@ VariableView::VariableView(Rcpp::DataFrame frame,RInside &rconn, QWidget *parent
     table = ss->getSpreadsheetTable();
     getVariabelAttribute();
     ss->dataFrameIterator(variabelTable);
-
     connect(variabelTable , SIGNAL(itemEntered(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
 
 }
 
-VariableView::VariableView(QDbf::QDbfTableModel* tableModel ,RInside &rconn, QWidget *parent):
-tableModel(tableModel),
-rconn(rconn)
-{
-    ss = new Spreadsheet(tableModel);
-    table = ss->getSpreadsheetTable();
-    getVariabelAttributeDBF();
-    ss->dbfIterator(variabelTable);
-    setupAlignment();
-    connect(variabelTable , SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
+//VariableView::VariableView(QDbf::QDbfTableModel* tableModel ,RInside &rconn, QWidget *parent):
+//tableModel(tableModel),
+//rconn(rconn)
+//{
+//    ss = new Spreadsheet(tableModel);
+//    table = ss->getSpreadsheetTable();
+//    getVariabelAttributeDBF();
+//    ss->dbfIterator(variabelTable);
+//    setupAlignment();
+//    connect(variabelTable , SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(changeVariableName(QTableWidgetItem*)));
 
-}
+//}
 
 void VariableView::getVariabelAttribute(){
 
 
     variabelTable = new QTableWidget(table->columnCount(), 3, 0);
-    variabelTable->setMaximumSize(1365,620);
+    variabelTable->setMaximumSize(1365,685);
     variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     std::string  headerVariabel[] = {"Variable","Type","Label"};
     //create Header
@@ -66,44 +64,44 @@ void VariableView::getVariabelAttribute(){
 }
 }
 
-void VariableView::getVariabelAttributeDBF(){
+//void VariableView::getVariabelAttributeDBF(){
 
-    variabelTable = new QTableWidget(table->columnCount(), 3, 0);
-    variabelTable->setMinimumSize(1365,620);
-    variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    std::string  headerVariabel[] = {"Variable","Type","Label"};
-    //create Header
-    for (int c = 0; c < variabelTable->columnCount(); ++c) {
-        QString character = QString::fromStdString(headerVariabel[c]);
-        variabelTable->setHorizontalHeaderItem(c, new QTableWidgetItem(character));
-        if (c == 0) {
-            for (int r = 0; r < table->columnCount(); ++r) {
+//    variabelTable = new QTableWidget(table->columnCount(), 3, 0);
+//    variabelTable->setMinimumSize(1365,620);
+//    variabelTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+//    std::string  headerVariabel[] = {"Variable","Type","Label"};
+//    //create Header
+//    for (int c = 0; c < variabelTable->columnCount(); ++c) {
+//        QString character = QString::fromStdString(headerVariabel[c]);
+//        variabelTable->setHorizontalHeaderItem(c, new QTableWidgetItem(character));
+//        if (c == 0) {
+//            for (int r = 0; r < table->columnCount(); ++r) {
 
-                QString x = tableModel->headerData(r,Qt::Horizontal).toString();
-                variabelTable->setItem(r,0,new QTableWidgetItem(x));
-
-
-            }
-        }else if (c == 1) {
-            for (int c = 0; c < variabelTable->rowCount(); ++c) {
-
-                QString dataType = checkVariableTypeDbf(c);
-                QTableWidgetItem* item = new QTableWidgetItem(dataType);
-                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                variabelTable->setItem(c,1,item );
-
-            }
-        }
-        else if(c==2) {
-            for (int r = 0; r < table->columnCount(); ++r) {
-                variabelTable->setItem(r,2,new QTableWidgetItem());
-            }
-        }
+//                QString x = tableModel->headerData(r,Qt::Horizontal).toString();
+//                variabelTable->setItem(r,0,new QTableWidgetItem(x));
 
 
+//            }
+//        }else if (c == 1) {
+//            for (int c = 0; c < variabelTable->rowCount(); ++c) {
 
-}
-}
+//                QString dataType = checkVariableTypeDbf(c);
+//                QTableWidgetItem* item = new QTableWidgetItem(dataType);
+//                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+//                variabelTable->setItem(c,1,item );
+
+//            }
+//        }
+//        else if(c==2) {
+//            for (int r = 0; r < table->columnCount(); ++r) {
+//                variabelTable->setItem(r,2,new QTableWidgetItem());
+//            }
+//        }
+
+
+
+//}
+//}
 
 QString VariableView::checkVariableType(int column){
       //check if string real
@@ -164,68 +162,69 @@ case 2:
 }
 
 }
-QString VariableView::checkVariableTypeDbf(int column){
-      //check if string real
-    QRegExp re("[+-]?\\d*\\.?\\d+");
-    if (!re.exactMatch(tableModel->index(0,column).data().toString()) && tableModel->index(0,column).data().toString().trimmed().length()>0)
-        return "String";
 
-    bool validate;
-    int lastIndex = 0;
-    int result = 0;
-    for (int i = 0; i < tableModel->rowCount(); ++i) {
-        lastIndex = i;
-        QString string = tableModel->index(i,column).data().toString();
-        if (string.trimmed().length()<=0) continue;
-        string.toInt(&validate);
+//QString VariableView::checkVariableTypeDbf(int column){
+//      //check if string real
+//    QRegExp re("[+-]?\\d*\\.?\\d+");
+//    if (!re.exactMatch(tableModel->index(0,column).data().toString()) && tableModel->index(0,column).data().toString().trimmed().length()>0)
+//        return "String";
 
-        if(validate == false){
-            if (!re.exactMatch(string))
-                return "String";
+//    bool validate;
+//    int lastIndex = 0;
+//    int result = 0;
+//    for (int i = 0; i < tableModel->rowCount(); ++i) {
+//        lastIndex = i;
+//        QString string = tableModel->index(i,column).data().toString();
+//        if (string.trimmed().length()<=0) continue;
+//        string.toInt(&validate);
 
-            lastIndex = i;
-            break;
-        }
+//        if(validate == false){
+//            if (!re.exactMatch(string))
+//                return "String";
 
-
-        result = 1;
-    }
-    if (lastIndex+1 != tableModel->rowCount()) {
-        for (int j = lastIndex; j < tableModel->rowCount(); ++j) {
-            QString string = tableModel->index(j,column).data().toString();
-            if (string.trimmed().length()<=0) continue;
-            string.toDouble(&validate);
-            if(validate == false){
-
-                if (!re.exactMatch(string))
-                    return "String";
-                break;
-            }
-
-        result = 2;
-        }
-
-    }
-
-    switch (result) {
-
-    case 0:
-            return "String";
-            break;
-    case 1:
-        return "Integer";
-        break;
-    case 2:
-        return "Real";
-        break;
-}
+//            lastIndex = i;
+//            break;
+//        }
 
 
-    return "String";
-}
+//        result = 1;
+//    }
+//    if (lastIndex+1 != tableModel->rowCount()) {
+//        for (int j = lastIndex; j < tableModel->rowCount(); ++j) {
+//            QString string = tableModel->index(j,column).data().toString();
+//            if (string.trimmed().length()<=0) continue;
+//            string.toDouble(&validate);
+//            if(validate == false){
+
+//                if (!re.exactMatch(string))
+//                    return "String";
+//                break;
+//            }
+
+//        result = 2;
+//        }
+
+//    }
+
+//    switch (result) {
+
+//    case 0:
+//            return "String";
+//            break;
+//    case 1:
+//        return "Integer";
+//        break;
+//    case 2:
+//        return "Real";
+//        break;
+//}
+//    return "String";
+//}
+
 QTableWidget* VariableView::getVariabelViewTable(){
     return variabelTable;
 }
+
 QTableWidget* VariableView::getSpreadsheetTable(){
     return table;
 }

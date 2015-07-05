@@ -16,7 +16,10 @@
 #include <mergedatatable.h>
 #include <timeseriespicker.h>
 #include <plugindialog.h>
-mapview* mview;
+#include <mapoption.h>
+#include <mapvariablechooser.h>
+#include <mapvariabletypechooser.h>
+
 ResultView* MainWindow::result;
 QMenu* MainWindow::analysisMenu;
 QStackedWidget* MainWindow::centralView;
@@ -43,17 +46,16 @@ MainWindow::MainWindow(RInside & R , QWidget *parent ) : QMainWindow(parent) ,Rc
 //Mainwindow basic settings
 void MainWindow::setupWindowsSetting(){
  //set fullscreen window
- this->showMaximized();
+    Rcon.parseEvalQ("library(foreign)");
+    this->showMaximized();
     createAction();
     setupMenuBar();
 
     centralView = new QStackedWidget(this);
 
-    mview = new mapview(this,0,centralView);
-    mview->disableToolBar();
+    mview = new MapView();
     centralView->addWidget(mview);
     setCentralWidget(centralView);
-    Rcon.parseEvalQ("library(foreign)");
 }
 
 void MainWindow::createAction(){
@@ -118,6 +120,33 @@ void MainWindow::createAction(){
 
     createTimeSeries = new QAction(tr("Time Series Plot"),this);
     connect(createTimeSeries , SIGNAL(triggered()),this,SLOT(openTimeSeriesCreator()));
+
+
+    //map menu create Action
+    createQuantileMap = new QAction(tr("Quantile Map"),this);
+    connect(createQuantileMap, SIGNAL(triggered()),this,SLOT(openQuantileMapCreator()));
+
+    createPercentilMap = new QAction(tr("Percentil Map"),this);
+    connect(createPercentilMap, SIGNAL(triggered()),this,SLOT(openPercentilMapCreator()));
+
+    createBoxMap = new QAction(tr("Box Map"),this);
+    connect(createBoxMap, SIGNAL(triggered()),this,SLOT(openBoxMapCreator()));
+
+    createStandarDeviationMap = new QAction(tr("Standar Deviation Map"),this);
+    connect(createStandarDeviationMap, SIGNAL(triggered()),this,SLOT(openStandarDeviationMapCreator()));
+
+    createUniqueValueMap = new QAction(tr("Unique Values Map"),this);
+    connect(createUniqueValueMap, SIGNAL(triggered()),this,SLOT(openUniqueValueMapCreator()));
+
+    createNaturalBreaksMap = new QAction(tr("Natural Breaks Map"),this);
+    connect(createNaturalBreaksMap, SIGNAL(triggered()),this,SLOT(openNaturalBreaksMapCreator()));
+
+    createEqualIntervalsMap =  new QAction(tr("Equal Intervals Map"),this);
+    connect(createEqualIntervalsMap, SIGNAL(triggered()),this,SLOT(openEqualIntervalsCreator()));
+
+    chooseOption = new QAction(tr("Option ..."),this);
+    connect(chooseOption, SIGNAL(triggered()),this,SLOT(openOptionChooser()));
+
     //plugin menu create Action
     createPluginDialog = new QAction(tr("Add Plugin..."),this);
     connect(createPluginDialog , SIGNAL(triggered()),this,SLOT(openPluginDialog()));
@@ -132,6 +161,7 @@ attributeMenu = menuBar()->addMenu(tr("&Attribute"));
 QMenu* explore = new QMenu(tr("Explore"));
 
 mapMenu = menuBar()->addMenu(tr("&Map"));
+QMenu* tematik = new QMenu(tr("Tematik"));
 toolsMenu = menuBar()->addMenu(tr("&Tools"));
 analysisMenu = menuBar()->addMenu(tr("&Analysis"));
 pluginMenu = menuBar()->addMenu(tr("&Plugin"));
@@ -179,6 +209,16 @@ explore->addAction(createScatter);
 explore->addAction(createBoxplot);
 explore->addAction(createParallel);
 explore->addAction(createTimeSeries);
+//map menu child
+mapMenu->addMenu(tematik);
+tematik->addAction(createQuantileMap);
+tematik->addAction(createPercentilMap);
+tematik->addAction(createBoxMap);
+tematik->addAction(createStandarDeviationMap);
+tematik->addAction(createUniqueValueMap);
+tematik->addAction(createNaturalBreaksMap);
+tematik->addAction(createEqualIntervalsMap);
+mapMenu->addAction(chooseOption);
 //plugin menu definition
 pluginMenu->addAction(createPluginDialog);
 }
@@ -188,26 +228,22 @@ pluginMenu->addAction(createPluginDialog);
 void MainWindow::openDataView(){
     centralView->setCurrentIndex(1);
     setWindowTitle("KalinggaSoft : Data View");
-    mview->disableToolBar();
 
 }
 
 void MainWindow::openVariableView(){
     centralView->setCurrentIndex(2);
     setWindowTitle("KalinggaSoft : Variable View");
-    mview->disableToolBar();
 }
 
 void MainWindow::openMapView(){
     centralView->setCurrentIndex(0);
     setWindowTitle("KalinggaSoft : Map View");
-    mview->enableToolBar();
 }
 
 void MainWindow::openResultView(){
     centralView->setCurrentIndex(3);
     setWindowTitle("KalinggaSoft : Result View");
-    mview->disableToolBar();
 }
 
 //All File dan data Slots
@@ -246,9 +282,10 @@ void MainWindow::openSHPSlot(){
     vv->setShapePath(shpPath);
     centralView->addWidget(vv->getSpreadsheetTable());
     centralView->addWidget(vv->getVariabelViewTable());
-    mview->openShapeFile(shpPath);
+    mview->setVariableView(vv);
+    mview->openShapeFile(shpPath,vv);
+
     openMapView();
-    mview->enableToolBar();
 
     centralView->addWidget(result);
     updateViewMenu();
@@ -375,6 +412,57 @@ void MainWindow::openTimeSeriesCreator(){
     TimeSeriesPicker* dialog = new TimeSeriesPicker(vv,Rcon,0,this);
     dialog->show();
 }
+
+//inisialisasi slot map menu
+
+void MainWindow::openQuantileMapCreator()
+{
+    MapVariableTypeChooser* dialog =  new MapVariableTypeChooser(mview,vv,Rcon,MapVariableTypeChooser::QUANTILE,this);
+    dialog->show();
+}
+
+void MainWindow::openPercentilMapCreator()
+{
+    MapVariableChooser* dialog = new MapVariableChooser(mview,vv,Rcon,MapVariableChooser::PERCENTIL,this);
+    dialog->show();
+}
+
+void MainWindow::openBoxMapCreator()
+{
+    MapVariableChooser* dialog = new MapVariableChooser(mview,vv,Rcon,MapVariableChooser::BOXMAP,this);
+    dialog->show();
+}
+
+void MainWindow::openStandarDeviationMapCreator()
+{
+    MapVariableChooser* dialog = new MapVariableChooser(mview,vv,Rcon,MapVariableChooser::STANDARDEVIATION,this);
+    dialog->show();
+}
+
+void MainWindow::openUniqueValueMapCreator()
+{
+    MapVariableChooser* dialog = new MapVariableChooser(mview,vv,Rcon,MapVariableChooser::UNIQUEVALUE,this);
+    dialog->show();
+}
+
+void MainWindow::openNaturalBreaksMapCreator()
+{
+    MapVariableTypeChooser* dialog =  new MapVariableTypeChooser(mview,vv,Rcon,MapVariableTypeChooser::NATURALBREAKS,this);
+    dialog->show();
+}
+
+void MainWindow::openEqualIntervalsCreator()
+{
+    MapVariableTypeChooser* dialog =  new MapVariableTypeChooser(mview,vv,Rcon,MapVariableTypeChooser::EQUALINTERVALS,this);
+    dialog->show();
+}
+
+void MainWindow::openOptionChooser()
+{
+    MapOption* dialog = new MapOption(mview,vv);
+    dialog->show();
+}
+
 //open random sample generator dialog
 void MainWindow::openRandomSampleGenerator(){
 RandomSampleGenarator* dialog = new RandomSampleGenarator(vv,Rcon,this);

@@ -58,6 +58,9 @@ public:
     virtual ~Feature(){}
     QSimpleSpatial::ShapeTypes ShapeType();
 
+    void setIdFeature(int id);
+    int getIdFeature();
+
     QString &GetFieldValue(const QString &name);
 
     void AddField(const QString &name, const QString &value);
@@ -89,6 +92,7 @@ public:
 protected:
     QSimpleSpatial::SimplePoint p_center;
     QSimpleSpatial::Extent p_extent;
+    int idFeature;
     DataFields p_fields;
     LabelScheme *p_labelScheme;
     Layer *p_layer;

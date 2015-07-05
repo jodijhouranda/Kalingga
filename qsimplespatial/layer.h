@@ -36,6 +36,7 @@
 #include <QList>
 #include <QPixmap>
 
+
 typedef QList<Feature *> Features;
 
 class Layer : public QObject
@@ -61,6 +62,9 @@ public:
     QString getName() const;
     void setName(const QString &name);
 
+    QString getSource() const;
+    void setSource(const QString &source);
+
     void SetExtent(const QSimpleSpatial::Extent &extent);
     QSimpleSpatial::Extent GetExtent();
 
@@ -76,14 +80,18 @@ public:
     void SetMinZoomFilter(double (*min_zoom_filter_func)(Feature *));
     void SetMaxZoomFilter(double (*max_zoom_filter_func)(Feature *));
 
-    void Draw(MapTranslator *renderer, QPainter *painter);
-    void DrawLabel(MapTranslator *renderer, QPainter *painter);
+    void DrawItemRegion(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsPolygonItem*> *itemRegion);
+    void DrawItemLine(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsLineItem*> *itemLine);
+    void DrawItemPoint(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsPointItem*> *itemPoint);
+    void DrawLabel(MapTranslator *renderer, QPainter *painter, QList<MapGraphicsLabelItem*> *itemLabel);
+
 
 private:
     bool p_visible;
     bool p_isDirtyFeature;
     bool p_isDirtyLabel;
     QString p_name;
+    QString p_source;
     QList<Feature *> p_list;
     QList<PaintScheme *> p_schemes;
     QList<LabelScheme *> p_labelSchemes;

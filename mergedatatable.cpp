@@ -55,10 +55,10 @@ void MergeDataTable::openDBFSlot(){
         QMessageBox::information(this,"Error opening shapefile" ,"dbf file not found");
         return;
     }
-
-   QDbf::QDbfTableModel *const tableModel = new QDbf::QDbfTableModel();
-   tableModel->open(dbfPath);
-   vvImport = new VariableView(tableModel,rconn);
+    rconn.parseEvalQ("library(foreign)");
+    QString cmd = QString("read.dbf(\"%1\")").arg(dbfPath);
+    Rcpp::DataFrame data = rconn.parseEval(cmd.toStdString());
+   vvImport = new VariableView(data,rconn);
    setImportContent();
     ui->lineEditSource->setText(dbfPath);
 }

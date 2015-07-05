@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/MyFiles">
+        <file>color-breawer.csv</file>
+    </qresource>
+</RCC>
