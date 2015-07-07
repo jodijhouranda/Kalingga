@@ -22,8 +22,8 @@ public:
     explicit MainWindow(RInside & R,QWidget *parent = 0);
     RInside& Rcon;
 static ResultView* result;
-
-
+static QStackedWidget* centralView;
+static QAction* resultViewAct;
 static void enableResultView();
 static void addAnalysisMenu(QString tittle);
 private slots:
@@ -129,8 +129,7 @@ private:
     QAction* mapViewAct;
     QAction* dataViewAct;
     QAction* variableViewAct;
-    static QStackedWidget* centralView;
-    static QAction* resultViewAct;
+
 
 };
 

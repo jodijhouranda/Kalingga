@@ -16,10 +16,10 @@ MapItemColorGraphicsView::MapItemColorGraphicsView(MapView* mviewResult, QList<Q
 
 void MapItemColorGraphicsView::initializedPickColorScheme()
 {
-    // 0 = sudah ditentukan jumlah cluster (diverging)
-    // 1 = untuk map unique value
-    // >1 = untuk clustering map umum
-    // <0 = untuk custom
+    // 0 = number of cluster have determined (diverging)
+    // 1 = for map unique value
+    // >1 = for general clustering map
+    // <0 = for custom map
 
     scene =  new QGraphicsScene();
     MapColorReader *color = new MapColorReader();
@@ -36,9 +36,12 @@ void MapItemColorGraphicsView::initializedPickColorScheme()
     }
 
     int range=0;
-    for(QList<QGraphicsItem*>::iterator it = scene->items().begin(); it != scene->items().end(); it++)
+
+    QList<QGraphicsItem*> it = scene->items();
+
+    for(int i=0; i<it.size(); i++)
     {
-        (*it)->setPos(QPointF(-80 + range, -60));
+        it.value(i)->setPos(QPointF(-80 + range, -60));
         range += 20;
     }
     this->setScene(scene);

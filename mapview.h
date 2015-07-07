@@ -93,7 +93,7 @@ public:
     QList<MapGraphicsPolygonItem*>* getItemRegion();
     void filterItem(QList<int> listRegion, QColor color);
     void drawRelation(QString field, QString region1, QString region2);
-    QTableWidget *getTableLatLon();
+    void setTableLatLon();
 
 public slots:
     void zoomIn(int level = 1);
@@ -133,6 +133,7 @@ private:
     QString path;
     QWidget *configMap;
     qreal scale;
+    QList<int> sign;
 
     QList<MapGraphicsPolygonItem*> itemRegion;
     QList<MapGraphicsLineItem*> itemLine;

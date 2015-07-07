@@ -1,12 +1,12 @@
 #ifndef RESULTVIEW_H
 #define RESULTVIEW_H
-#include <resultviewitem.h>
-#include<QWidget>
-#include<QTreeWidget>
-#include<variableview.h>
+#include "resultviewitem.h"
+#include <QWidget>
+#include <QTreeWidget>
+#include "variableview.h"
 #include <QStackedWidget>
 #include <QMap>
-#include <resultindex.h>
+
 
 class ResultView : public QWidget
 {
@@ -17,6 +17,7 @@ public:
 
     ~ResultView();
     void setResultViewItem(ResultViewItem* item);
+
 private:
     QTreeWidget* tree;
     QStackedWidget* stackedWidget;
@@ -29,6 +30,7 @@ private slots :
    void changeStacketWidget(QTreeWidgetItem* item ,int col);
    void onCustomContextMenuRequested(const QPoint& pos);
    void closeWidget();
+
 };
 
 #endif // RESULTVIEW_H

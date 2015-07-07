@@ -8,12 +8,12 @@ QT_END_NAMESPACE
 class PluginInterfaces
 {
 public:
-    virtual ~PluginInterfaces(){};
+    virtual ~PluginInterfaces(){}
 
-    virtual QString setPluginTittle() const = 0;
+    virtual QString getPluginTittle() const = 0;
 
 };
 Q_DECLARE_INTERFACE(PluginInterfaces,
-                    "com.kalinggasoft-Inc.kalinggasoft.PluginInterface/1.0")
+                    "com.kalinggasoft-Inc.KalinggaSoft.PluginInterfaces/2.0")
 
 #endif // PLUGININTERFACES_H

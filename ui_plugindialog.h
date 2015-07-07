@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'plugindialog.ui'
 **
-** Created: Wed Jun 10 21:55:39 2015
+** Created: Tue Jul 7 23:10:44 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -17,7 +17,9 @@
 #include <QtGui/QDialog>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
 #include <QtGui/QListWidget>
+#include <QtGui/QPushButton>
 
 QT_BEGIN_NAMESPACE
 
@@ -26,6 +28,8 @@ class Ui_PluginDialog
 public:
     QListWidget *listWidget;
     QLabel *label;
+    QLineEdit *lineEdit;
+    QPushButton *pushButton;
 
     void setupUi(QDialog *PluginDialog)
     {
@@ -34,10 +38,16 @@ public:
         PluginDialog->resize(341, 396);
         listWidget = new QListWidget(PluginDialog);
         listWidget->setObjectName(QString::fromUtf8("listWidget"));
-        listWidget->setGeometry(QRect(10, 30, 321, 351));
+        listWidget->setGeometry(QRect(10, 60, 321, 321));
         label = new QLabel(PluginDialog);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(10, 10, 47, 13));
+        label->setGeometry(QRect(10, 40, 47, 13));
+        lineEdit = new QLineEdit(PluginDialog);
+        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        lineEdit->setGeometry(QRect(10, 10, 251, 20));
+        pushButton = new QPushButton(PluginDialog);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setGeometry(QRect(270, 10, 61, 23));
 
         retranslateUi(PluginDialog);
 
@@ -48,6 +58,7 @@ public:
     {
         PluginDialog->setWindowTitle(QApplication::translate("PluginDialog", "Dialog", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("PluginDialog", "Plugin", 0, QApplication::UnicodeUTF8));
+        pushButton->setText(QApplication::translate("PluginDialog", "Add", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

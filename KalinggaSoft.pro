@@ -103,7 +103,6 @@ HEADERS  += \
     descriptivestat.h \
     mergedatatable.h \
     duplicatevariablledialog.h \
-    plugininterfaces.h \
     plugindialog.h \
     timeseriespicker.h \
     labelscheme.h \
@@ -144,7 +143,9 @@ HEADERS  += \
     ui_mapoptionstyle.h \
     ui_maptematikconfig.h \
     ui_mapvariablechooser.h \
-    ui_mapvariabletypechooser.h
+    ui_mapvariabletypechooser.h \
+    interfaces.h \
+    includes.h
 
 
 FORMS    += \
@@ -191,7 +192,10 @@ DISTFILES += \
     images/zoomin.png \
     images/zoomout.png \
     images/arrow.png \
-    color-breawer.csv
+    images/analysis.png \
+    images/tools.png \
+    color-breawer.csv \
+
 
 DESTDIR = $$PWD
 
@@ -235,3 +239,8 @@ QMAKE_CLEAN +=		mainwindow.cpp Makefile
 
 RESOURCES += \
     myfiles.qrc
+
+
+
+
+

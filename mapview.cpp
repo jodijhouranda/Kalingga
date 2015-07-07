@@ -327,6 +327,7 @@ void MapView::openShapeFile(QString shpPath, VariableView *vv)
 //        drawRelation("DESA", "MENTENG", "CIKINI");
 //        drawRelation("DESA", "MENTENG", "GONDANGDIA");
 //        drawRelation("DESA", "KEBON SIRIH", "GONDANGDIA");
+//        drawRelation("DESA", "GONDANGDIA", "KEBON SIRIH");
 
 //            int a = 0;
 //            int b = 3;
@@ -381,37 +382,51 @@ void MapView::drawRelation(QString field, QString region1, QString region2)
 
     int idRegion1 = getId(field, region1);
     int idRegion2 = getId(field, region2);
+    bool poin1 = false;
+    bool poin2 = false;
 
     foreach(Layer *layer, this->GetLayers()) {
         if(layer->isVisible()) {
             foreach(Feature *feature, layer->getFeatures()) {
-                //QString &type = feature->GetFieldValue(field);
-                //    if(type == "town")
                 int idFeature = feature->getIdFeature();
                 if(idFeature == idRegion1) {
                     mapPointReg1 = this->GetTranslator()->Coord2Screen(feature->getCenter());
                     pointRegion1.setX(mapPointReg1.X);
                     pointRegion1.setY(mapPointReg1.Y);
+
+                    if(!sign.contains(idFeature)){
+                        scene->addEllipse(pointRegion1.x()-size,pointRegion1.y()-size,2*size,2*size,QPen(Qt::black),QBrush(Qt::red))->setZValue(1);
+                        sign.append(idFeature);
+                        poin1 = true;
+                    }
                 }else if(idFeature == idRegion2){
                     mapPointReg2 = this->GetTranslator()->Coord2Screen(feature->getCenter());
                     pointRegion2.setX(mapPointReg2.X);
                     pointRegion2.setY(mapPointReg2.Y);
+
+                    if(!sign.contains(idFeature)){
+                        scene->addEllipse(pointRegion2.x()-size,pointRegion2.y()-size,2*size,2*size,QPen(Qt::black),QBrush(Qt::red))->setZValue(1);
+                        sign.append(idFeature);
+                        poin2 = true;
+                    }
                 }
             }
         }
     }
-    scene->addEllipse(pointRegion1.x()-size,pointRegion1.y()-size,2*size,2*size,QPen(Qt::black),QBrush(Qt::red));
-    scene->addEllipse(pointRegion2.x()-size,pointRegion2.y()-size,2*size,2*size,QPen(Qt::black),QBrush(Qt::red));\
+
     scene->addLine(pointRegion1.x(),pointRegion1.y(),pointRegion2.x(),pointRegion2.y(),QPen(Qt::green));
+
 }
 
-QTableWidget *MapView::getTableLatLon()
+void MapView::setTableLatLon()
 {
-    QTableWidget *tablewidget = vv->getSpreadsheetTable();
     Projection_WGS84_WorldMercator *p = new Projection_WGS84_WorldMercator;
-    QTableWidget *tableLatLong = new QTableWidget(vv->getRowCount(), 3);
     QSimpleSpatial::SimplePoint centroid;
     QSimpleSpatial::SimplePoint latlonCoor;
+    QList<double> lat;
+    QList<double> lon;
+    Rcpp::NumericVector latitude;
+    Rcpp::NumericVector longitude;
 
     foreach(Layer *layer, this->GetLayers()) {
         if(layer->isVisible()) {
@@ -421,26 +436,20 @@ QTableWidget *MapView::getTableLatLon()
                 centroid = feature->getCenter();
                 latlonCoor = p->toGeodetic(centroid.X,centroid.Y);
 
-                QTableWidgetItem *idFeature = new QTableWidgetItem(QString("%0").arg(tablewidget->verticalHeaderItem(i)->text()));
-                tableLatLong->setItem(i,0,idFeature);
+                lat.append(latlonCoor.X);
+                lon.append(latlonCoor.Y);
 
-                QTableWidgetItem *latitude = new QTableWidgetItem(QString("%0").arg(latlonCoor.X));
-                tableLatLong->setItem(i,1,latitude);
-
-                QTableWidgetItem *longitude = new QTableWidgetItem(QString("%0").arg(latlonCoor.Y));
-                tableLatLong->setItem(i,2,longitude);
                 i++;
-
             }
         }
-
     }
 
-    QStringList label;
-    label << "ID" << "Latitude" << "Longitude";
-    tableLatLong->setHorizontalHeaderLabels(label);
-
-    return tableLatLong;
+    latitude = lat;
+    longitude = lon;
+    vv->createNewVariable("LONGITUDE", "Integer", "Longitude", 0);
+    vv->createNewVariable("LATITUDE", "Integer", "Latitude", 0);
+    vv->setNumericVariable("LATITUDE",latitude);
+    vv->setNumericVariable("LONGITUDE",longitude);
 }
 
 

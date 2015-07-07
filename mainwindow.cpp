@@ -7,7 +7,6 @@
 #include <mapview.h>
 #include <QDebug>
 #include <QMessageBox>
-#include <qdbftablemodel.h>
 #include <QPointer>
 #include <parallechart.h>
 #include <QPushButton>
@@ -148,7 +147,7 @@ void MainWindow::createAction(){
     connect(chooseOption, SIGNAL(triggered()),this,SLOT(openOptionChooser()));
 
     //plugin menu create Action
-    createPluginDialog = new QAction(tr("Add Plugin..."),this);
+    createPluginDialog = new QAction(tr("Plugin Manager"),this);
     connect(createPluginDialog , SIGNAL(triggered()),this,SLOT(openPluginDialog()));
 
 }
@@ -471,7 +470,7 @@ dialog->show();
 
 
 void MainWindow::openPluginDialog(){
-    PluginDialog* dialog = new PluginDialog(this);
+    PluginDialog* dialog = new PluginDialog(vv,result,Rcon,analysisMenu,toolsMenu,this);
     dialog->show();
 }
 
@@ -499,6 +498,8 @@ void MainWindow::setMenubarVisible(bool x){
         saveData->setEnabled(true);
         saveDataAs->setEnabled(true);
         closer= true;
+        PluginDialog* dialog = new PluginDialog(vv,result,Rcon,analysisMenu,toolsMenu,this);
+        dialog->loadPlugins();
     } else {
         viewMenu->menuAction()->setVisible(false);
         attributeMenu->menuAction()->setVisible(false);

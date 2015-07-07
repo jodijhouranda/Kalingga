@@ -40,7 +40,7 @@ void MapFitureInfo::createDialog()
     for( int r=0; r<itemClick; r++ )
       {
             QStandardItem *fiture = new QStandardItem( QString("%0 (%1)").arg(tablewidget->horizontalHeaderItem(1)->text())
-                                                       .arg(tablewidget->item(itemList.value(r),1)->text()));
+                                                       .arg(tablewidget->item(itemList.value(r)-1,1)->text()));
 
             QStandardItem *form = new QStandardItem( QString("Form") );
             form->setEditable( false );
@@ -57,7 +57,7 @@ void MapFitureInfo::createDialog()
             fiture->appendRow( data );
             for(int i=0; i<fieldCount; i++){
                 QStandardItem *dataFiture = new QStandardItem(QString("%0 : %1").arg(tablewidget->horizontalHeaderItem(i)->text())
-                                                              .arg(tablewidget->item(itemList.value(r),i)->text()));
+                                                              .arg(tablewidget->item(itemList.value(r)-1,i)->text()));
                 dataFiture->setEditable(false);
                 data->appendRow(dataFiture);
             }
