@@ -17,7 +17,7 @@ public:
 
     ~ResultView();
     void setResultViewItem(ResultViewItem* item);
-
+    QStackedWidget* getStackedWidget();
 private:
     QTreeWidget* tree;
     QStackedWidget* stackedWidget;
@@ -26,6 +26,7 @@ private:
     void iterateTreeItems(QStringList listItem, QList<QWidget*> listWidget, QTreeWidgetItem* root);
      QMap <QString ,QWidget*> map;     
      void reindex();
+
 private slots :
    void changeStacketWidget(QTreeWidgetItem* item ,int col);
    void onCustomContextMenuRequested(const QPoint& pos);

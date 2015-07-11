@@ -18,7 +18,10 @@
 #include <mapoption.h>
 #include <mapvariablechooser.h>
 #include <mapvariabletypechooser.h>
+#include <QPrinter>
+#include <QPainter>
 
+#include <QPrintPreviewDialog>
 ResultView* MainWindow::result;
 QMenu* MainWindow::analysisMenu;
 QStackedWidget* MainWindow::centralView;
@@ -76,6 +79,8 @@ void MainWindow::createAction(){
     saveDataAs = new QAction(tr("Save as"),this);
     connect(saveDataAs, SIGNAL(triggered()),this,SLOT(saveDataAsSlot()));
 
+    printPreview = new QAction(tr("Print preview..."),this);
+    connect(printPreview, SIGNAL(triggered()),this,SLOT(openPrintPreview()));
 
     exit = new QAction(tr("Exit"),this);
     connect(exit, SIGNAL(triggered()),this,SLOT(exitSlot()));
@@ -173,6 +178,7 @@ openMenu->addAction(openDBF);
 openMenu->addAction(openCSV);
 fileMenu->addAction(saveData);
 fileMenu->addAction(saveDataAs);
+fileMenu->addAction(printPreview);
 fileMenu->addAction(exit);
 //view menu child
 
@@ -498,8 +504,6 @@ void MainWindow::setMenubarVisible(bool x){
         saveData->setEnabled(true);
         saveDataAs->setEnabled(true);
         closer= true;
-        PluginDialog* dialog = new PluginDialog(vv,result,Rcon,analysisMenu,toolsMenu,this);
-        dialog->loadPlugins();
     } else {
         viewMenu->menuAction()->setVisible(false);
         attributeMenu->menuAction()->setVisible(false);
@@ -539,4 +543,50 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         }
 
     }
+}
+
+void MainWindow::openPrintPreview(){
+    QPrinter printer(QPrinter::PrinterResolution);;
+    printer.setOutputFormat(QPrinter::PdfFormat);
+
+    printer.setPaperSize(QPrinter::A4);
+    printer.setOutputFileName("sample.pdf");
+    printer.setResolution(300);
+    printer.setFullPage(true);
+
+
+
+        QPrintPreviewDialog* ppriview = new QPrintPreviewDialog(&printer);
+        ppriview->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+         connect(ppriview, SIGNAL(paintRequested(QPrinter*)), this, SLOT(print(QPrinter*)));
+        ppriview->setWindowTitle("Preview Dialog");
+        Qt::WindowFlags flags(Qt::WindowTitleHint);
+        ppriview->setWindowFlags(flags);
+        ppriview->exec();
+
+
+}
+
+void MainWindow::print(QPrinter *printer)
+{
+    QPainter painter;
+    painter.begin(printer);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
+
+    QStackedWidget* resultReport = result->getStackedWidget();
+    for (int page = 0; page < resultReport->count(); ++page) {
+
+        QWidget* myWidget = resultReport->widget(page);
+       double printerWidth = printer->pageRect().width();
+                      double  printerHeight = printer->pageRect().height();
+                     double   xscale = printerWidth/(myWidget->width());
+                      double  yscale = printerHeight/(myWidget->height());
+                      double  scale = qMin(xscale, yscale);
+                        painter.scale(scale, scale);
+        myWidget->render(&painter);
+        if (page != resultReport->count()-1)
+        printer->newPage();
+    }
+
+    painter.end();
 }

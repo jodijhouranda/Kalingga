@@ -26,13 +26,16 @@ static QStackedWidget* centralView;
 static QAction* resultViewAct;
 static void enableResultView();
 static void addAnalysisMenu(QString tittle);
+
 private slots:
+void print(QPrinter *printer);
     //slot file menu
     void openCSVSlot();
     void openSHPSlot();
     void openDBFSlot();
     void saveDataAsSlot();
     void saveDataSlot();
+    void openPrintPreview();
     void exitSlot();
     //slot file menu
     void openMergeTable();
@@ -85,6 +88,7 @@ private:
     QAction* openDBF;
     QAction* saveDataAs;
     QAction* saveData;
+    QAction* printPreview;
     QAction* exit;
     //data menu action
     QAction* mergeTable;

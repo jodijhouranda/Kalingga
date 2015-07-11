@@ -25,6 +25,13 @@ private slots:
     void on_pushButton_clicked();
 
     void openPlugin();
+    void on_pushButton_2_clicked();
+
+    void on_listWidget_currentTextChanged(const QString &currentText);
+
+    void on_plug_clicked();
+    void on_listWidget_itemClicked(QListWidgetItem *item);
+
 private:
     Ui::PluginDialog *ui;
     QList<PluginInterfaces*> interfaces;
@@ -35,8 +42,8 @@ private:
     RInside& rconn;
     QMenu* analysis;
     QMenu* tools;
-
-
+    QList<QPluginLoader*> plugloaders;
+    bool copyDir(const QString source, const QString destination, const bool override);
 
 };
 

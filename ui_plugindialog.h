@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'plugindialog.ui'
 **
-** Created: Tue Jul 7 23:10:44 2015
+** Created: Sat Jul 11 16:36:07 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -30,12 +30,14 @@ public:
     QLabel *label;
     QLineEdit *lineEdit;
     QPushButton *pushButton;
+    QPushButton *pushButton_2;
+    QPushButton *plug;
 
     void setupUi(QDialog *PluginDialog)
     {
         if (PluginDialog->objectName().isEmpty())
             PluginDialog->setObjectName(QString::fromUtf8("PluginDialog"));
-        PluginDialog->resize(341, 396);
+        PluginDialog->resize(341, 424);
         listWidget = new QListWidget(PluginDialog);
         listWidget->setObjectName(QString::fromUtf8("listWidget"));
         listWidget->setGeometry(QRect(10, 60, 321, 321));
@@ -48,6 +50,12 @@ public:
         pushButton = new QPushButton(PluginDialog);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setGeometry(QRect(270, 10, 61, 23));
+        pushButton_2 = new QPushButton(PluginDialog);
+        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        pushButton_2->setGeometry(QRect(250, 390, 75, 23));
+        plug = new QPushButton(PluginDialog);
+        plug->setObjectName(QString::fromUtf8("plug"));
+        plug->setGeometry(QRect(170, 390, 75, 23));
 
         retranslateUi(PluginDialog);
 
@@ -59,6 +67,8 @@ public:
         PluginDialog->setWindowTitle(QApplication::translate("PluginDialog", "Dialog", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("PluginDialog", "Plugin", 0, QApplication::UnicodeUTF8));
         pushButton->setText(QApplication::translate("PluginDialog", "Add", 0, QApplication::UnicodeUTF8));
+        pushButton_2->setText(QApplication::translate("PluginDialog", "Unplug", 0, QApplication::UnicodeUTF8));
+        plug->setText(QApplication::translate("PluginDialog", "Plug", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

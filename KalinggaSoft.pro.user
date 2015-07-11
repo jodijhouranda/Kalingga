@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.3.2, 2015-07-07T00:20:10. -->
+<!-- Written by QtCreator 3.3.2, 2015-07-11T15:00:43. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -60,7 +60,7 @@
   <valuemap type="QVariantMap">
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Qt 4.8.1 (4.8.1)</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Qt 4.8.1 (4.8.1)</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{d3eceed2-9cbc-4fd0-93ed-971269258f53}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{9939d2c6-0924-4507-93fd-b9b3ff3c38f6}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
@@ -171,7 +171,7 @@
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">KalinggaSoft</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">KalinggaSoft2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Kalingga-master (1)/Kalingga-master/KalinggaSoft.pro</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">KalinggaSoft.pro</value>

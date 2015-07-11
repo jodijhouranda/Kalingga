@@ -128,3 +128,8 @@ void ResultView::reindex(){
 
 }
 
+
+QStackedWidget* ResultView::getStackedWidget(){
+    return stackedWidget;
+}
+
