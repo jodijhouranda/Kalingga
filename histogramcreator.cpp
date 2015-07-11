@@ -71,6 +71,6 @@ void HistogramCreator::generateHistogram(){
 }
 void HistogramCreator::generateRecode(){
     QString x = ui->listWidgetVariables->currentItem()->text();
-    RecodeVariable* recode = new RecodeVariable(vv,x);
+    RecodeVariable* recode = new RecodeVariable(vv,x,this);
     recode->show();
 }
