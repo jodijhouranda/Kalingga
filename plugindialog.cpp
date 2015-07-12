@@ -112,11 +112,11 @@ void PluginDialog::loadPlugins()
 
 void PluginDialog::on_pushButton_clicked()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                 "/home",
-                                                 QFileDialog::ShowDirsOnly
-                                                 | QFileDialog::DontResolveSymlinks);
+    QString dir = QFileDialog::getOpenFileName(this,"Open",QString(),tr("(*.zip)"));
+
+
     if (dir.length()>0) {
+        ui->lineEdit->setText(dir);
         QDir pluginsDir = QDir(qApp->applicationDirPath());
 
     #if defined(Q_OS_WIN)
@@ -131,11 +131,13 @@ void PluginDialog::on_pushButton_clicked()
     #endif
         pluginsDir.cd("plugins");
         qDebug() << dir;
-        if ( copyDir(dir.replace("\\","/"),pluginsDir.absolutePath(),false)) {
-
+        try {
+            QString cmd = QString("unzip( %1 , %2 )").arg("\""+dir+"\"" ,"exdir =\"" + pluginsDir.absolutePath() +"\"");
+            qDebug() << cmd;
+            rconn.parseEvalQ(cmd.toStdString());
             loadPlugins();
-        }else {
-             QMessageBox::information(this,"Cannot add the plugin","The plugin has been added");
+        } catch (...) {
+            QMessageBox::information(this,"Cannot add pluggin" , "the pluggin has been added");
         }
     }
 
@@ -156,9 +158,9 @@ void PluginDialog::on_pushButton_2_clicked()
         QMessageBox::information(this,"Cannot unplug the plugin","The plugin is not plugged yet");
         return;
     }
- QMessageBox::StandardButton reply;
-reply = QMessageBox::question(this,"Unplug plugin", "Are sure to unplug plugin from KalinggaSoft environment",QMessageBox::Yes|QMessageBox::No);
-if (reply == QMessageBox::Yes) {
+// QMessageBox::StandardButton reply;
+//reply = QMessageBox::question(this,"Unplug plugin", "Are sure to unplug plugin from KalinggaSoft environment",QMessageBox::Yes|QMessageBox::No);
+//if (reply == QMessageBox::Yes) {
 
 QString plugname = ui->listWidget->currentItem()->text();
     ui->listWidget->currentItem()->setBackgroundColor(Qt::white);
@@ -180,9 +182,9 @@ QString plugname = ui->listWidget->currentItem()->text();
 
 
 
-}else {
-    return;
-}
+//}else {
+//    return;
+//}
 ui->plug->setEnabled(true);
 ui->pushButton_2->setEnabled(false);
 }

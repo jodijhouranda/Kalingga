@@ -79,7 +79,7 @@ void MainWindow::createAction(){
     saveDataAs = new QAction(tr("Save as"),this);
     connect(saveDataAs, SIGNAL(triggered()),this,SLOT(saveDataAsSlot()));
 
-    printPreview = new QAction(tr("Print preview..."),this);
+    printPreview = new QAction(tr("Report preview..."),this);
     connect(printPreview, SIGNAL(triggered()),this,SLOT(openPrintPreview()));
 
     exit = new QAction(tr("Exit"),this);
