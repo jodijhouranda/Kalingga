@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'plugindialog.ui'
 **
-** Created: Sat Jul 11 16:36:07 2015
+** Created: Sun Jul 12 15:12:17 2015
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

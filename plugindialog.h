@@ -32,6 +32,7 @@ private slots:
     void on_plug_clicked();
     void on_listWidget_itemClicked(QListWidgetItem *item);
 
+
 private:
     Ui::PluginDialog *ui;
     QList<PluginInterfaces*> interfaces;
@@ -43,7 +44,6 @@ private:
     QMenu* analysis;
     QMenu* tools;
     QList<QPluginLoader*> plugloaders;
-    bool copyDir(const QString source, const QString destination, const bool override);
 
 };
 
