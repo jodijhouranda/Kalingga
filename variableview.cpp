@@ -408,6 +408,24 @@ void VariableView::sendDataFrameSeriesFormatted(QString varName,QString id, QStr
     m_r["ID"] = ids;
     m_r.parseEvalQ(QString("dframe <- data.frame(times, %1 ,ID)").arg(varName).toStdString());
 }
+void VariableView::sendDataFrameSeriesFormatted2(QString varName,QString id, QStringList timeList, RInside &m_r){
+    sendDataFrameSeries(varName,timeList,m_r);
+    m_r.parseEvalQ("dframe <- as.data.frame(t(dframe))");
+    int len = timeList.length();
+    Rcpp::CharacterVector times(len);
+    Rcpp::CharacterVector header = getCharacterVector(getVariableIndex(id));
+    m_r["header"] = header;
+    m_r.parseEvalQ("names(dframe) <- header");
+    for (int i = 0; i < times.length(); ++i) {
+        times[i] = timeList.at(i).toStdString();
+    }
+    m_r["times"] = times;
+    m_r.parseEvalQ("dframe <- as.data.frame(cbind(times,dframe))");
+    m_r.parseEvalQ("rownames(dframe) <- NULL");
+
+}
+
+
 //get All numeric variable in spreadsheet
 QList<QString> VariableView::getRealVariableNames(){
     QList<QString> allVar;

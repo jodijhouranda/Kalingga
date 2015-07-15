@@ -43,7 +43,10 @@ void TimeSeriesPicker::on_buttonBox_accepted()
         }
     }
     QString x = ui->comboBoxVariable->currentText();
+
+
     vv->sendDataFrameSeriesFormatted(ui->comboBoxVariable->currentText(),ui->comboBoxVariableID->currentText(),timeList,rconn);
+
       setupChartView("Time Series Plot",x, new QWidget());
       QString command;
       try {
